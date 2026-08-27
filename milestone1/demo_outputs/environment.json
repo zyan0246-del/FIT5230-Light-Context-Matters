@@ -1,0 +1,11 @@
+{
+  "python": "3.13.5",
+  "platform": "macOS-15.6.1-arm64-arm-64bit-Mach-O",
+  "opencv": "5.0.0",
+  "mediapipe": "0.10.30",
+  "numpy": "2.5.2",
+  "pandas": "3.0.5",
+  "frame_stride": 2,
+  "smoothing_window": 5,
+  "max_duration_s": 15.0
+}

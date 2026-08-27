@@ -1,0 +1,24 @@
+{
+  "real": {
+    "sampled_frames": 180,
+    "duration_s": 11.945266666666667,
+    "landmark_coverage": 1.0,
+    "mean_inner_aperture": 0.12672709922373696,
+    "std_inner_aperture": 0.053790110098618574,
+    "mean_lip_width": 0.555061572692942,
+    "mean_abs_velocity": 0.2025405244890137,
+    "p95_abs_jerk": 79.85256122795076,
+    "exploratory_freeze_ratio": 0.18333333333333332
+  },
+  "generated": {
+    "sampled_frames": 149,
+    "duration_s": 11.84,
+    "landmark_coverage": 1.0,
+    "mean_inner_aperture": 0.13068633007787653,
+    "std_inner_aperture": 0.03669712220257751,
+    "mean_lip_width": 0.7049686257057237,
+    "mean_abs_velocity": 0.08916014876802944,
+    "p95_abs_jerk": 21.33500426204156,
+    "exploratory_freeze_ratio": 0.24161073825503357
+  }
+}
