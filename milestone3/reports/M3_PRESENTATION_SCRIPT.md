@@ -14,7 +14,7 @@ Speaker: Yan.
 
 "At Milestone 2, we had reproducible code, synthetic checks and public-video preprocessing, but no real classifier experiment. For Milestone 3 we added a 24-clip public pilot, actual held-out evaluation, weak phonetic alignment, a peer-pair forensic analyser, a neutral codec control and post-processing tests."
 
-Point to the fixed split: 12 train, six validation and six test. Mention 32 passing tests and 24 out of 24 clips with full face-landmark coverage.
+Point to the fixed split: 12 train, six validation and six test. Mention 35 passing tests and 24 out of 24 clips with full face-landmark coverage.
 
 ## Slide 3: Experimental framework (1:45 to 3:00)
 
@@ -48,11 +48,13 @@ Speaker: Yan.
 
 "The correct conclusion is that this weak context implementation does not improve the pilot."
 
-## Slide 7: Strategy A failure analysis (8:15 to 10:00)
+## Slide 7: Strategy A multi-event follow-up (8:15 to 10:00)
 
 Speaker: Yan.
 
-"This negative result identifies three concrete limits. Uniform phone placement is not accurate alignment. One interval per clip discards most speech. Real and fake clips come from different collections, which introduces domain cues. The next research version needs forced alignment, many intervals per clip and matched real/fake sources. The context-free model remains our safe course fallback."
+"We addressed one clear limitation by using every eligible vowel proxy rather than one interval per clip. This gives 547 events, with a median of 20 per clip. A model learned expected central mouth geometry from real training speech and aggregated residuals back to one row per clip."
+
+"On the original six-clip split, macro-F1 increased from 0.486 to 0.829 and AUROC from 0.667 to 0.778. This follow-up was designed after seeing that split, so it is post-hoc. In 20 repeated four-fold runs, mean F1 changed from 0.655 to 0.645 and mean AUROC from 0.678 to 0.689. The average gain is not stable. We need forced alignment and a fresh matched hold-out set."
 
 ## Slide 8: Strategy B design and neutral control (10:00 to 11:30)
 
@@ -78,7 +80,7 @@ Speaker: He.
 
 Speaker: He, final sentence by Yan.
 
-"The lip branch tests residual S2F generation inconsistencies. The colour branch tests traces introduced by the attempted physiological evasion. Our small context experiment is negative, while the peer-pair chromatic result is strong but narrow."
+"The lip branch contains a negative first result and a transparent post-hoc follow-up. The original split improves, but repeated folds do not show a stable average gain. The colour branch finds a strong but narrow trace in one peer pair."
 
 Yan closes:
 
@@ -88,7 +90,11 @@ Yan closes:
 
 ### Why did the context model fail?
 
-The alignment is only a word-timestamp proxy, the training set has 12 clips and one interval per clip, and source differences may dominate the signal. We report the failure instead of tuning on the test set.
+The first version used only a word-timestamp proxy, 12 training clips and one interval per clip. The follow-up uses many intervals but still lacks forced alignment and matched sources. Its improvement on one known split did not remain stable across repeated folds.
+
+### Why report the 0.829 result if it is post-hoc?
+
+It shows that the engineering change is worth testing, but it cannot confirm effectiveness because the split was already visible. We pair it with repeated cross-validation and explicitly require a new matched hold-out set.
 
 ### Why is the chromatic result not a detector?
 

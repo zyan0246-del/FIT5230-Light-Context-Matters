@@ -14,8 +14,9 @@
 - [x] H.264 CRF 35, resize and 15 FPS conditions included.
 - [x] Raw peer files excluded from the public repository.
 - [x] Peer file SHA256 provenance recorded.
-- [x] 32 regression tests pass.
-- [x] Milestone3.ipynb executed with eight saved code-cell outputs and no errors.
+- [x] 35 regression tests pass.
+- [x] Multi-event context follow-up added with a repeated-cross-validation stability check.
+- [x] Updated Milestone3.ipynb executed locally with nine saved code-cell outputs and no errors.
 - [x] Fifteen-minute presentation script prepared.
 
 ## Still requires a team member
@@ -24,7 +25,8 @@
 - [ ] Confirm the lecturer expects both members to speak for approximately five minutes each in the strategy section.
 - [x] Upload the final repository to GitHub.
 - [x] Open `notebooks/Milestone3.ipynb` in Google Colab.
-- [x] Run all eight code cells in a fresh Colab CPU runtime; all completed successfully.
+- [x] The previous eight-cell notebook completed in a fresh Colab CPU runtime.
+- [ ] Run the updated nine-cell notebook in a fresh Colab CPU runtime after publishing the multi-event follow-up.
 - [x] Verify the public GitHub-backed Colab URL loads without repository authentication.
 - [x] Record the cross-environment result variation without changing the conclusion.
 - [x] Put the verified Colab URL in a TXT file.

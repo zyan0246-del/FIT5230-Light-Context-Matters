@@ -1,69 +1,107 @@
 # Context Matters — FIT5230 Milestone 3
 
-**Light.Ningyizhuo_No.1 · Yan Zhiheng and He Hongjie · Theme 3 / Light**
+**Light.Ningyizhuo_No.1 · Yan Zhiheng; He Hongjie · Theme 3 / Light (Defense)**
 
-This release evaluates two complementary defenses against speech-to-face deepfakes:
+A reproducible two-channel Light-side study. Strategy A evaluates context-free and weak context-conditioned lip dynamics on a 24-clip public pilot. Strategy B audits periodic chromatic traces introduced by Dark.Mimic's rPPG evasion on one peer-supplied aligned pair and a neutral re-encode control.
 
-1. **Yan — context-conditioned lip dynamics.** A 24-clip public pilot compares a context-free mouth-dynamics baseline with a weak phonetic-context model.
-2. **He — chromatic-injection forensics.** A paired audit checks whether Dark.Mimic's reported 1.2 Hz rPPG-evasion edit leaves a periodic colour trace, including a neutral re-encode control and three post-processing conditions.
+**Current evidence:** 24/24 public clips passed landmark extraction. On the six-clip held-out test, the context-free pilot reached macro-F1 0.486 and AUROC 0.667; the original single weak-context model did not improve it. A post-hoc multi-event context extension reached 0.829/0.778 on that same split, but 20 repeated four-fold runs showed no stable average gain, so it remains exploratory. In the single Dark.Mimic pair, colour energy near 1.2 Hz remained above a neutral re-encode control under H.264 CRF 35, 256×224 resizing and 15 FPS. These are course-pilot findings, not publication-scale generalisation claims. See [M3 results](reports/M3_RESULTS.md), the [multi-event follow-up](reports/M3_MULTI_CONTEXT_FOLLOWUP.md) and [submission checklist](reports/M3_SUBMISSION_CHECKLIST.md).
 
-The held-out public pilot contains six clips. The context-free model reached macro-F1 0.486 and AUROC 0.667; the weak-context model reached macro-F1 0.486 and AUROC 0.556. Thus, this pilot does **not** support a context improvement claim. In the single peer pair, red-channel target-band energy was 4.63 times the neutral control and remained higher after H.264 CRF 35, resizing, and 15 FPS conversion. This is descriptive evidence from one pair, not a population-level detector result.
+Submission materials: [executed notebook](notebooks/Milestone3.ipynb), [improved presentation](deliverables/FIT5230_M3_Context_Matters_Presentation_Improved_v2.pptx), [15-minute script](reports/M3_PRESENTATION_SCRIPT.md) and [Moodle Colab-link file](deliverables/Moodle_M3_Colab_Link.txt). The updated notebook has nine locally verified code cells; run it once in a fresh Colab runtime after publishing.
 
-The values above are the saved reference run. A fresh Colab CPU run completed all eight cells and produced macro-F1 0.486 for both models, with AUROC 0.556 and 0.444 respectively. The direction and -0.111 AUROC change were unchanged. See [`reports/M3_COLAB_VERIFICATION.md`](reports/M3_COLAB_VERIFICATION.md) for the environment-sensitivity record.
+## Quick start
 
-## Evidence and deliverables
-
-- [`notebooks/Milestone3.ipynb`](notebooks/Milestone3.ipynb): fully executed notebook with eight saved code-cell outputs.
-- [`reports/M3_RESULTS.md`](reports/M3_RESULTS.md): metrics, uncertainty, failure cases, limitations and claim boundaries.
-- [`deliverables/FIT5230_M3_Context_Matters_Presentation.pptx`](deliverables/FIT5230_M3_Context_Matters_Presentation.pptx): editable 11-slide presentation.
-- [`reports/M3_PRESENTATION_SCRIPT.md`](reports/M3_PRESENTATION_SCRIPT.md): 15-minute speaking plan with member attribution.
-- [`artifacts/m3_results/`](artifacts/m3_results/): frozen aggregate tables, reports and figures.
-- [`reports/M3_SUBMISSION_CHECKLIST.md`](reports/M3_SUBMISSION_CHECKLIST.md): final manual steps.
-- [`reports/M3_COLAB_VERIFICATION.md`](reports/M3_COLAB_VERIFICATION.md): fresh Colab execution evidence and cross-environment metrics.
-
-## Reproduce the public experiment
-
-Python 3.12 was used for the verified run. FFmpeg must be available on `PATH`.
+Use Python 3.12 (tested); Python 3.10–3.13 subject to MediaPipe wheel availability.
 
 ```bash
 python -m venv .venv
-source .venv/bin/activate                 # macOS/Linux
-# .venv\Scripts\Activate.ps1             # Windows PowerShell
+# Windows PowerShell:
+.venv/Scripts/Activate.ps1
+# macOS/Linux instead: source .venv/bin/activate
 python -m pip install -r requirements.txt
 python -m pip install -e . --no-deps
-python scripts/download_m3_pilot.py
-python scripts/audit_m3_pilot.py
-python -m s2f.cli extract-manifest data/m3_pilot_manifest.csv --out outputs/m3_work/pilot_features
-python scripts/build_weak_phoneme_intervals.py
-python scripts/summarize_lip_pilot.py
+python -m s2f.cli smoke
+python -m s2f.cli public-demo
 python -m pytest -q
 ```
 
-The acquisition script downloads 12 licensed Wikitongues clips and 12 TalkingHeadBench generated clips, standardises them, and records source metadata, hashes and portable FFmpeg commands. Raw videos, model weights, caches and working outputs are excluded from Git. The committed notebook also embeds a source snapshot so its saved results remain inspectable.
+After the M3 landmark and ASR caches exist, reproduce the explicitly post-hoc
+multi-event follow-up with `python scripts/run_multi_context_improvement.py`.
+Its fixed-split improvement is reported together with a repeated-cross-validation
+stability check; it must not be described as fresh confirmatory evidence.
 
-## Data and evaluation controls
+`smoke` needs no private data or downloads after installation. It creates 32 explicitly artificial trajectory fixtures, trains both models on 20 fixtures, and evaluates 4 validation / 8 test fixtures. Its artificial speaker IDs only exercise split logic; scores are **not detection evidence**. Public MP4 preprocessing downloads the same real Wikitongues and Hallo files as M1, plus a MediaPipe model. It runs on CPU. See [sources and provenance](reports/M1_PROVENANCE.md).
 
-- Fixed seed: 5230.
-- Fixed split: 12 train, 6 validation and 6 test clips, balanced by class.
-- `source_id` and `speaker_id` cannot cross splits.
-- The context-free and weak-context models use identical clips and split.
-- Vocabulary and scaling are learned on training data only; threshold 0.5 is fixed.
-- Phone intervals are weak proxies from Whisper `tiny.en` word timestamps plus CMUdict, not forced alignment.
-- Aggregate peer results are public; raw DarkMimic MP4 files remain private and are represented by SHA256 provenance only.
+For notebook use, open [Milestone3.ipynb](notebooks/Milestone3.ipynb) in Colab and run all cells. It contains a verified source snapshot, public acquisition scripts, the real pilot experiment and hash-linked aggregate peer results. The peer MP4 files remain private. Local saved execution is not proof of Colab sharing permissions; the team must still upload the notebook to Colab, set **Anyone with the link can view**, and test the URL in an incognito window.
 
-## Run the notebook in Colab
+## Project layout
 
-Open [`notebooks/Milestone3.ipynb`](notebooks/Milestone3.ipynb) through the repository's Colab link and select **Runtime → Run all**. The public experiment can be rebuilt from downloads. The peer audit cell verifies local filenames and hashes and is skipped when the private files are absent; its frozen aggregate outputs remain available for inspection.
+```text
+configs/                  fixed seed, coverage and context settings
+data/raw/                 original videos (excluded from release bundle)
+data/synthetic/           explicitly artificial feature fixtures
+data/variants/            robustness videos and parent manifest
+data/*_template.csv       manifests, intervals and opponent pairs
+src/s2f/                  reusable Python modules + CLI
+notebooks/                standalone notebook with saved executed outputs
+outputs/public_demo/      actual MP4 features, QC, previews, plots
+outputs/smoke/            synthetic model metrics, predictions, figures
+challenge/                strict validation/scoring and dummy examples
+reports/                  evidence, M1 comparison, Ed draft, remaining work
+reference/m1/             unmodified original team repository snapshot
+tests/                    leakage, time-series and scorer regression checks
+```
 
-## Scope and claim boundary
+## Run a real pilot
 
-PIA is the research reference baseline, not a reproduced result in this repository. CALS motivates the coarticulation hypothesis but is a generation paper, not a detector baseline. This course pilot does not claim forced alignment, physiological waveform recovery, successful score fusion, publication-level generalisation or that a negative weak-context result disproves coarticulation.
+1. Put licensed/consented MP4 files under `data/raw/`. Copy `data/manifest_template.csv` to `data/pilot.csv` and fill it using [the data contract](data/README.md). Keep original and derived clips in the same source family and split. Use multiple speakers, both real/fake classes in training, and ideally both classes in test. Do not train on the unmatched two-clip public demo.
+2. Add one central phoneme/word interval per clip to `data/pilot_intervals.csv`. Use audio inspection and record annotator/tool provenance. Keep phoneme spellings consistent. An interval must have at least 0.2 s of valid context on both sides. Automatic alignment is an extension interface only.
+3. Run:
 
-## References
+```bash
+python -m s2f.cli validate-manifest data/pilot.csv --protocol speaker
+python -m s2f.cli extract-manifest data/pilot.csv --out outputs/pilot
+python -m s2f.cli evaluate data/pilot.csv --features outputs/pilot/features --intervals data/pilot_intervals.csv --out outputs/pilot --protocol speaker
+```
 
-- [PIA official implementation](https://github.com/skrantidatta/PIA) and [paper](https://arxiv.org/abs/2510.14241)
-- [CALS paper](https://arxiv.org/abs/2305.19556)
-- [MediaPipe Face Landmarker](https://developers.google.com/mediapipe/solutions/vision/face_landmarker/python)
-- [TalkingHeadBench dataset card](https://huggingface.co/datasets/luchaoqi/TalkingHeadBench)
+Omit `--intervals` for a context-free-only run. For the paired comparison, **both models use exactly the same clips and split**. All feature vocabulary/scaling is fit on training clips only. Decisions use a fixed 0.5 threshold; no test tuning. `--protocol generator` holds out fake generators while checking source families; `speaker_generator` requires both kinds of disjointness. Generator-only evaluation does not imply unseen speakers. Unsupported datasets fail validation rather than silently falling back.
 
-This is defensive media-forensics coursework. Use only consented or appropriately licensed media.
+Outputs include `metrics/results.csv`, individual metric JSONs (AUROC is null for one-class evaluation), `predictions/`, `models/`, confusion matrices, validated manifest and feature hashes. A small real run remains a **pilot**. Inspect subgroup/class counts and failure cases before making broader claims. PIA remains a separately named reference baseline; neither lightweight model is PIA.
+
+## Test new / opponent clips
+
+For an unknown clip, preprocessing does not need a label. Create a minimal inference manifest with `clip_id`; add matching phoneme columns only for a context model.
+
+```bash
+python -m s2f.cli preprocess data/raw/new_clip.mp4 --clip-id new_clip --out outputs/inference
+python -m s2f.cli feature-table data/inference.csv outputs/inference/features --out outputs/inference/table.csv
+python -m s2f.cli predict outputs/pilot/models/context_free.joblib outputs/inference/table.csv --out outputs/inference/predictions.csv
+python -m s2f.cli compare-pairs data/pairs.csv outputs/inference/predictions.csv --out outputs/inference/pairs.csv
+```
+
+Train a real pilot model first. Synthetic models exist solely for software verification. Only load trusted joblib files. Add `--intervals` for a context feature table. If rPPG fake probabilities are supplied, `--alpha 0.5` enables an explicitly exploratory weighted average. Missing rPPG remains missing. Convert real-class probability using `1-p_real`; never substitute a raw waveform or arbitrary logit. Fusion requires validation/calibration before substantive comparison. See [interaction protocol and unsent draft](reports/DARK_MIMIC.md).
+
+## Robustness and challenge
+
+```bash
+python -m s2f.cli variants data/pilot.csv --out data/variants
+python -m s2f.cli extract-manifest data/variants/manifest.csv --out outputs/variants
+python -m s2f.cli feature-table data/variants/manifest.csv outputs/variants/features --out outputs/variants/table.csv
+python -m s2f.cli evaluate-frozen outputs/pilot/models/context_free.joblib data/variants/manifest.csv outputs/variants/table.csv --out outputs/robustness
+python challenge/validate_submission.py challenge/dummy_submission.csv challenge/dummy_catalog.csv
+python challenge/score_submission.py challenge/dummy_submission.csv challenge/dummy_catalog.csv challenge/dummy_answer_key.csv --out outputs/challenge
+```
+
+Variants include H.264 CRF 32, height 256 resize, and 15 FPS; only test clips are transformed. They retain source IDs/splits and must never enter training. For a context model, copy the parent's annotations to each variant ID, preserve times, and validate coverage again. Compare frozen clean-test and transformed-test scores on identical parent clips; fewer valid frames may cause explicit rejection.
+
+The real 24-clip Context-Swap Gauntlet remains to be collected/annotated. Dummy scoring is executable now; it is not a released real challenge. [Challenge rules](challenge/README.md) preserve the M1 70/20/10 weights.
+
+## Method limits
+
+Input scope is a single visible speaker without scene cuts. MediaPipe tracks one face but does not establish identity or verify lip-sync. Geometry is measured in pixels then divided by eye distance; it does not fully correct pose. Detection gaps stay missing. Derivatives are computed within continuous valid runs; short runs and boundary frames are excluded. High-order derivatives remain sensitive to FPS and smoothing. Quality rejection is never a real/fake prediction. Context v1 supports one central interval per clip and lexical interaction features; it does not automatically localize forgeries or learn a publication-scale coarticulation model.
+
+## Research references
+
+- [Team M1 repository](https://github.com/zyan0246-del/FIT5230-Light-Context-Matters), preserved at commit `d2b091c4bf42f130c48fa060ce777d51e7cd9b74`.
+- [PIA official implementation](https://github.com/skrantidatta/PIA) and [paper](https://arxiv.org/abs/2510.14241): main reference, not reproduced here.
+- [CALS paper](https://arxiv.org/abs/2305.19556): context-aware **generation** motivates the hypothesis; it does not establish this detector's effectiveness.
+- [MediaPipe Python API](https://developers.google.com/edge/mediapipe/solutions/vision/face_landmarker/python).

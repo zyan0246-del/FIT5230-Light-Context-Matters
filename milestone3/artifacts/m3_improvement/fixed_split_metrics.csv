@@ -1,0 +1,3 @@
+model,split,n,macro_f1,auroc
+multi_event_context,val,6,0.8285714285714285,0.7777777777777778
+multi_event_context,test,6,0.8285714285714285,0.7777777777777778

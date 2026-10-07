@@ -1,5 +1,7 @@
 # Fresh Colab verification
 
+> Scope note: this record verifies the previous eight-code-cell notebook. The updated notebook adds a ninth multi-event follow-up cell. That version has completed locally with saved outputs and requires one fresh Colab rerun after publication.
+
 Verification date: 7 October 2026
 
 Notebook: `milestone3/notebooks/Milestone3.ipynb`

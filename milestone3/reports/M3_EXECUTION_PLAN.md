@@ -65,5 +65,5 @@ reported separately.  Fusion is optional and must not be tuned on the peer pair.
 - The context-free test result was macro-F1 0.486 and AUROC 0.667 (n=6).
 - Weak context did not improve the result: macro-F1 0.486 and AUROC 0.556.
 - The peer chromatic trace remained above the neutral control under three fixed post-processing conditions.
-- The standalone M3 notebook completed all eight code cells with saved outputs and no errors.
+- The updated standalone M3 notebook completed all nine code cells locally with saved outputs and no errors.
 - Thirty-two regression tests pass.

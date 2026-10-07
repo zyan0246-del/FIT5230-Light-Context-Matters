@@ -1,0 +1,65 @@
+{
+  "status": "exploratory_post_hoc",
+  "parameters": {
+    "seed": 5230,
+    "minimum_word_probability": 0.8,
+    "central_window_s": 0.2,
+    "context_window_each_side_s": 0.2,
+    "ridge_alpha": 10.0,
+    "classifier_c": 0.01,
+    "cv_splits": 4,
+    "cv_repeats": 20
+  },
+  "events": {
+    "total": 547,
+    "clips": 24,
+    "minimum_per_clip": 1,
+    "median_per_clip": 20.0,
+    "maximum_per_clip": 47
+  },
+  "fixed_split_metrics": [
+    {
+      "model": "multi_event_context",
+      "split": "val",
+      "n": 6,
+      "macro_f1": 0.8285714285714285,
+      "auroc": 0.7777777777777778
+    },
+    {
+      "model": "multi_event_context",
+      "split": "test",
+      "n": 6,
+      "macro_f1": 0.8285714285714285,
+      "auroc": 0.7777777777777778
+    }
+  ],
+  "repeated_cv": [
+    {
+      "model": "context_free",
+      "macro_f1_mean": 0.6549255952380952,
+      "macro_f1_std": 0.20475601220108855,
+      "auroc_mean": 0.6777777777777778,
+      "auroc_std": 0.20357793500571428
+    },
+    {
+      "model": "multi_event_context",
+      "macro_f1_mean": 0.6451934523809524,
+      "macro_f1_std": 0.17670660232143007,
+      "auroc_mean": 0.6888888888888889,
+      "auroc_std": 0.19797379625533923
+    }
+  ],
+  "paired_fold_differences": {
+    "macro_f1": {
+      "mean_delta": -0.009732142857142856,
+      "median_delta": 0.0,
+      "positive_fold_fraction": 0.4625
+    },
+    "auroc": {
+      "mean_delta": 0.011111111111111118,
+      "median_delta": 0.0,
+      "positive_fold_fraction": 0.475
+    }
+  },
+  "interpretation": "The original six-clip split improves, but repeated cross-validation does not show a stable average gain. Treat the result as a feasibility improvement and motivate a fresh matched hold-out set."
+}
