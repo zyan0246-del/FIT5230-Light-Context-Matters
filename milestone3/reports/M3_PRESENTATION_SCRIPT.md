@@ -44,7 +44,7 @@ Explain that Whisper word timestamps plus CMUdict give a weak proxy. Do not call
 
 Speaker: Yan.
 
-"On six held-out clips, the context-free model reached macro-F1 0.486 and AUROC 0.667. The weak context model had the same macro-F1 and AUROC 0.556. The bootstrap intervals are wide because the test set contains only three real and three fake clips."
+"On six held-out clips, the saved reference run gave macro-F1 0.486 for both models and AUROC 0.667 versus 0.556. A fresh Colab CPU rerun gave the same macro-F1 and AUROC 0.556 versus 0.444. The difference was minus 0.111 in both environments. The bootstrap intervals are wide because the test set contains only three real and three fake clips."
 
 "The correct conclusion is that this weak context implementation does not improve the pilot."
 

@@ -17,6 +17,8 @@ We evaluate two independent defensive signals:
 
 These are course-pilot findings. The repository does not claim forced phoneme alignment, full PIA reproduction, physiological waveform recovery or population-level detector accuracy.
 
+A fresh Google Colab CPU run on 7 October 2026 completed all eight code cells and all 32 tests. Small AUROC changes across macOS/Python 3.12 and Colab/Linux/Python 3.13 left the central finding unchanged; see the [Colab verification record](milestone3/reports/M3_COLAB_VERIFICATION.md).
+
 ## Start here
 
 - [Executed Milestone 3 notebook](milestone3/notebooks/Milestone3.ipynb)
@@ -24,6 +26,7 @@ These are course-pilot findings. The repository does not claim forced phoneme al
 - [15-minute presentation script](milestone3/reports/M3_PRESENTATION_SCRIPT.md)
 - [Editable PowerPoint presentation](milestone3/deliverables/FIT5230_M3_Context_Matters_Presentation.pptx)
 - [Submission checklist](milestone3/reports/M3_SUBMISSION_CHECKLIST.md)
+- [Fresh Colab verification](milestone3/reports/M3_COLAB_VERIFICATION.md)
 - [Milestone 3 source and reproduction guide](milestone3/README.md)
 
 ## Reproduce the public pilot

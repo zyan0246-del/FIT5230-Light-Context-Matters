@@ -222,9 +222,11 @@ else:
         ),
         nbf.v4.new_markdown_cell(
             "## 6. Conclusions and claim boundaries\n\n"
-            "1. All 24 public clips passed landmark coverage, but the context-free test result remained small and uncertain "
-            "(macro-F1 0.486; AUROC 0.667; n=6).\n"
-            "2. The weak phonetic-context proxy did not improve the held-out result (macro-F1 0.486; AUROC 0.556). "
+            "1. All 24 public clips passed landmark coverage, but the six-clip held-out result remained small and uncertain. "
+            "The generated metrics table above is authoritative for the current runtime.\n"
+            "2. The weak phonetic-context proxy did not improve the held-out result. The saved reference run produced "
+            "AUROC 0.667 versus 0.556; a fresh Colab CPU run produced 0.556 versus 0.444. Macro-F1 was 0.486 for both "
+            "models in both runs. This small cross-environment variation does not change the conclusion. "
             "This negative result points to forced alignment, matched real/fake sources and more clips as the next research step.\n"
             "3. In the single peer pair, periodic colour energy near 1.2 Hz remained higher than the neutral control after "
             "H.264 CRF 35, resizing and 15 FPS. This supports a paired manipulation audit, not a general detector.\n\n"

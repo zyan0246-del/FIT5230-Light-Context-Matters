@@ -9,6 +9,8 @@ This release evaluates two complementary defenses against speech-to-face deepfak
 
 The held-out public pilot contains six clips. The context-free model reached macro-F1 0.486 and AUROC 0.667; the weak-context model reached macro-F1 0.486 and AUROC 0.556. Thus, this pilot does **not** support a context improvement claim. In the single peer pair, red-channel target-band energy was 4.63 times the neutral control and remained higher after H.264 CRF 35, resizing, and 15 FPS conversion. This is descriptive evidence from one pair, not a population-level detector result.
 
+The values above are the saved reference run. A fresh Colab CPU run completed all eight cells and produced macro-F1 0.486 for both models, with AUROC 0.556 and 0.444 respectively. The direction and -0.111 AUROC change were unchanged. See [`reports/M3_COLAB_VERIFICATION.md`](reports/M3_COLAB_VERIFICATION.md) for the environment-sensitivity record.
+
 ## Evidence and deliverables
 
 - [`notebooks/Milestone3.ipynb`](notebooks/Milestone3.ipynb): fully executed notebook with eight saved code-cell outputs.
@@ -17,6 +19,7 @@ The held-out public pilot contains six clips. The context-free model reached mac
 - [`reports/M3_PRESENTATION_SCRIPT.md`](reports/M3_PRESENTATION_SCRIPT.md): 15-minute speaking plan with member attribution.
 - [`artifacts/m3_results/`](artifacts/m3_results/): frozen aggregate tables, reports and figures.
 - [`reports/M3_SUBMISSION_CHECKLIST.md`](reports/M3_SUBMISSION_CHECKLIST.md): final manual steps.
+- [`reports/M3_COLAB_VERIFICATION.md`](reports/M3_COLAB_VERIFICATION.md): fresh Colab execution evidence and cross-environment metrics.
 
 ## Reproduce the public experiment
 

@@ -23,11 +23,12 @@
 - [ ] Read every slide and practise the 15-minute timing.
 - [ ] Confirm the lecturer expects both members to speak for approximately five minutes each in the strategy section.
 - [x] Upload the final repository to GitHub.
-- [ ] Open `notebooks/Milestone3.ipynb` in Google Colab.
-- [ ] Run all in a fresh Colab CPU runtime and save the outputs.
-- [ ] Set Colab sharing to **Anyone with the link can view**.
-- [ ] Test the Colab URL in an incognito window without signing in.
-- [x] Put the verified public GitHub-backed Colab URL in a TXT file.
+- [x] Open `notebooks/Milestone3.ipynb` in Google Colab.
+- [x] Run all eight code cells in a fresh Colab CPU runtime; all completed successfully.
+- [x] Verify the public GitHub-backed Colab URL loads without repository authentication.
+- [x] Record the cross-environment result variation without changing the conclusion.
+- [x] Put the verified Colab URL in a TXT file.
+- [ ] Optionally copy the notebook to Drive and set **Anyone with the link can view** if the lecturer requires a Drive-owned rather than GitHub-backed Colab link.
 - [ ] Submit that PDF or TXT file to the Moodle Milestone 3 page before 22 October 2026, 11:55 PM MYT.
 
 ## Do not claim

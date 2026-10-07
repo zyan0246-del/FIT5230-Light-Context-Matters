@@ -11,4 +11,4 @@ Repository URL:
 https://github.com/zyan0246-del/FIT5230-Light-Context-Matters/tree/main/milestone3
 
 Verification date: 7 October 2026
-Verification: the public GitHub repository is anonymously accessible and the URL loads Milestone3.ipynb in Google Colab with the saved outputs visible.
+Verification: the public GitHub repository is anonymously accessible; the URL loads Milestone3.ipynb with saved outputs visible; and all eight code cells completed successfully in a fresh Colab CPU runtime on 7 October 2026.

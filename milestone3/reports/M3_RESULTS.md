@@ -54,6 +54,8 @@ Both models use the same 12 training, six validation and six held-out test clips
 
 The intervals use 5,000 paired stratified bootstrap resamples. The held-out set contains only three real and three fake clips, so the intervals are necessarily wide.
 
+These are the saved reference-run values (Python 3.12). A fresh Google Colab CPU run on 7 October 2026 completed all eight code cells and produced macro-F1 0.486 for both models, with AUROC 0.556 for context-free and 0.444 for weak context. The AUROC difference remained -0.111. FFmpeg builds, decoded pixels and dependency versions differ across the two environments; with only six test clips, small numeric perturbations can change rank-based AUROC. The direction and claim boundary are unchanged. Full details are in [M3_COLAB_VERIFICATION.md](M3_COLAB_VERIFICATION.md).
+
 ### Interpretation
 
 The weak context proxy did not improve the pilot. Macro-F1 was unchanged and AUROC decreased by 0.111. This does not refute the coarticulation hypothesis. It shows that one approximate interval per clip, 12 training clips and cross-collection data are insufficient evidence for the proposed method.
