@@ -1,0 +1,39 @@
+{
+  "scope": "24-clip course pilot: 12 licensed public real clips and 12 TalkingHeadBench generated clips",
+  "warning": "Cross-source pilot only. It cannot establish publication-level generalization and must be followed by a controlled paired subset if time permits.",
+  "standardization": {
+    "duration_s": 12,
+    "fps": 25,
+    "canvas": "512x512",
+    "video_codec": "H.264 CRF 23",
+    "audio": "AAC mono 16 kHz"
+  },
+  "real": [
+    {"id":"real_ahmad","split":"train","speaker":"ahmad","start_s":5,"filename":"Ahmad 20200617 Eng-Apc.webm"},
+    {"id":"real_daniel","split":"train","speaker":"daniel","start_s":5,"filename":"Daniel speaking English.webm"},
+    {"id":"real_ingid","split":"train","speaker":"ingid","start_s":5,"filename":"Ingid 20190816 Eng+Nys.webm"},
+    {"id":"real_gereon","split":"train","speaker":"gereon","start_s":5,"filename":"WIKITONGUES- Gereon speaking English.webm"},
+    {"id":"real_mckensie","split":"train","speaker":"mckensie","start_s":5,"filename":"WIKITONGUES- Mckensie speaking English.webm"},
+    {"id":"real_sam","split":"train","speaker":"sam","start_s":5,"filename":"WIKITONGUES- Sam speaking English.webm"},
+    {"id":"real_james","split":"val","speaker":"james","start_s":5,"filename":"WIKITONGUES- James speaking Filipino, English, and Spanish.webm"},
+    {"id":"real_john","split":"val","speaker":"john","start_s":5,"filename":"WIKITONGUES- John speaking English, Spanish, and Greek.webm"},
+    {"id":"real_omar","split":"val","speaker":"omar","start_s":5,"filename":"WIKITONGUES- Omar Speaking English and Jamaican Patois.webm"},
+    {"id":"real_simon","split":"test","speaker":"simon","start_s":5,"filename":"WIKITONGUES- Simon speaking Cumbrian.webm"},
+    {"id":"real_william","split":"test","speaker":"william","start_s":5,"filename":"WIKITONGUES- William speaking English.webm"},
+    {"id":"real_yorkshire","split":"test","speaker":"yorkshire_james","start_s":5,"filename":"James speaking West Riding Yorkshire English.webm"}
+  ],
+  "fake": [
+    {"id":"fake_hallo_00054","split":"train","speaker":"ffhq_00054","generator":"Hallo","path":"fake/Hallo/train/00054--ptAdtShJa_0_1--Hallo.mp4"},
+    {"id":"fake_hallo_00139","split":"train","speaker":"ffhq_00139","generator":"Hallo","path":"fake/Hallo/train/00139--9mDnkVUl08k_0--Hallo.mp4"},
+    {"id":"fake_live_01071","split":"train","speaker":"ffhq_01071","generator":"LivePortrait","path":"fake/LivePortrait/train/01071--7F1bODlFs2U_1--LivePortrait.mp4"},
+    {"id":"fake_live_01115","split":"train","speaker":"ffhq_01115","generator":"LivePortrait","path":"fake/LivePortrait/train/01115--MYcsUTqNjNQ_0--LivePortrait.mp4"},
+    {"id":"fake_hallo_00346","split":"train","speaker":"ffhq_00346","generator":"Hallo","path":"fake/Hallo/train/00346--xMjEmE1YLSU_0--Hallo.mp4"},
+    {"id":"fake_live_01253","split":"train","speaker":"ffhq_01253","generator":"LivePortrait","path":"fake/LivePortrait/train/01253--7F1bODlFs2U_2--LivePortrait.mp4"},
+    {"id":"fake_hallo_01896","split":"val","speaker":"ffhq_01896","generator":"Hallo","path":"fake/Hallo/val/01896--7g1ti_tjuvQ_1--Hallo.mp4"},
+    {"id":"fake_live_03975","split":"val","speaker":"ffhq_03975","generator":"LivePortrait","path":"fake/LivePortrait/val/03975--cMFosgxgPAs_1--LivePortrait.mp4"},
+    {"id":"fake_hallo_02235","split":"val","speaker":"ffhq_02235","generator":"Hallo","path":"fake/Hallo/val/02235--EHMPLXVeO9c_2--Hallo.mp4"},
+    {"id":"fake_hallo_00023","split":"test","speaker":"ffhq_00023","generator":"Hallo","path":"fake/Hallo/test/00023--7lHr2ZNlULA_4--Hallo.mp4"},
+    {"id":"fake_live_00198","split":"test","speaker":"ffhq_00198","generator":"LivePortrait","path":"fake/LivePortrait/test/00198--H_c_crxV9O8_0--LivePortrait.mp4"},
+    {"id":"fake_live_00462","split":"test","speaker":"ffhq_00462","generator":"LivePortrait","path":"fake/LivePortrait/test/00462--OMGBYSEJ4CU_5--LivePortrait.mp4"}
+  ]
+}

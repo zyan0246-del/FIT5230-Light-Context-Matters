@@ -22,3 +22,15 @@ milestone1/*.docx
 *.key
 private_data/
 private_videos/
+
+# Milestone 3 public downloads, models and generated working outputs
+milestone3/data/raw/
+milestone3/data/processed/
+milestone3/data/private/
+milestone3/models/
+milestone3/outputs/
+milestone3/tmp/
+milestone3/.pytest_cache/
+milestone3/.venv/
+milestone3/.build*/
+milestone3/.codex-finalizer/

@@ -1,0 +1,22 @@
+{
+  "scope": "Dark.Mimic peer-supplied pair used for the M3 paired forensic audit",
+  "redistribution": "raw videos excluded from the public repository",
+  "files": [
+    {
+      "role": "control",
+      "original_name": "person01_fake01_control.mp4",
+      "sha256": "05b771eee52dc629904f9e0b40f52d715d8c42d2535576c2f135974f1d302edd"
+    },
+    {
+      "role": "Dark.Mimic A=1 modification",
+      "original_name": "person01_fake01_attacked_A1.mp4",
+      "sha256": "55cde2f07cc3f95c4f5c35f505e229d19e5f599567e434caa89fd18b8066123a"
+    },
+    {
+      "role": "team-created neutral re-encode control",
+      "original_name": "person01_fake01_control_neutral_reencode.mp4",
+      "sha256": "88024d5372605531d58241a6c8418a76aa2543e06273aaeb092ab71cddb265da"
+    }
+  ],
+  "claim_boundary": "One aligned pair supports a descriptive manipulation audit only. It does not estimate physiology or establish population-level real/fake detection."
+}

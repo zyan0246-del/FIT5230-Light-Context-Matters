@@ -1,0 +1,22 @@
+{
+  "weak_context_minus_context_free": {
+    "macro_f1": 0.0,
+    "macro_f1_bootstrap_95_ci": [
+      0.0,
+      0.0
+    ],
+    "auroc": -0.11111111111111116,
+    "auroc_bootstrap_95_ci": [
+      -0.44444444444444453,
+      0.0
+    ]
+  },
+  "bootstrap": "5000 paired stratified resamples; fixed threshold 0.5",
+  "interpretation": "No evidence that weak proxy context improves the six-clip held-out pilot.",
+  "limitations": [
+    "Only six held-out clips (three real, three fake).",
+    "Real and fake clips come from different source collections, so domain cues may confound the pilot.",
+    "Whisper word timestamps plus uniform CMUdict phone placement are weak proxies, not forced alignment.",
+    "The result is feasibility evidence, not a publication-level generalisation claim."
+  ]
+}

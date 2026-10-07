@@ -1,0 +1,10 @@
+FIT5230 Milestone 3 Colab submission
+
+Team: Light.Ningyizhuo_No.1
+Members: Yan Zhiheng; He Hongjie
+Theme and side: Theme 3 Speech-to-Face, Light
+
+Colab URL: [PASTE FINAL ANYONE-WITH-THE-LINK VIEW URL HERE]
+
+Verification completed in an incognito window: [YES / NO]
+Verification date: [YYYY-MM-DD]

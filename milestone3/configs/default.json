@@ -1,0 +1,9 @@
+{
+  "seed": 5230,
+  "frame_stride": 1,
+  "smoothing_window": 5,
+  "min_coverage": 0.8,
+  "context_window_s": 0.2,
+  "decision_threshold": 0.5,
+  "min_segment_frames": 5
+}

@@ -1,0 +1,45 @@
+{
+  "conditions_fixed_before_analysis": [
+    "original",
+    "h264_crf35",
+    "resize_256",
+    "fps_15"
+  ],
+  "expected_frequency_hz": 1.2,
+  "scope": "one paired Dark.Mimic A=1 example; descriptive forensic audit",
+  "red_channel": [
+    {
+      "condition": "original",
+      "channel": "red",
+      "attack": 0.9456918104760784,
+      "neutral": 0.2043617083266858,
+      "attack_to_neutral_ratio": 4.627539171694177
+    },
+    {
+      "condition": "h264_crf35",
+      "channel": "red",
+      "attack": 0.3672345169718491,
+      "neutral": 0.0434662282960078,
+      "attack_to_neutral_ratio": 8.448732070124846
+    },
+    {
+      "condition": "resize_256",
+      "channel": "red",
+      "attack": 0.7997830616915408,
+      "neutral": 0.1272925039622935,
+      "attack_to_neutral_ratio": 6.283033460701284
+    },
+    {
+      "condition": "fps_15",
+      "channel": "red",
+      "attack": 0.8732771056326861,
+      "neutral": 0.0418589577497892,
+      "attack_to_neutral_ratio": 20.862370985266207
+    }
+  ],
+  "limitations": [
+    "The paired audit requires an aligned control.",
+    "This is not an rPPG estimator or a population-level detector evaluation.",
+    "Only one peer-supplied identity/pair was available."
+  ]
+}

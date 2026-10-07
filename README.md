@@ -1,83 +1,52 @@
-# FIT5230 Light - Context Matters
+# FIT5230 Light: Context Matters
 
-Initial course-project repository for **FIT5230 Malicious AI, Theme 3: Speech-to-Face (S2F), Light/Defense**.
+Team **Light.Ningyizhuo_No.1**
 
-## Project idea
+Members: **Yan Zhiheng and He Hongjie**
 
-AI-generated talking faces can achieve plausible global lip synchronization while still producing mouth transitions that are weakly conditioned on neighboring phonetic context. We investigate whether these context-dependent lip dynamics can provide interpretable evidence for S2F deepfake detection.
+Theme 3: Speech-to-Face, Light side
 
-**Working title:** *Context Matters: Context-Conditioned Lip Dynamics for Speech-to-Face Deepfake Detection*
+This repository preserves the original Milestone 1 work and adds the complete Milestone 3 course pilot.
 
-## Reference baseline
+## Milestone 3 outcome
 
-Our main technical baseline is:
+We evaluate two independent defensive signals:
 
-- **PIA: Deepfake Detection Using Phoneme-Temporal and Identity-Dynamic Analysis**
-- [Paper](https://openaccess.thecvf.com/content/ICCV2025W/APAI/papers/Datta_PIA_Deepfake_Detection_Using_Phoneme-Temporal_and_Identity-Dynamic_Analysis_ICCVW_2025_paper.pdf)
-- [Official repository](https://github.com/skrantidatta/PIA)
+1. **Yan: context-conditioned lip dynamics.** A 24-clip public pilot compares a context-free mouth-dynamics baseline with a weak phonetic-context version. On six held-out clips, weak context did not improve the result.
+2. **He: periodic chromatic-injection forensics.** A paired audit detects a strong colour trace near the peer-reported 1.2 Hz setting in one Dark.Mimic A=1 pair. The trace remains above a neutral re-encode control after H.264 CRF 35, resizing and 15 FPS.
 
-PIA motivates the use of phoneme-temporal, lip-geometry, visual, and identity-dynamic evidence. This Milestone 1 repository does **not** claim a full PIA reproduction. It provides our own initial, executable extension around the phoneme-and-lip-dynamics premise.
+These are course-pilot findings. The repository does not claim forced phoneme alignment, full PIA reproduction, physiological waveform recovery or population-level detector accuracy.
 
-Additional references:
+## Start here
 
-- [CALS: Exploring Phonetic Context-Aware Lip-Sync for Talking Face Generation](https://arxiv.org/abs/2305.19556) - theoretical motivation for phonetic context and coarticulation.
-- [GenVidBench](https://github.com/genvidbench/GenVidBench) - general AI-generated-video evaluation reference.
+- [Executed Milestone 3 notebook](milestone3/notebooks/Milestone3.ipynb)
+- [Milestone 3 results](milestone3/reports/M3_RESULTS.md)
+- [15-minute presentation script](milestone3/reports/M3_PRESENTATION_SCRIPT.md)
+- [Editable PowerPoint presentation](milestone3/deliverables/FIT5230_M3_Context_Matters_Presentation.pptx)
+- [Submission checklist](milestone3/reports/M3_SUBMISSION_CHECKLIST.md)
+- [Milestone 3 source and reproduction guide](milestone3/README.md)
 
-## Initial customization beyond the reference baseline
+## Reproduce the public pilot
 
-The Milestone 1 notebook adds a lightweight and interpretable S2F preprocessing path:
-
-1. accepts real and generated MP4 talking-face clips;
-2. tracks mouth landmarks with MediaPipe;
-3. normalizes lip aperture and width using face scale;
-4. derives velocity, acceleration, and jerk from lip trajectories;
-5. supports manually specified word or phoneme intervals for controlled pilots;
-6. visualizes real-versus-generated motion traces; and
-7. exports per-frame CSV features, summary JSON, and environment metadata.
-
-These additions demonstrate initial customization and setup. Automatic phoneme alignment, PIA inference, controlled context-matched negatives, and the context-conditioned classifier remain planned work for later milestones.
-
-## Reproducible Milestone 1 smoke test
-
-The notebook can automatically download:
-
-- one licensed Wikitongues real talking-face clip; and
-- one public Hallo-generated example from TalkingHeadBench.
-
-The public pair has already completed the pipeline with 100% sampled-frame landmark coverage. Because the clips contain different identities and speech, their feature differences are **software-execution evidence only**, not proof of detector accuracy.
-
-![Tracked mouth landmarks](milestone1/demo_outputs/landmark_previews.png)
-
-![Normalized lip-dynamics traces](milestone1/demo_outputs/lip_dynamics_comparison.png)
-
-## Run in Google Colab
-
-1. Open [`milestone1/milestone1.ipynb`](milestone1/milestone1.ipynb) in Google Colab.
-2. Select **Runtime > Run all**.
-3. Keep `USE_PUBLIC_DEMO = True` for the reproducible smoke test, or set it to `False` and upload your own short MP4 clips.
-4. Confirm that the quality-control table, landmark previews, trajectory plots, CSV files, and JSON files are produced.
-
-For local execution, install the packages in [`requirements.txt`](requirements.txt). The notebook remains the recommended execution path.
-
-## Repository structure
-
-```text
-.
-├── README.md
-├── requirements.txt
-└── milestone1/
-    ├── milestone1.ipynb
-    ├── README.md
-    ├── Interactive_Challenge.md
-    ├── Public_Demo_Sources.md
-    ├── verify_milestone1.py
-    └── demo_outputs/
+```bash
+cd milestone3
+python -m venv .venv
+source .venv/bin/activate
+python -m pip install -r requirements.txt
+python scripts/download_m3_pilot.py
+python -m pytest -q
 ```
 
-## Interactive challenge
+The public notebook contains an inspectable source snapshot and saved outputs. A fresh run downloads the public pilot clips and models. Raw public videos, model weights and generated working outputs are excluded from Git.
 
-The proposed **Context-Swap Gauntlet** asks other teams to classify metadata-stripped real and generated clips and, for predicted fakes, identify the most suspicious time interval and primary cue. The full proposed rules are in [`milestone1/Interactive_Challenge.md`](milestone1/Interactive_Challenge.md).
+## Private peer material
 
-## Scope and responsible use
+Raw Dark.Mimic MP4 files are not redistributed. Aggregate results and SHA256 provenance are available under `milestone3/artifacts/m3_results/`. Team members with the verified files can use the guarded private rerun cell in the notebook.
 
-This repository is for defensive media-forensics research and coursework. Recordings must be consented or appropriately licensed. Hidden evaluation labels, personal videos, credentials, and private working materials are intentionally excluded.
+## Earlier work
+
+The original Milestone 1 notebook, documentation and demonstration outputs remain under [`milestone1/`](milestone1/).
+
+## Responsible use
+
+This project is defensive media-forensics coursework. Use only consented or appropriately licensed recordings. Do not commit credentials, personal videos or private peer media.

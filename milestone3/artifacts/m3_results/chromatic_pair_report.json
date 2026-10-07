@@ -1,0 +1,31 @@
+{
+  "scope": "one Dark.Mimic pair plus one neutral re-encode control",
+  "classification": "not performed",
+  "main_observation": {
+    "red": {
+      "attack_peak_hz": 1.1589403973509935,
+      "attack_target_energy_fraction": 0.9456918104760784,
+      "neutral_target_energy_fraction": 0.2043617083266858,
+      "energy_fraction_ratio": 4.627539171694177
+    },
+    "green": {
+      "attack_peak_hz": 1.1589403973509935,
+      "attack_target_energy_fraction": 0.9388008421856344,
+      "neutral_target_energy_fraction": 0.1107587540702676,
+      "energy_fraction_ratio": 8.47608706026108
+    },
+    "blue": {
+      "attack_peak_hz": 1.1589403973509935,
+      "attack_target_energy_fraction": 0.6602763128284589,
+      "neutral_target_energy_fraction": 0.0039781535791344,
+      "energy_fraction_ratio": 165.97557125286434
+    }
+  },
+  "limitations": [
+    "single source pair",
+    "rectangular image-relative ROIs are not face tracked",
+    "paired audit requires a control video",
+    "neutral control matches codec family and target bitrate, not the peer's exact encoder settings",
+    "periodicity is not a physiological waveform or a real/fake decision"
+  ]
+}

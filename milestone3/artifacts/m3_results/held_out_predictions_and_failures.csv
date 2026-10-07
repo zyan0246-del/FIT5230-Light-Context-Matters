@@ -1,0 +1,7 @@
+clip_id,label,generator,context_free_probability,context_probability,context_free_error,context_error
+fake_hallo_00023,fake,Hallo,0.425988241210033,0.0081412267112817,True,True
+fake_live_00198,fake,LivePortrait,0.1212545562605197,0.0357702830144825,True,True
+fake_live_00462,fake,LivePortrait,0.9369642332684418,0.9937724358614084,False,False
+real_simon,real,none,0.7717091196328509,0.8722832535867849,True,True
+real_william,real,none,0.0296076048006528,0.0008225678181607,False,False
+real_yorkshire,real,none,0.4154902774375774,0.1798360722792147,False,False
