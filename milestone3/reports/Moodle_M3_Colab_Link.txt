@@ -1,0 +1,14 @@
+FIT5230 Milestone 3 Colab submission
+
+Team: Light.Ningyizhuo_No.1
+Members: Yan Zhiheng; He Hongjie
+Theme and side: Theme 3 Speech-to-Face, Light
+
+Colab URL:
+https://colab.research.google.com/github/zyan0246-del/FIT5230-Light-Context-Matters/blob/main/milestone3/notebooks/Milestone3.ipynb
+
+Repository URL:
+https://github.com/zyan0246-del/FIT5230-Light-Context-Matters/tree/main/milestone3
+
+Verification date: 7 October 2026
+Verification: the public GitHub repository is anonymously accessible and the URL loads Milestone3.ipynb in Google Colab with the saved outputs visible.
