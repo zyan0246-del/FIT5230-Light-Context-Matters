@@ -374,7 +374,7 @@ def main() -> None:
     axes[1].set_title("20× repeated four-fold stability check")
     axes[1].grid(axis="y", alpha=0.2)
     axes[1].legend()
-    fig.suptitle("Multi-event context: promising split, no stable average gain")
+    fig.suptitle("Multi-event context: post-hoc split and stability check")
     fig.tight_layout()
     fig.savefig(artifact / "multi_context_improvement.png", dpi=180)
     plt.close(fig)
@@ -383,6 +383,21 @@ def main() -> None:
     fallback_clips = sorted(events.loc[
         events.selection_threshold.eq(FALLBACK_WORD_PROBABILITY), "clip_id"
     ].unique().tolist())
+    baseline_test = original_test.loc[original_test.model.eq("Context-free")].iloc[0]
+    followup_test = improved_test.iloc[0]
+    fixed_f1_delta = float(followup_test.macro_f1 - baseline_test.macro_f1)
+    fixed_auc_delta = float(followup_test.auroc - baseline_test.auroc)
+    cv_f1_delta = float(paired["macro_f1"]["mean_delta"])
+    cv_auc_delta = float(paired["auroc"]["mean_delta"])
+    fixed_description = (
+        "improved both metrics" if fixed_f1_delta > 0 and fixed_auc_delta > 0
+        else "did not improve both metrics"
+    )
+    cv_description = (
+        "did not show a consistent gain on both metrics"
+        if cv_f1_delta <= 0 or cv_auc_delta <= 0
+        else "showed a positive mean change on both metrics, but needs independent confirmation"
+    )
     summary = {
         "status": "exploratory_post_hoc",
         "parameters": {
@@ -408,8 +423,11 @@ def main() -> None:
         "repeated_cv": cv_summary.to_dict("records"),
         "paired_fold_differences": paired,
         "interpretation": (
-            "The original six-clip split improves, but repeated cross-validation does not show a stable "
-            "average gain. Treat the result as a feasibility improvement and motivate a fresh matched hold-out set."
+            f"In this runtime, the post-hoc six-clip follow-up {fixed_description} "
+            f"(Macro-F1 delta {fixed_f1_delta:+.3f}, AUROC delta {fixed_auc_delta:+.3f}). "
+            f"Repeated cross-validation {cv_description} "
+            f"(mean Macro-F1 delta {cv_f1_delta:+.3f}, AUROC delta {cv_auc_delta:+.3f}). "
+            "This is exploratory and requires a fresh matched hold-out set."
         ),
     }
     (artifact / "multi_context_summary.json").write_text(

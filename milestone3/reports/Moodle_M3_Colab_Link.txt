@@ -10,5 +10,5 @@ https://colab.research.google.com/github/zyan0246-del/FIT5230-Light-Context-Matt
 Repository URL:
 https://github.com/zyan0246-del/FIT5230-Light-Context-Matters/tree/main/milestone3
 
-Verification date: 7 October 2026
-Verification: the public GitHub repository is anonymously accessible; the URL loads Milestone3.ipynb with saved outputs visible; and all eight code cells completed successfully in a fresh Colab CPU runtime on 7 October 2026.
+Verification date: 15 October 2026
+Verification: the public GitHub repository is anonymously accessible; all nine code cells completed in a reset Colab CPU runtime, 37 tests passed, and all 24 public clips were processed. Saved notebook outputs are from the local reference run; the fresh Colab numerical disagreement is documented in M3_COLAB_VERIFICATION.md. The optional private Dark.Mimic rerun remains disabled in the public notebook.

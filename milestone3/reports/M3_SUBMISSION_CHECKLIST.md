@@ -14,7 +14,7 @@
 - [x] H.264 CRF 35, resize and 15 FPS conditions included.
 - [x] Raw peer files excluded from the public repository.
 - [x] Peer file SHA256 provenance recorded.
-- [x] 35 regression tests pass.
+- [x] 37 regression tests pass.
 - [x] Multi-event context follow-up added with a repeated-cross-validation stability check.
 - [x] Updated Milestone3.ipynb executed locally with nine saved code-cell outputs and no errors.
 - [x] Fifteen-minute presentation script prepared.
@@ -26,9 +26,10 @@
 - [x] Upload the final repository to GitHub.
 - [x] Open `notebooks/Milestone3.ipynb` in Google Colab.
 - [x] The previous eight-cell notebook completed in a fresh Colab CPU runtime.
-- [ ] Run the updated nine-cell notebook in a fresh Colab CPU runtime after publishing the multi-event follow-up.
+- [x] Run the nine-cell notebook in a reset Colab CPU runtime; all nine cells and 37 tests completed on 15 October.
 - [x] Verify the public GitHub-backed Colab URL loads without repository authentication.
 - [x] Record the cross-environment result variation without changing the conclusion.
+- [x] Correct the post-hoc interpretation: the local multi-event gain did not reproduce in Colab.
 - [x] Put the verified Colab URL in a TXT file.
 - [ ] Optionally copy the notebook to Drive and set **Anyone with the link can view** if the lecturer requires a Drive-owned rather than GitHub-backed Colab link.
 - [ ] Submit that PDF or TXT file to the Moodle Milestone 3 page before 22 October 2026, 11:55 PM MYT.

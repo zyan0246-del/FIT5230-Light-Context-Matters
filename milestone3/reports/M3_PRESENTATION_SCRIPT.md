@@ -14,7 +14,7 @@ Speaker: Yan.
 
 "At Milestone 2, we had reproducible code, synthetic checks and public-video preprocessing, but no real classifier experiment. For Milestone 3 we added a 24-clip public pilot, actual held-out evaluation, weak phonetic alignment, a peer-pair forensic analyser, a neutral codec control and post-processing tests."
 
-Point to the fixed split: 12 train, six validation and six test. Mention 35 passing tests and 24 out of 24 clips with full face-landmark coverage.
+Point to the fixed split: 12 train, six validation and six test. Mention 37 passing tests and 24 out of 24 clips with full face-landmark coverage.
 
 ## Slide 3: Experimental framework (1:45 to 3:00)
 
@@ -44,7 +44,7 @@ Explain that Whisper word timestamps plus CMUdict give a weak proxy. Do not call
 
 Speaker: Yan.
 
-"On six held-out clips, the saved reference run gave macro-F1 0.486 for both models and AUROC 0.667 versus 0.556. A fresh Colab CPU rerun gave the same macro-F1 and AUROC 0.556 versus 0.444. The difference was minus 0.111 in both environments. The bootstrap intervals are wide because the test set contains only three real and three fake clips."
+"On six held-out clips, the saved local reference run gave macro-F1 0.486 for both models and AUROC 0.667 versus 0.556. A fresh Colab CPU rerun on 15 October gave the same macro-F1 and AUROC 0.556 versus 0.222. The exact AUROC changed with the runtime, but weak context was worse in both. The bootstrap intervals are wide because the test set contains only three real and three fake clips."
 
 "The correct conclusion is that this weak context implementation does not improve the pilot."
 
@@ -52,9 +52,11 @@ Speaker: Yan.
 
 Speaker: Yan.
 
-"We addressed one clear limitation by using every eligible vowel proxy rather than one interval per clip. This gives 547 events, with a median of 20 per clip. A model learned expected central mouth geometry from real training speech and aggregated residuals back to one row per clip."
+"We addressed one clear limitation by using every eligible vowel proxy rather than one interval per clip. This gives 547 events in the saved local run, with a median of 20 per clip. A model learned expected central mouth geometry from real training speech and aggregated residuals back to one row per clip."
 
-"On the original six-clip split, macro-F1 increased from 0.486 to 0.829 and AUROC from 0.667 to 0.778. This follow-up was designed after seeing that split, so it is post-hoc. In 20 repeated four-fold runs, mean F1 changed from 0.655 to 0.645 and mean AUROC from 0.678 to 0.689. The average gain is not stable. We need forced alignment and a fresh matched hold-out set."
+"Locally, the already-known six-clip split improved from 0.486 to 0.829 Macro-F1 and from 0.667 to 0.778 AUROC. That was post-hoc, not independent confirmation. Local repeated four-fold means were mixed: F1 0.655 to 0.645 and AUROC 0.678 to 0.689. More importantly, fresh Colab did not reproduce the fixed-split gain: follow-up test F1 0.486 and AUROC 0.444, versus baseline 0.486 and 0.556. Its repeated-CV mean changes were negative on both metrics. We need forced alignment and a fresh matched hold-out set."
+
+If asked whether phonetic context caused the six-clip improvement: the follow-up also changes the number of windows, feature representation and classifier regularisation. A matched-parameter no-phone/shuffled-phone ablation and cross-fitted training residuals are still required.
 
 ## Slide 8: Strategy B design and neutral control (10:00 to 11:30)
 
@@ -80,7 +82,7 @@ Speaker: He.
 
 Speaker: He, final sentence by Yan.
 
-"The lip branch contains a negative first result and a transparent post-hoc follow-up. The original split improves, but repeated folds do not show a stable average gain. The colour branch finds a strong but narrow trace in one peer pair."
+"The lip branch contains a negative first result and a transparent post-hoc follow-up. A local split improved, but the fresh Colab rerun did not reproduce it, and repeated folds do not show a consistent gain. The colour branch finds a strong but narrow trace in one peer pair."
 
 Yan closes:
 
@@ -94,7 +96,7 @@ The first version used only a word-timestamp proxy, 12 training clips and one in
 
 ### Why report the 0.829 result if it is post-hoc?
 
-It shows that the engineering change is worth testing, but it cannot confirm effectiveness because the split was already visible. We pair it with repeated cross-validation and explicitly require a new matched hold-out set.
+It records an exploratory local finding, but it cannot confirm effectiveness because the split was already visible, and fresh Colab did not reproduce it. We pair it with repeated cross-validation and explicitly require a new matched hold-out set.
 
 ### Why is the chromatic result not a detector?
 

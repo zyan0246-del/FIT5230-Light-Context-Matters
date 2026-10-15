@@ -22,7 +22,7 @@ We report the channels separately. We do not tune score fusion on one peer pair.
 - Added reproducible Whisper and CMUdict weak context annotations.
 - Added a paired chromatic spectral analyser and five unit tests.
 - Added a neutral re-encode control and three post-processing conditions.
-- Increased the regression suite to 35 passing tests.
+- Increased the regression suite to 37 passing tests.
 - Built and executed a standalone Milestone 3 notebook with saved outputs.
 
 ## Public pilot
@@ -54,7 +54,7 @@ Both models use the same 12 training, six validation and six held-out test clips
 
 The intervals use 5,000 paired stratified bootstrap resamples. The held-out set contains only three real and three fake clips, so the intervals are necessarily wide.
 
-These are the saved reference-run values (Python 3.12). A fresh Google Colab CPU run on 7 October 2026 completed the previous eight-cell notebook and produced macro-F1 0.486 for both models, with AUROC 0.556 for context-free and 0.444 for weak context. The AUROC difference remained -0.111. FFmpeg builds, decoded pixels and dependency versions differ across the two environments; with only six test clips, small numeric perturbations can change rank-based AUROC. The updated nine-cell notebook, including the multi-event follow-up, has been executed locally and still needs a fresh Colab rerun. Full details are in [M3_COLAB_VERIFICATION.md](M3_COLAB_VERIFICATION.md).
+These are the saved local reference-run values (Python 3.12). A fresh Google Colab CPU run on 15 October 2026 completed all nine code cells and produced macro-F1 0.486 for both original models, with AUROC 0.556 for context-free and 0.222 for weak context. The weak-context difference was -0.333. A prior eight-cell Colab run on 7 October had AUROC 0.556 versus 0.444. FFmpeg builds, decoded pixels, ASR output and dependency versions can differ; with only six test clips, AUROC ranks are especially unstable. The negative weak-context conclusion held in each run, but the exact scores did not. Full details are in [M3_COLAB_VERIFICATION.md](M3_COLAB_VERIFICATION.md).
 
 ### Interpretation
 
@@ -64,9 +64,13 @@ The next research experiment should use forced phoneme alignment, many intervals
 
 ### Exploratory multi-event follow-up
 
-After observing the original result, we added a post-hoc follow-up that uses all eligible vowel proxies rather than one interval per clip. It learns expected central mouth geometry from neighbouring phone classes and real training speech, then aggregates context residuals and transition summaries to one row per clip. The analysis retained 547 events across all 24 clips (median 20 per clip).
+After observing the original result, we added a post-hoc follow-up that uses all eligible vowel proxies rather than one interval per clip. It learns expected central mouth geometry from neighbouring phone classes and real training speech, then aggregates context residuals and transition summaries to one row per clip. The saved local analysis retained 547 events across all 24 clips (median 20 per clip). The primary ASR word-confidence threshold is 0.80; a clip with no eligible event retries at 0.60, with the fallback ID recorded in the output. This makes availability explicit but does not make approximate phoneme timing more accurate.
 
 On the original six-clip split, this extension reached macro-F1 0.829 and AUROC 0.778. Because that test split was already known, we also ran 20 repeated four-fold comparisons with the context expectation refitted inside every training fold. Mean macro-F1 was 0.645 versus 0.655 for context-free, while mean AUROC was 0.689 versus 0.678. The apparent fixed-split improvement therefore did not become a stable average gain. We treat it as a feasibility result and require a fresh matched hold-out dataset for confirmation. See [M3_MULTI_CONTEXT_FOLLOWUP.md](M3_MULTI_CONTEXT_FOLLOWUP.md).
+
+Crucially, the fresh Colab run did **not** reproduce that local split gain: the multi-event test result was macro-F1 0.486 and AUROC 0.444, versus context-free 0.486/0.556. It retained 567 events and required one documented 0.60-confidence fallback. Colab repeated-CV mean changes were -0.057 Macro-F1 and -0.067 AUROC. Therefore, the course evidence supports a functioning but environment-sensitive experiment, not an effective new detector.
+
+This follow-up also changes regularisation (`C=0.01` versus the context-free model's `C=1.0`) and the window/feature representation. It has not isolated the contribution of correct phonetic neighbours. Its training-real residuals are computed in sample, whereas held-out residuals are out of sample. We disclose these limitations rather than interpreting the six-clip difference as a method-specific gain.
 
 ## Peer work
 
@@ -114,7 +118,7 @@ The two strategies answer different questions. The lip model asks whether genera
 - Fixed split, seed, threshold and preprocessing parameters are stored.
 - The notebook contains an inspectable source snapshot and saved outputs.
 - All nine updated notebook code cells execute locally without errors.
-- All 35 regression tests pass.
+- All 37 regression tests pass.
 
 ## Claim boundary
 

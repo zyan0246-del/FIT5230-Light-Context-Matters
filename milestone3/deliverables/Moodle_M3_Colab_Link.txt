@@ -10,5 +10,5 @@ https://colab.research.google.com/github/zyan0246-del/FIT5230-Light-Context-Matt
 Repository URL:
 https://github.com/zyan0246-del/FIT5230-Light-Context-Matters/tree/main/milestone3
 
-Verification date: 7 October 2026
-Verification status: the previous eight-cell notebook completed successfully in a fresh Colab CPU runtime on 7 October 2026. The updated nine-cell notebook includes the multi-event follow-up and completed locally with saved outputs. Run the updated public notebook once in a fresh Colab runtime before Moodle submission, then replace this sentence with the final verification result.
+Verification date: 15 October 2026
+Verification status: all nine code cells completed in a reset Google Colab CPU runtime; 37 regression tests passed and all 24 public clips were processed. The notebook contains saved local reference outputs; the fresh Colab numerical results differed, particularly for the exploratory multi-event follow-up. Both are disclosed in milestone3/reports/M3_COLAB_VERIFICATION.md. The optional private Dark.Mimic video rerun is disabled in the public notebook; only hash-linked aggregate results are displayed.

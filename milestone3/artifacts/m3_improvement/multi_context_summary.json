@@ -63,5 +63,5 @@
       "positive_fold_fraction": 0.475
     }
   },
-  "interpretation": "The original six-clip split improves, but repeated cross-validation does not show a stable average gain. Treat the result as a feasibility improvement and motivate a fresh matched hold-out set."
+  "interpretation": "In this runtime, the post-hoc six-clip follow-up improved both metrics (Macro-F1 delta +0.343, AUROC delta +0.111). Repeated cross-validation did not show a consistent gain on both metrics (mean Macro-F1 delta -0.010, AUROC delta +0.011). This is exploratory and requires a fresh matched hold-out set."
 }

@@ -49,7 +49,7 @@ reported separately.  Fusion is optional and must not be tuned on the peer pair.
 - fresh end-to-end Colab run with outputs;
 - one clearly attributed strategy and contribution per member.
 
-## Current status (7 October 2026)
+## Current status (15 October 2026)
 
 - M2 source restored from the submitted notebook snapshot.
 - Existing M2 tests, synthetic smoke test and public preprocessing retained.
@@ -66,4 +66,7 @@ reported separately.  Fusion is optional and must not be tuned on the peer pair.
 - Weak context did not improve the result: macro-F1 0.486 and AUROC 0.556.
 - The peer chromatic trace remained above the neutral control under three fixed post-processing conditions.
 - The updated standalone M3 notebook completed all nine code cells locally with saved outputs and no errors.
-- Thirty-two regression tests pass.
+- The post-hoc multi-event follow-up is implemented and reported with repeated cross-validation; its apparent fixed-split improvement is not stable across folds.
+- Thirty-seven regression tests pass.
+- The public nine-cell notebook completed in a reset Colab CPU runtime on 15 October; 37 tests passed and all 24 public clips were processed.
+- That cloud run did not reproduce the saved local multi-event gain. Reports, notebook interpretation and presentation now disclose the disagreement instead of claiming a stable improvement.
