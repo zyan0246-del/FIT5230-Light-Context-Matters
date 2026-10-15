@@ -17,12 +17,12 @@ We report the channels separately. We do not tune score fusion on one peer pair.
 
 ## Progress since Milestone 2
 
-- Replaced synthetic-only classifier evidence with a 24-clip public pilot.
+- The submitted M2 notebook used 32 synthetic trajectory fixtures (16 artificial identity IDs) for its classifier smoke test and two public videos for preprocessing/coverage only. It reported no real-video classifier accuracy. M3 added the first 24-clip public real/fake pilot with held-out evaluation. A separate 16-video pilot mentioned in informal feedback is not verified by the supplied M2 notebook, so we do not claim it here.
 - Added fixed speaker/source-disjoint train, validation and test splits.
 - Added reproducible Whisper and CMUdict weak context annotations.
 - Added a paired chromatic spectral analyser and five unit tests.
 - Added a neutral re-encode control and three post-processing conditions.
-- Increased the regression suite to 37 passing tests.
+- Increased the regression suite to 38 passing tests.
 - Built and executed a standalone Milestone 3 notebook with saved outputs.
 
 ## Public pilot
@@ -35,7 +35,7 @@ The real and fake classes come from different source collections. A classifier m
 
 ## Strategy A: context-conditioned lip dynamics
 
-Owner: Yan Zhiheng.
+Presentation lead: Yan Zhiheng. Individual implementation credit has not been independently verified.
 
 ### Method
 
@@ -72,6 +72,10 @@ Crucially, the fresh Colab run did **not** reproduce that local split gain: the 
 
 This follow-up also changes regularisation (`C=0.01` versus the context-free model's `C=1.0`) and the window/feature representation. It has not isolated the contribution of correct phonetic neighbours. Its training-real residuals are computed in sample, whereas held-out residuals are out of sample. We disclose these limitations rather than interpreting the six-clip difference as a method-specific gain.
 
+### Matched-setting phonetic ablation added after review
+
+The source script now includes a `multi_event_no_phone` comparison. It uses the same eligible events, before/after mouth measurements, ridge penalty, clip aggregation, logistic-regression settings and fixed/CV splits as `multi_event_context`; only the previous/next/central phone-category inputs to the expected-mouth model are removed. A local replay used the audited 15 October event and feature caches, 547 events from 24 clips. On the already-known six-clip test split, the phone-context version scored Macro-F1 0.829/AUROC 0.778 versus no-phone 0.625/0.667. Across 20 repeated four-fold comparisons, mean Macro-F1 was 0.645 versus 0.632, while mean AUROC was **0.689 versus 0.694**. The mixed repeated-CV result does not establish a stable phonetic-context advantage. The new CSVs are `matched_context_ablation_fixed.csv`, `matched_context_ablation_folds.csv` and `matched_context_ablation_summary.csv`. The revised public notebook now contains this code and its **locally executed** outputs; a fresh Colab rerun of this exact revision is still pending. The six-clip test was already known, and real training-event residuals remain in sample, so the fixed-split gain is exploratory.
+
 ## Peer work
 
 Dark.Mimic generated or modified talking-face video and attempted to make its physiological signal more plausible to an rPPG-based detector. The exchanged package contained an aligned control and an A=1 modified video. Our paired check confirmed identical audio in the earlier analysis and very similar mouth geometry. Those findings motivated a forensic question: does the manipulation itself leave a periodic decoded-pixel trace?
@@ -80,7 +84,7 @@ The raw peer videos remain outside the public repository. The notebook records S
 
 ## Strategy B: periodic chromatic-injection forensics
 
-Owner: He Hongjie.
+Presentation lead: He Hongjie. Individual implementation credit has not been independently verified.
 
 ### Method
 
@@ -107,7 +111,19 @@ The single pair supports a descriptive claim: the A=1 modification contains a st
 
 It does not support a population-level detection claim. The analyser requires an aligned control, uses fixed rectangular regions rather than face tracking and has only one identity. Periodicity is not an rPPG waveform. A future detector would need unpaired features, multiple identities, clean lighting controls and false-positive evaluation.
 
-No response or counter-test from Dark.Mimic to this M3 forensic finding has been documented. We therefore report what happened in the exchanged pair, not a demonstrated defeat of the target team. Periodic lighting, motion and camera auto-exposure remain plausible false-positive sources.
+No response or counter-test from Dark.Mimic to this M3 forensic finding has been documented. We therefore report what happened in the exchanged pair, not a demonstrated defeat of the target team. The synthetic periodic-lighting control below confirms a non-attack trigger; natural lighting, motion and camera auto-exposure remain plausible confounders.
+
+The attack evidence includes one attacked identity plus its neutral re-encode. Twelve separate benign identities are now included for codec-only and synthetic-light checks, but none has a matched attack or naturally captured lighting change. These controls narrow the interpretation and expose a specificity limit, but do not measure false-positive rate. A future suite should include natural lighting, exposure changes and head motion on benign videos, plus attacks on multiple subjects. Until then, the attack result remains a paired forensic case study.
+
+### Additional public benign-codec controls and neutral recipe
+
+We applied the same paired colour analysis to 12 public real-speaker videos, each compared with its own MPEG-4 800 kb/s neutral re-encode. This explicit FFmpeg recipe is in `scripts/run_benign_chromatic_controls.py`. The global red 1.2 Hz target-band fraction ranged from 0.008 to 0.359, median 0.074; the peer A=1 pair was 0.946. Because these videos have different identities, lighting and capture conditions, the numbers are descriptive and **not** an estimated false-positive rate or a matched-control test. The absolute codec-difference RMS is also recorded so a high normalized fraction is not mistaken for a large injected signal. Aggregates and source hashes are in `artifacts/m3_results/benign_chromatic_controls.csv`.
+
+We also regenerated a neutral MP4 directly from the hash-verified private peer control with the documented MPEG-4 800 kb/s command. Using this new neutral, the peer red attack/neutral ratios were 7.61, 1.88, 17.69 and 34.76 for original, CRF 35, resize and 15 FPS, respectively. They remained above one but varied markedly from the historical-neutral ratios. The original historical neutral file was not created with a fully recorded command, so we retain both analyses and do not claim bit-exact reproduction of that file.
+
+### Synthetic periodic-lighting counterexample
+
+To test specificity, we added the same *global* 1.2 Hz brightness modulation (normalized amplitude 0.02) to each of the 12 public real-speaker clips, using the same MPEG-4 settings as the neutral variant. The paired red target-band fraction rose above its own neutral value in **12/12** clips: median 0.981 for synthetic periodic light versus 0.074 for neutral codec re-encoding. This is a deliberate non-physiological perturbation and demonstrates that the current frequency metric responds to periodic light as well as to the peer modification. It therefore cannot by itself attribute a detected trace to Dark.Mimic, nor can the single attacked pair support a false-positive rate or deployable classifier. The reproducible recipe and per-speaker aggregate values are in `scripts/run_periodic_light_control.py` and `artifacts/m3_results/periodic_light_controls.csv`. Naturally captured lighting, motion, auto-exposure and attacks on multiple identities remain untested.
 
 ## Integrated Light-side response
 
@@ -117,10 +133,14 @@ The two strategies answer different questions. The lip model asks whether genera
 
 - Public acquisition URLs, license metadata, FFmpeg commands and SHA256 hashes are saved.
 - Private peer videos are identified by SHA256 but are not redistributed.
+- On 16 October, the three private MP4 hashes were rechecked and the four-condition chromatic audit was rerun independently. Red attack/neutral ratios matched the reported rounded values: 4.63, 8.45, 6.28 and 20.86. This reproduces the one-pair analysis, not population-level validity.
+- A documented MPEG-4 recipe regenerates a new neutral control. Its output SHA256 and ratios are saved separately from the historical neutral analysis.
+- Twelve public real-speaker codec-only controls were run with the same metric; their aggregate table is public, not the derived videos.
+- Twelve synthetic periodic-lighting variants on those real speakers exposed a specificity failure (12/12 increased target-band fractions); the controlled recipe and aggregates are public, not the derived videos.
 - Fixed split, seed, threshold and preprocessing parameters are stored.
 - The notebook contains an inspectable source snapshot and saved outputs.
 - All nine updated notebook code cells execute locally without errors.
-- All 37 regression tests pass.
+- All 38 regression tests pass.
 
 ## Claim boundary
 

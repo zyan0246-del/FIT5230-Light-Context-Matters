@@ -26,15 +26,20 @@ manager = KernelManager(
     kernel_name="s2f-m3",
     kernel_spec_manager=KernelSpecManager(kernel_dirs=[str(KERNELS)]),
 )
-notebook_path = ROOT / "notebooks/Milestone3.ipynb"
+notebook_name = os.environ.get("M3_NOTEBOOK_NAME", "Milestone3.ipynb")
+if Path(notebook_name).name != notebook_name:
+    raise ValueError("M3_NOTEBOOK_NAME must be a filename, not a path")
+notebook_path = ROOT / "notebooks" / notebook_name
 notebook = nbformat.read(notebook_path, as_version=4)
+ROOT.joinpath("tmp").mkdir(exist_ok=True)
 run_dir = Path(tempfile.mkdtemp(prefix="m3_notebook_run_", dir=ROOT / "tmp"))
 workspace = run_dir / "m3_notebook_workspace"
+cache_root = Path(os.environ.get("M3_CACHE_ROOT", ROOT)).resolve()
 
 # Reuse independently acquired caches. A fresh Colab run uses the same public
 # acquisition scripts and URLs instead.
 for relative in ["data/raw/m3_pilot", "data/processed/m3_pilot", "models"]:
-    source = ROOT / relative
+    source = cache_root / relative
     if source.exists():
         shutil.copytree(source, workspace / relative)
 

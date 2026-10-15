@@ -1,0 +1,17 @@
+{
+  "scope": "12 independent public real speakers, each paired with its own neutral MPEG-4 re-encode",
+  "target_frequency_hz": 1.2,
+  "command_template": "ffmpeg -i SOURCE -map 0:v:0 -c:v mpeg4 -b:v 800k -pix_fmt yuv420p -an TARGET",
+  "n_speakers": 12,
+  "n_pairs": 12,
+  "red_target_fraction_min": 0.0075520009466307,
+  "red_target_fraction_median": 0.0739451804237086,
+  "red_target_fraction_max": 0.3594158023405082,
+  "red_delta_rms_median": 0.03882250159933531,
+  "limitations": [
+    "The videos are not matched to the Dark.Mimic identity or encoder settings.",
+    "No controlled periodic lighting, head motion or exposure perturbations are included.",
+    "No attack is applied to these speakers; this is not a false-positive-rate or detector test.",
+    "A normalized spectral fraction can be large even if absolute signal amplitude is small."
+  ]
+}

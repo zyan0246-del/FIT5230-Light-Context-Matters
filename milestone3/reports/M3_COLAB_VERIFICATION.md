@@ -1,6 +1,6 @@
 # Fresh Colab verification
 
-The 15 October run verified the nine-code-cell public notebook from a reset Colab CPU runtime. The notebook was opened from the public GitHub URL. Its output differs materially from the saved local reference; both results are retained and labelled.
+The 15 October run verified the **previous** nine-code-cell public notebook from a reset Colab CPU runtime. The notebook was opened from the public GitHub URL. Its output differs materially from the saved local reference; both results are retained and labelled. The 16 October revision adds the matched no-phone ablation and public benign-codec controls and has been executed locally, but **has not yet been verified in fresh Colab**. Do not present this page as verification of the revised notebook.
 
 Verification dates: 7 and 15 October 2026
 
@@ -34,4 +34,4 @@ Macro-F1 stayed at 0.486 for the original two models in all three runs. Weak con
 
 The 15 October multi-event result did **not** reproduce the local improvement. Saved local test Macro-F1/AUROC was 0.829/0.778, whereas fresh Colab gave 0.486/0.444, compared with its context-free 0.486/0.556. Local repeated four-fold mean changes were -0.010 Macro-F1 and +0.011 AUROC; Colab changes were -0.057 and -0.067. Therefore, no reliable gain has been established.
 
-This is a cross-environment reproducibility check, not an independent dataset. FFmpeg/codec decoding, ASR output and package versions can alter event selection and features; the ASR fallback makes one such difference visible. With only three real and three fake test clips, AUROC ranks are highly unstable. The final presentation plots saved local results and labels the fresh Colab disagreement on the relevant slides. The updated source prints a runtime-specific interpretation rather than claiming a gain unconditionally.
+This is a cross-environment reproducibility check of the earlier revision, not an independent dataset. FFmpeg/codec decoding, ASR output and package versions can alter event selection and features; the ASR fallback makes one such difference visible. With only three real and three fake test clips, AUROC ranks are highly unstable. The final presentation plots saved local results and labels the earlier fresh-Colab disagreement on the relevant slides. The updated source prints a runtime-specific interpretation rather than claiming a gain unconditionally; its new ablation must be rerun in Colab separately.

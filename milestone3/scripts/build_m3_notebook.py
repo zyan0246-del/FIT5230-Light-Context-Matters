@@ -28,6 +28,8 @@ def text_snapshot() -> tuple[dict[str, str], str]:
         ROOT / "scripts/summarize_lip_pilot.py",
         ROOT / "scripts/run_multi_context_improvement.py",
         ROOT / "scripts/run_chromatic_robustness.py",
+        ROOT / "scripts/run_benign_chromatic_controls.py",
+        ROOT / "scripts/run_periodic_light_control.py",
     ]
     paths += list((ROOT / "artifacts/m3_results").glob("*.csv"))
     paths += list((ROOT / "artifacts/m3_results").glob("*.json"))
@@ -84,8 +86,9 @@ print(json.dumps(environment(), indent=2))
         nbf.v4.new_markdown_cell(
             "# Context Matters: FIT5230 Milestone 3\n\n"
             "**Light.Ningyizhuo_No.1 | Yan Zhiheng and He Hongjie | Theme 3, Light side**\n\n"
-            "This notebook evaluates two distinct defenses. Yan tests whether weak phonetic context improves "
-            "mouth-dynamics detection. He audits the periodic colour trace introduced by Dark.Mimic's rPPG evasion. "
+            "This notebook evaluates two distinct defenses. Yan presents the phonetic-context "
+            "mouth-dynamics analysis. He presents the periodic-colour audit of Dark.Mimic's rPPG evasion. "
+            "These are speaking roles, not independently verified implementation credits. "
             "The public pilot runs end to end on CPU. Peer videos remain private, so the notebook includes their hashes, "
             "aggregate results and a guarded rerun path without redistributing the MP4 files."
         ),
@@ -182,6 +185,8 @@ print("Result: the weak context proxy did not improve the six-clip held-out pilo
             "proxy, learns expected central mouth geometry from real training speech and aggregates residuals at "
             "clip level. The original six-clip split is therefore not fresh confirmation. We report it together "
             "with 20 repeated four-fold comparisons in which the context expectation is refit inside each fold. "
+            "A matched no-phone ablation uses the same events, numeric mouth inputs, ridge penalty and classifier; "
+            "it removes only phonetic-category inputs. Report its fixed split and repeated folds separately. "
             "If a clip has no usable vowel at 0.80 ASR word confidence, a 0.60 fallback is recorded; "
             "the rule is applied without reference to labels or scores."
         ),
@@ -190,6 +195,8 @@ print("Result: the weak context proxy did not improve the six-clip held-out pilo
 followup = json.loads((ROOT / "artifacts/m3_improvement/multi_context_summary.json").read_text())
 display(pd.DataFrame(followup["fixed_split_metrics"]))
 display(pd.DataFrame(followup["repeated_cv"]))
+display(pd.DataFrame(followup["matched_context_ablation"]["fixed_split"]))
+display(pd.DataFrame(followup["matched_context_ablation"]["repeated_cv_mean"]))
 display(Image(filename=str(ROOT / "artifacts/m3_improvement/multi_context_improvement.png")))
 print("Fallback ASR clips:", followup["events"]["fallback_clips"])
 print(followup["interpretation"])
@@ -200,6 +207,7 @@ print(followup["interpretation"])
             "Dark.Mimic supplied one aligned control and A=1 modified video. We measure modified-minus-control RGB "
             "differences and spectral energy near the peer-reported 1.2 Hz setting. A neutral re-encode tests codec effects. "
             "The raw peer files stay outside the public repository. The aggregate below identifies them by SHA256. "
+            "Twelve public real-speaker codec controls and synthetic periodic-light variants probe specificity. "
             "This paired forensic measurement does not estimate physiology and does not classify real versus fake."
         ),
         nbf.v4.new_code_cell(
@@ -207,8 +215,19 @@ print(followup["interpretation"])
 print(json.dumps(provenance, indent=2))
 pair = pd.read_csv(ROOT / "artifacts/m3_results/attack_vs_neutral.csv")
 robust = pd.read_csv(ROOT / "artifacts/m3_results/robustness_summary.csv")
+benign = pd.read_csv(ROOT / "artifacts/m3_results/benign_chromatic_controls.csv")
+new_neutral = pd.read_csv(ROOT / "artifacts/m3_results/robustness_reproduced_neutral.csv")
+periodic_light = pd.read_csv(ROOT / "artifacts/m3_results/periodic_light_controls.csv")
 display(pair[pair.roi.eq("global")])
 display(robust)
+print("Twelve real-speaker codec-only controls (not a false-positive test):")
+display(benign[["clip_id", "target_band_energy_fraction", "red_delta_rms"]])
+print("Peer red ratios with a newly regenerated neutral control:")
+display(new_neutral[new_neutral.channel.eq("red")][["condition", "attack_to_neutral_ratio"]])
+print("Neutral recipe:", json.loads((ROOT / "artifacts/m3_results/neutral_recipe.json").read_text())["command_template"])
+print("Synthetic 1.2 Hz global light control (a non-attack trigger):")
+display(periodic_light[["clip_id", "neutral_fraction", "periodic_fraction"]])
+print("Periodic light exceeds neutral in", int((periodic_light.periodic_fraction > periodic_light.neutral_fraction).sum()), "of", len(periodic_light), "real-speaker clips")
 
 import matplotlib.pyplot as plt
 red = robust[robust.channel.eq("red")].set_index("condition").loc[["original", "h264_crf35", "resize_256", "fps_15"]]
@@ -252,8 +271,11 @@ else:
             "metrics. ASR, decoding and package versions can change six-clip rankings; use the generated metrics "
             "above for this runtime. This narrows the next research step to forced "
             "alignment and a fresh matched hold-out set rather than further tuning these 24 clips.\n"
-            "3. In the single peer pair, periodic colour energy near 1.2 Hz remained higher than the neutral control after "
-            "H.264 CRF 35, resizing and 15 FPS. This supports a paired manipulation audit, not a general detector.\n\n"
+            "3. In the single attacked peer pair, periodic colour energy near 1.2 Hz remained higher than both the historical "
+            "and newly regenerated neutral controls after H.264 CRF 35, resizing and 15 FPS. Twelve public real-speaker "
+            "codec-only controls were also run. Synthetic 1.2 Hz global light raised the same metric on all 12 real "
+            "speakers, showing that the metric is not attack-specific. These checks support a paired manipulation audit, "
+            "not a general detector or measured false-positive rate; natural lighting, motion and exposure are not controlled.\n\n"
             "The integrated Light defense keeps both channels separate: lip dynamics test S2F generation artefacts, while "
             "chromatic forensics test traces introduced by the attempted rPPG evasion. We do not tune fusion on one peer pair."
         ),
@@ -266,7 +288,8 @@ else:
             "source_snapshot_sha256": digest,
         },
     )
-    destination = ROOT / "notebooks/Milestone3.ipynb"
+    import os
+    destination = ROOT / "notebooks" / os.environ.get("M3_NOTEBOOK_NAME", "Milestone3.ipynb")
     destination.parent.mkdir(exist_ok=True)
     nbf.write(notebook, destination)
     print("Built", destination, "with", len(cells), "cells and source", digest)

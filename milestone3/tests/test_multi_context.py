@@ -47,6 +47,27 @@ def test_aggregation_stays_clip_level():
     assert aggregated.loc[0, "residual_inner_aperture_smooth_mean"] == pytest.approx(0.6)
 
 
+def test_no_phone_ablation_preserves_event_rows():
+    rows = []
+    for clip_id, phone_class in [("real_a", "stop"), ("real_b", "nasal"), ("fake_a", "glide")]:
+        for event_index in range(3):
+            row = {
+                "clip_id": clip_id, "event_index": event_index,
+                "previous_class": phone_class, "next_class": "vowel", "central_vowel": "AE",
+            }
+            for column in MODULE.GEOMETRY:
+                for phase, value in [("before", 0.1), ("during", 0.2), ("after", 0.3)]:
+                    row[f"{column}_{phase}"] = value + event_index * 0.01
+            rows.append(row)
+    events = pd.DataFrame(rows)
+    real_ids = {"real_a", "real_b"}
+    full = MODULE.residual_events(events, real_ids)
+    ablated = MODULE.residual_events(events, real_ids, use_phone_context=False)
+    assert len(full) == len(ablated) == len(events)
+    assert list(MODULE.aggregate_events(full).clip_id) == list(MODULE.aggregate_events(ablated).clip_id)
+    assert np.isfinite(ablated.filter(like="residual_").to_numpy()).all()
+
+
 @pytest.mark.parametrize("confidence, expected_threshold", [(0.9, 0.8), (0.7, 0.6)])
 def test_clip_events_uses_recorded_confidence_fallback(tmp_path, monkeypatch, confidence, expected_threshold):
     monkeypatch.setattr(MODULE, "ROOT", tmp_path)

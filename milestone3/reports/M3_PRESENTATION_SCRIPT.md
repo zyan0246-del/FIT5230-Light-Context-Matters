@@ -1,6 +1,6 @@
 # Milestone 3 presentation plan and speaker script
 
-Total time: 15 minutes. Target 11 slides.
+Total time: 15 minutes. Target 11 slides. Planned speaking time: Yan 7.5 minutes, He 7.5 minutes. This is an equal speaking allocation, not a record of implementation credit.
 
 ## Slide 1: Title and research question (0:00 to 0:30)
 
@@ -12,15 +12,17 @@ Speaker: Yan.
 
 Speaker: Yan.
 
-"At Milestone 2, we had reproducible code, synthetic checks and public-video preprocessing, but no real classifier experiment. For Milestone 3 we added a 24-clip public pilot, actual held-out evaluation, weak phonetic alignment, a peer-pair forensic analyser, a neutral codec control and post-processing tests."
+"The submitted M2 notebook used 32 synthetic trajectories from 16 artificial identity IDs to check classifier logic. It also preprocessed one real and one generated public video, but did not measure real-video detection accuracy. In M3 we built a 24-clip public pilot and added held-out evaluation, weak phonetic timing, and a separate paired forensic audit of Dark.Mimic's signal modification."
 
-Point to the fixed split: 12 train, six validation and six test. Mention 37 passing tests and 24 out of 24 clips with full face-landmark coverage.
+Point to the fixed split: 12 train, six validation and six test. Mention 38 passing tests and 24 out of 24 clips with full face-landmark coverage.
 
 ## Slide 3: Experimental framework (1:45 to 3:00)
 
-Speaker: Yan.
+Speakers: Yan for the first 30 seconds, He for the next 45 seconds.
 
-"The first branch extracts lip geometry and compares a context-free model with a weak context model. The second branch compares aligned RGB signals from the Dark.Mimic control and modified video. We report each branch separately because one peer pair cannot calibrate a valid fusion model."
+Yan: "The public branch extracts lip geometry and compares a context-free model with a weak context model."
+
+He: "The peer branch compares aligned RGB signals from Dark.Mimic's control and modified video. We report the branches separately because one peer pair cannot calibrate a valid fusion model."
 
 Emphasize the data boundaries: public videos for Strategy A, hash-identified private peer videos for Strategy B.
 
@@ -36,7 +38,7 @@ State that the team did not receive enough identities for population-level accur
 
 Speaker: Yan.
 
-"My strategy tests context-conditioned lip dynamics. The context-free model summarizes aperture, width and their time derivatives over a clip. The context version adds before, during and after statistics around one central vowel, conditioned on neighbouring phonetic classes. Both models use the same clips and the same fixed threshold."
+"I will present our lip-dynamics strategy. The context-free model summarizes aperture, width and their time derivatives over a clip. The context version adds before, during and after statistics around one central vowel, conditioned on neighbouring phonetic classes. Both models use the same clips and the same fixed threshold."
 
 Explain that Whisper word timestamps plus CMUdict give a weak proxy. Do not call it forced alignment.
 
@@ -54,15 +56,15 @@ Speaker: Yan.
 
 "We addressed one clear limitation by using every eligible vowel proxy rather than one interval per clip. This gives 547 events in the saved local run, with a median of 20 per clip. A model learned expected central mouth geometry from real training speech and aggregated residuals back to one row per clip."
 
-"Locally, the already-known six-clip split improved from 0.486 to 0.829 Macro-F1 and from 0.667 to 0.778 AUROC. That was post-hoc, not independent confirmation. Local repeated four-fold means were mixed: F1 0.655 to 0.645 and AUROC 0.678 to 0.689. More importantly, fresh Colab did not reproduce the fixed-split gain: follow-up test F1 0.486 and AUROC 0.444, versus baseline 0.486 and 0.556. Its repeated-CV mean changes were negative on both metrics. We need forced alignment and a fresh matched hold-out set."
+"We added a matched no-phone ablation using the same 547 local events, windows, ridge and classifier settings, and splits; only phone-category inputs were removed. On the already-known six-clip test, context scored F1 0.829 and AUROC 0.778, versus no-phone 0.625 and 0.667. Across 20 repeated four-fold runs, context averaged F1 0.645 versus 0.632, but AUROC 0.689 versus 0.694. That is mixed, post-hoc evidence, not proof that context helps. The prior multi-event extension also failed to reproduce its local gain in Colab. This new notebook ran locally, but we have not rerun this revision in fresh Colab."
 
-If asked whether phonetic context caused the six-clip improvement: the follow-up also changes the number of windows, feature representation and classifier regularisation. A matched-parameter no-phone/shuffled-phone ablation and cross-fitted training residuals are still required.
+If asked whether phonetic context caused the six-clip improvement: this matched ablation removes a major confound but the known split, in-sample real-training residuals and mixed repeated-fold result prevent a causal or stable-effect claim. Cross-fitting, shuffled-phone controls and a new matched hold-out are still needed.
 
 ## Slide 8: Strategy B design and neutral control (10:00 to 11:30)
 
 Speaker: He.
 
-"My strategy subtracts control RGB values from the modified video, then measures spectral energy near the peer-reported 1.2 Hz. I use the full frame, forehead and cheek regions. A neutral re-encode of the control estimates how much periodic energy an ordinary codec change creates."
+"I will present our chromatic audit. It subtracts control RGB values from the modified video, then measures spectral energy near the peer-reported 1.2 Hz. We use the full frame, forehead and cheek regions. A neutral re-encode of the control estimates how much periodic energy an ordinary codec change creates."
 
 "This is a paired forensic audit. It does not estimate a pulse waveform and it does not decide whether an arbitrary video is real or fake."
 
@@ -78,13 +80,15 @@ Speaker: He.
 
 "The red-channel attack-to-neutral ratio remains above one after all three transformations: 8.45 under H.264 CRF 35, 6.28 after resizing to 256 by 224 and 20.86 at 15 FPS. This is promising forensic evidence for this pair. It is not a general accuracy result because we have only one identity and require an aligned control."
 
-"We have not documented a response or counter-test from Dark.Mimic to this M3 finding, so we cannot claim they were defeated. Natural periodic lighting, motion and camera auto-exposure may also produce false positives; testing those controls is our next step."
+"We also ran 12 public real-speaker videos against their own neutral codec re-encodes; their red target-band fractions ranged from 0.008 to 0.359, median 0.074. A newly generated neutral control with an explicit MPEG-4 recipe kept all four peer red ratios above one, although the ratios changed. To challenge specificity, we added synthetic 1.2 Hz global brightness variation to those 12 real videos; all 12 then triggered the same frequency metric, with median 0.981. Thus the metric is not attack-specific. We have no documented Dark.Mimic counter-test and cannot claim the peer was defeated."
+
+He should distinguish the completed 12-speaker *codec-only* and *synthetic periodic-light* controls from the still-missing multi-identity attacks and naturally captured lighting, motion and exposure experiments. Do not call the 12-speaker values a false-positive rate.
 
 ## Slide 11: Integrated conclusion (14:00 to 15:00)
 
 Speaker: He, final sentence by Yan.
 
-"The lip branch contains a negative first result and a transparent post-hoc follow-up. A local split improved, but the fresh Colab rerun did not reproduce it, and repeated folds do not show a consistent gain. The colour branch finds a strong but narrow trace in one peer pair."
+"The lip branch contains a negative first result and a transparent matched ablation with mixed evidence. A prior local split gain failed to reproduce in Colab. The colour branch finds a strong trace in one attacked peer pair, but a synthetic-light counterexample shows the frequency metric is not attack-specific."
 
 Yan closes:
 
@@ -111,3 +115,7 @@ One peer pair cannot calibrate fusion without severe overfitting. We keep the ch
 ### Did you use PIA?
 
 PIA remains the main research reference. We did not claim reproduction because the available time and public pilot do not support a fair full PIA training comparison.
+
+### What did each member personally do?
+
+The speaking roles are balanced: Yan presents the public pilot, lip branch and matched ablation; He presents the peer exchange, chromatic branch and controls. This is a presentation allocation, **not** a claim that either person personally implemented every part of that branch. Each member should identify only specific code, tests, data work or analysis they can demonstrate from their own records. If both worked jointly, say so. Both should explain the interface between branches: the team deliberately did not fit a fusion weight from one peer pair. The actual historical contribution split needs member confirmation before submission.

@@ -1,0 +1,17 @@
+{
+  "n_speakers": 12,
+  "frequency_hz": 1.2,
+  "global_brightness_amplitude": 0.02,
+  "neutral_command_template": "ffmpeg -i SOURCE -map 0:v:0 -c:v mpeg4 -b:v 800k -pix_fmt yuv420p -an NEUTRAL",
+  "periodic_command_template": "ffmpeg -i SOURCE -map 0:v:0 -vf eq=brightness='0.02*sin(2*PI*1.2*t)':eval=frame -c:v mpeg4 -b:v 800k -pix_fmt yuv420p -an PERIODIC",
+  "neutral_fraction_median": 0.0739451804237086,
+  "periodic_fraction_median": 0.9807002317042885,
+  "periodic_fraction_min": 0.9777191557020084,
+  "periodic_fraction_max": 0.9824447162455336,
+  "periodic_higher_than_neutral_count": 12,
+  "limitations": [
+    "The brightness modulation is synthetic and global, not naturally captured lighting.",
+    "The test has no attacked multi-identity sample and does not estimate detector specificity.",
+    "The measured metric is a paired chromatic difference, not an rPPG waveform."
+  ]
+}

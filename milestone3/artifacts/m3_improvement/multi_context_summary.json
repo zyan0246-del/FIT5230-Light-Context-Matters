@@ -63,5 +63,50 @@
       "positive_fold_fraction": 0.475
     }
   },
+  "matched_context_ablation": {
+    "fixed_split": [
+      {
+        "model": "multi_event_context",
+        "split": "val",
+        "n": 6,
+        "macro_f1": 0.8285714285714285,
+        "auroc": 0.7777777777777778
+      },
+      {
+        "model": "multi_event_context",
+        "split": "test",
+        "n": 6,
+        "macro_f1": 0.8285714285714285,
+        "auroc": 0.7777777777777778
+      },
+      {
+        "model": "multi_event_no_phone",
+        "split": "val",
+        "n": 6,
+        "macro_f1": 0.6666666666666666,
+        "auroc": 0.5555555555555556
+      },
+      {
+        "model": "multi_event_no_phone",
+        "split": "test",
+        "n": 6,
+        "macro_f1": 0.625,
+        "auroc": 0.6666666666666667
+      }
+    ],
+    "repeated_cv_mean": [
+      {
+        "model": "multi_event_context",
+        "macro_f1": 0.6451934523809524,
+        "auroc": 0.6888888888888889
+      },
+      {
+        "model": "multi_event_no_phone",
+        "macro_f1": 0.6320684523809523,
+        "auroc": 0.6944444444444444
+      }
+    ],
+    "caveat": "Post-hoc same-setting comparison. Real training-event residuals remain in sample; independent data is needed."
+  },
   "interpretation": "In this runtime, the post-hoc six-clip follow-up improved both metrics (Macro-F1 delta +0.343, AUROC delta +0.111). Repeated cross-validation did not show a consistent gain on both metrics (mean Macro-F1 delta -0.010, AUROC delta +0.011). This is exploratory and requires a fresh matched hold-out set."
 }

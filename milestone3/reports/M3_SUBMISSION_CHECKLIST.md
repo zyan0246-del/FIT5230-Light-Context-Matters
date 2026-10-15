@@ -2,7 +2,7 @@
 
 ## Completed locally
 
-- [x] Two clearly attributed strategies: Yan, lip context; He, chromatic forensics.
+- [x] Two clearly allocated presentation leads: Yan, lip context; He, chromatic forensics. Actual implementation contributions still require each member's confirmation.
 - [x] 24-clip public pilot with balanced fixed splits.
 - [x] Source/speaker leakage validation.
 - [x] 24 of 24 clips passed face-landmark coverage.
@@ -14,20 +14,28 @@
 - [x] H.264 CRF 35, resize and 15 FPS conditions included.
 - [x] Raw peer files excluded from the public repository.
 - [x] Peer file SHA256 provenance recorded.
-- [x] 37 regression tests pass.
+- [x] 38 regression tests pass.
 - [x] Multi-event context follow-up added with a repeated-cross-validation stability check.
+- [x] Matched no-phone ablation run locally with fixed-split and 20 repeated four-fold comparisons; report mixed results.
+- [x] Twelve public real-speaker neutral codec controls run and aggregate results saved.
+- [x] Synthetic 1.2 Hz periodic-light controls run on the 12 real speakers; 12/12 triggered the frequency metric, so specificity is explicitly limited.
+- [x] A new neutral peer control regenerated with a documented FFmpeg recipe; results labelled separately from historical-neutral results.
 - [x] Updated Milestone3.ipynb executed locally with nine saved code-cell outputs and no errors.
+- [x] Editable 11-slide presentation updated and rendered for inspection.
 - [x] Fifteen-minute presentation script prepared.
 
 ## Still requires a team member
 
+- [ ] Run the current locally executed notebook in a fresh Colab session and save outputs. The saved notebook **does include** the matched ablation, but only the prior revision was verified in Colab on 15 October.
+- [ ] Add attacks on multiple identities and naturally captured lighting, motion and exposure videos if available; otherwise state clearly that Strategy B is a one-attack-pair forensic case plus 12 public codec-only and synthetic-light controls. Synthetic light is already tested and triggers the metric.
+- [ ] Yan and He each verify and rehearse a factual account of their own code, analysis and collaboration; do not infer personal contribution from the owner labels alone.
 - [ ] Read every slide and practise the 15-minute timing.
 - [ ] If Dark.Mimic has given feedback or a counter-test after this analysis, add its actual outcome to the critical-analysis section; otherwise state that no response is documented.
 - [ ] Confirm the lecturer expects both members to speak for approximately five minutes each in the strategy section.
 - [x] Upload the final repository to GitHub.
 - [x] Open `notebooks/Milestone3.ipynb` in Google Colab.
 - [x] The previous eight-cell notebook completed in a fresh Colab CPU runtime.
-- [x] Run the nine-cell notebook in a reset Colab CPU runtime; all nine cells and 37 tests completed on 15 October.
+- [x] Run the prior nine-cell notebook in a reset Colab CPU runtime; all nine cells and 37 tests completed on 15 October. This does not verify the 16 October ablation revision.
 - [x] Verify the public GitHub-backed Colab URL loads without repository authentication.
 - [x] Record the cross-environment result variation without changing the conclusion.
 - [x] Correct the post-hoc interpretation: the local multi-event gain did not reproduce in Colab.

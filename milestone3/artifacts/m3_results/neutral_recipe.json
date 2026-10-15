@@ -1,0 +1,6 @@
+{
+  "command_template": "ffmpeg -hide_banner -loglevel error -y -i CONTROL -map 0:v:0 -c:v mpeg4 -b:v 800k -pix_fmt yuv420p -an NEUTRAL",
+  "source_sha256": "05b771eee52dc629904f9e0b40f52d715d8c42d2535576c2f135974f1d302edd",
+  "output_sha256": "3adf2b5e3336437f6b5743cbfa74391295cc5f89d7d6345ace747d7777f9fc90",
+  "note": "New reproducible neutral control; not the historical peer-neutral MP4."
+}
