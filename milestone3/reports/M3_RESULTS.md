@@ -107,6 +107,8 @@ The single pair supports a descriptive claim: the A=1 modification contains a st
 
 It does not support a population-level detection claim. The analyser requires an aligned control, uses fixed rectangular regions rather than face tracking and has only one identity. Periodicity is not an rPPG waveform. A future detector would need unpaired features, multiple identities, clean lighting controls and false-positive evaluation.
 
+No response or counter-test from Dark.Mimic to this M3 forensic finding has been documented. We therefore report what happened in the exchanged pair, not a demonstrated defeat of the target team. Periodic lighting, motion and camera auto-exposure remain plausible false-positive sources.
+
 ## Integrated Light-side response
 
 The two strategies answer different questions. The lip model asks whether generated mouth movement appears plausible. The chromatic audit asks whether the adversarial attempt to repair physiological plausibility leaves another trace. The first experiment currently gives a negative small-pilot result. The second gives a strong single-pair forensic result. Keeping them separate makes the evidence and limitations clear.

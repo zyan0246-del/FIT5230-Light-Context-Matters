@@ -78,6 +78,8 @@ Speaker: He.
 
 "The red-channel attack-to-neutral ratio remains above one after all three transformations: 8.45 under H.264 CRF 35, 6.28 after resizing to 256 by 224 and 20.86 at 15 FPS. This is promising forensic evidence for this pair. It is not a general accuracy result because we have only one identity and require an aligned control."
 
+"We have not documented a response or counter-test from Dark.Mimic to this M3 finding, so we cannot claim they were defeated. Natural periodic lighting, motion and camera auto-exposure may also produce false positives; testing those controls is our next step."
+
 ## Slide 11: Integrated conclusion (14:00 to 15:00)
 
 Speaker: He, final sentence by Yan.

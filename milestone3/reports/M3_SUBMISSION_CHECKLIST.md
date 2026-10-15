@@ -22,6 +22,7 @@
 ## Still requires a team member
 
 - [ ] Read every slide and practise the 15-minute timing.
+- [ ] If Dark.Mimic has given feedback or a counter-test after this analysis, add its actual outcome to the critical-analysis section; otherwise state that no response is documented.
 - [ ] Confirm the lecturer expects both members to speak for approximately five minutes each in the strategy section.
 - [x] Upload the final repository to GitHub.
 - [x] Open `notebooks/Milestone3.ipynb` in Google Colab.
