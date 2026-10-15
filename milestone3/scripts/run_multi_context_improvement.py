@@ -41,6 +41,7 @@ from s2f.features import build_features  # noqa: E402
 
 SEED = 5230
 MIN_WORD_PROBABILITY = 0.80
+FALLBACK_WORD_PROBABILITY = 0.60
 CENTRAL_HALF_WINDOW_S = 0.10
 CONTEXT_WINDOW_S = 0.20
 RIDGE_ALPHA = 10.0
@@ -128,43 +129,48 @@ def clip_events(clip_id: str, dictionary: dict) -> list[dict]:
             scale = 1.0
         frame[column + "_z"] = (frame[column] - median) / scale
 
-    events: list[dict] = []
     minimum_time, maximum_time = float(frame.time_s.min()), float(frame.time_s.max())
-    for index in range(1, len(phones) - 1):
-        central = phones[index]
-        if central["phone"] not in VOWELS or central["word_probability"] < MIN_WORD_PROBABILITY:
-            continue
-        centre = (central["start_s"] + central["end_s"]) / 2
-        start, end = centre - CENTRAL_HALF_WINDOW_S, centre + CENTRAL_HALF_WINDOW_S
-        if start - CONTEXT_WINDOW_S < minimum_time or end + CONTEXT_WINDOW_S > maximum_time:
-            continue
-        event = {
-            "clip_id": clip_id,
-            "event_index": len(events),
-            "start_s": start,
-            "end_s": end,
-            "central_word": central["word"],
-            "word_probability": central["word_probability"],
-            "previous_class": phone_class(phones[index - 1]["phone"]),
-            "next_class": phone_class(phones[index + 1]["phone"]),
-            "central_vowel": central["phone"],
-        }
-        valid = True
-        for column in GEOMETRY:
-            normalised = column + "_z"
-            for phase, lower, upper in [
-                ("before", start - CONTEXT_WINDOW_S, start),
-                ("during", start, end),
-                ("after", end, end + CONTEXT_WINDOW_S),
-            ]:
-                value = _phase_mean(frame, lower, upper, normalised)
-                event[f"{column}_{phase}"] = value
-                valid &= np.isfinite(value)
-        if valid:
-            events.append(event)
-    if not events:
-        raise ValueError(f"{clip_id}: no eligible multi-context event")
-    return events
+    # An ASR rerun can place every word in a short clip below 0.80. Relax the
+    # same rule for any clip with zero usable events and record that decision.
+    # The threshold is never selected using class labels or evaluation scores.
+    for threshold in (MIN_WORD_PROBABILITY, FALLBACK_WORD_PROBABILITY):
+        events: list[dict] = []
+        for index in range(1, len(phones) - 1):
+            central = phones[index]
+            if central["phone"] not in VOWELS or central["word_probability"] < threshold:
+                continue
+            centre = (central["start_s"] + central["end_s"]) / 2
+            start, end = centre - CENTRAL_HALF_WINDOW_S, centre + CENTRAL_HALF_WINDOW_S
+            if start - CONTEXT_WINDOW_S < minimum_time or end + CONTEXT_WINDOW_S > maximum_time:
+                continue
+            event = {
+                "clip_id": clip_id,
+                "event_index": len(events),
+                "start_s": start,
+                "end_s": end,
+                "central_word": central["word"],
+                "word_probability": central["word_probability"],
+                "selection_threshold": threshold,
+                "previous_class": phone_class(phones[index - 1]["phone"]),
+                "next_class": phone_class(phones[index + 1]["phone"]),
+                "central_vowel": central["phone"],
+            }
+            valid = True
+            for column in GEOMETRY:
+                normalised = column + "_z"
+                for phase, lower, upper in [
+                    ("before", start - CONTEXT_WINDOW_S, start),
+                    ("during", start, end),
+                    ("after", end, end + CONTEXT_WINDOW_S),
+                ]:
+                    value = _phase_mean(frame, lower, upper, normalised)
+                    event[f"{column}_{phase}"] = value
+                    valid &= np.isfinite(value)
+            if valid:
+                events.append(event)
+        if events:
+            return events
+    raise ValueError(f"{clip_id}: no eligible multi-context event at either confidence threshold")
 
 
 def residual_events(events: pd.DataFrame, real_training_ids: set[str]) -> pd.DataFrame:
@@ -374,11 +380,15 @@ def main() -> None:
     plt.close(fig)
 
     counts = events.groupby("clip_id").size()
+    fallback_clips = sorted(events.loc[
+        events.selection_threshold.eq(FALLBACK_WORD_PROBABILITY), "clip_id"
+    ].unique().tolist())
     summary = {
         "status": "exploratory_post_hoc",
         "parameters": {
             "seed": SEED,
             "minimum_word_probability": MIN_WORD_PROBABILITY,
+            "fallback_word_probability_if_no_events": FALLBACK_WORD_PROBABILITY,
             "central_window_s": 2 * CENTRAL_HALF_WINDOW_S,
             "context_window_each_side_s": CONTEXT_WINDOW_S,
             "ridge_alpha": RIDGE_ALPHA,
@@ -392,6 +402,7 @@ def main() -> None:
             "minimum_per_clip": int(counts.min()),
             "median_per_clip": float(counts.median()),
             "maximum_per_clip": int(counts.max()),
+            "fallback_clips": fallback_clips,
         },
         "fixed_split_metrics": fixed_rows,
         "repeated_cv": cv_summary.to_dict("records"),

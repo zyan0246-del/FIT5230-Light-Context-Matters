@@ -1,6 +1,8 @@
 import importlib.util
+import json
 from pathlib import Path
 
+import numpy as np
 import pandas as pd
 import pytest
 
@@ -43,3 +45,26 @@ def test_aggregation_stays_clip_level():
     assert len(aggregated) == 1
     assert aggregated.loc[0, "event_count"] == 2
     assert aggregated.loc[0, "residual_inner_aperture_smooth_mean"] == pytest.approx(0.6)
+
+
+@pytest.mark.parametrize("confidence, expected_threshold", [(0.9, 0.8), (0.7, 0.6)])
+def test_clip_events_uses_recorded_confidence_fallback(tmp_path, monkeypatch, confidence, expected_threshold):
+    monkeypatch.setattr(MODULE, "ROOT", tmp_path)
+    asr = tmp_path / "outputs/m3_work/asr"
+    features = tmp_path / "outputs/m3_work/pilot_features/features"
+    asr.mkdir(parents=True)
+    features.mkdir(parents=True)
+    (asr / "sample.json").write_text(json.dumps({
+        "segments": [{"words": [{
+            "word": " bat", "start": 0.6, "end": 1.5, "probability": confidence,
+        }]}],
+    }), encoding="utf-8")
+    times = np.arange(51) / 25
+    frame = pd.DataFrame({"time_s": times, "detected": True})
+    for column in MODULE.GEOMETRY:
+        frame[column] = 1 + np.sin(times)
+    frame.to_csv(features / "sample.csv", index=False)
+
+    events = MODULE.clip_events("sample", {"bat": [["B", "AE1", "T"]]})
+    assert len(events) == 1
+    assert events[0]["selection_threshold"] == expected_threshold

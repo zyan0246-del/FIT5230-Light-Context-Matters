@@ -3,6 +3,7 @@
   "parameters": {
     "seed": 5230,
     "minimum_word_probability": 0.8,
+    "fallback_word_probability_if_no_events": 0.6,
     "central_window_s": 0.2,
     "context_window_each_side_s": 0.2,
     "ridge_alpha": 10.0,
@@ -15,7 +16,8 @@
     "clips": 24,
     "minimum_per_clip": 1,
     "median_per_clip": 20.0,
-    "maximum_per_clip": 47
+    "maximum_per_clip": 47,
+    "fallback_clips": []
   },
   "fixed_split_metrics": [
     {

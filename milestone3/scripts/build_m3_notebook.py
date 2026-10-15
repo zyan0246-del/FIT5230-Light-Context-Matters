@@ -181,7 +181,9 @@ print("Result: the weak context proxy did not improve the six-clip held-out pilo
             "After seeing the original test result, we added a post-hoc extension that uses every eligible vowel "
             "proxy, learns expected central mouth geometry from real training speech and aggregates residuals at "
             "clip level. The original six-clip split is therefore not fresh confirmation. We report it together "
-            "with 20 repeated four-fold comparisons in which the context expectation is refit inside each fold."
+            "with 20 repeated four-fold comparisons in which the context expectation is refit inside each fold. "
+            "If a clip has no usable vowel at 0.80 ASR word confidence, a 0.60 fallback is recorded; "
+            "the rule is applied without reference to labels or scores."
         ),
         nbf.v4.new_code_cell(
             '''run_checked([sys.executable, "scripts/run_multi_context_improvement.py"])
@@ -189,6 +191,7 @@ followup = json.loads((ROOT / "artifacts/m3_improvement/multi_context_summary.js
 display(pd.DataFrame(followup["fixed_split_metrics"]))
 display(pd.DataFrame(followup["repeated_cv"]))
 display(Image(filename=str(ROOT / "artifacts/m3_improvement/multi_context_improvement.png")))
+print("Fallback ASR clips:", followup["events"]["fallback_clips"])
 print(followup["interpretation"])
 '''
         ),
@@ -243,10 +246,10 @@ else:
             "## 6. Conclusions and claim boundaries\n\n"
             "1. All 24 public clips passed landmark coverage, but the six-clip held-out result remained small and uncertain. "
             "The generated metrics table above is authoritative for the current runtime.\n"
-            "2. The original weak phonetic-context proxy did not improve the held-out result. The saved reference run produced "
-            "AUROC 0.667 versus 0.556; a fresh Colab CPU run produced 0.556 versus 0.444. Macro-F1 was 0.486 for both "
-            "models in both runs. A post-hoc multi-event extension reached 0.829/0.778 on the original split, but "
-            "20 repeated four-fold runs showed no stable average gain. This narrows the next research step to forced "
+            "2. The original weak phonetic-context proxy did not improve the held-out result. "
+            "A post-hoc multi-event extension improved the saved reference split, but 20 repeated four-fold runs "
+            "showed no stable average gain. ASR, decoding and package versions can change the six-clip AUROC; "
+            "use the generated metrics above for this runtime. This narrows the next research step to forced "
             "alignment and a fresh matched hold-out set rather than further tuning these 24 clips.\n"
             "3. In the single peer pair, periodic colour energy near 1.2 Hz remained higher than the neutral control after "
             "H.264 CRF 35, resizing and 15 FPS. This supports a paired manipulation audit, not a general detector.\n\n"
