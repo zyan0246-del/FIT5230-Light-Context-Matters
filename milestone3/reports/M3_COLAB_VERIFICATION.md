@@ -1,37 +1,40 @@
 # Fresh Colab verification
 
-The 15 October run verified the **previous** nine-code-cell public notebook from a reset Colab CPU runtime. The notebook was opened from the public GitHub URL. Its output differs materially from the saved local reference; both results are retained and labelled. The 16 October revision adds the matched no-phone ablation and public benign-codec controls and has been executed locally, but **has not yet been verified in fresh Colab**. Do not present this page as verification of the revised notebook.
-
-Verification dates: 7 and 15 October 2026
+The current nine-code-cell public notebook was opened directly from GitHub commit `5b139a3` and run from a fresh Google Colab CPU runtime on **16 October 2026**. Its embedded readable-source snapshot had SHA256 `508b11a432aa6e4a8f1fb910a6bb17dcb2f29fcbf5433a15715ed38ac6b3174c`. This is the revision containing the matched no-phone ablation, 12 public codec controls and synthetic periodic-light controls.
 
 Notebook: `milestone3/notebooks/Milestone3.ipynb`
 
-Runtime: fresh Google Colab CPU, Python 3.13.16 on Linux
+Runtime: Python 3.13.16, Linux 6.6.122 x86_64, Google Colab CPU
 
-## Outcome
+Key packages: NumPy 2.1.3, pandas 2.2.3, SciPy 1.16.3, scikit-learn 1.6.1, Matplotlib 3.10.0, MediaPipe 1.1.1, OpenCV 4.14.0.94
 
-- All nine code cells completed without an exception on 15 October.
-- All 37 regression tests passed; one pandas `FutureWarning` did not affect execution.
-- The 24 public clips downloaded and standardised successfully.
-- The fixed split remained 12 train, 6 validation and 6 test clips, balanced by class.
+## Execution outcome
+
+- All nine code cells completed without an exception.
+- All 38 regression tests passed. One pandas `FutureWarning` did not affect execution.
+- The 24 public clips downloaded and standardised successfully: 12 train, 6 validation and 6 test, balanced by class.
 - All 24 clips achieved MediaPipe landmark coverage 1.0.
-- The private Dark.Mimic rerun remained disabled as designed; SHA256-linked aggregate results displayed successfully.
-- The post-hoc multi-event cell finished with 567 events, retaining all 24 clips. `fake_hallo_00023` used the documented 0.60 ASR-confidence fallback because no event met 0.80 in that runtime.
+- The private Dark.Mimic rerun remained disabled as designed; the SHA256-linked aggregate tables and public controls displayed successfully.
+- The multi-event run retained 567 events across all 24 clips. `fake_hallo_00023` used the documented 0.60 ASR-confidence fallback because no event met 0.80 in this runtime.
+- The chromatic-control cell confirmed that synthetic 1.2 Hz global light exceeded its neutral counterpart in 12/12 real-speaker clips.
 
-## Cross-environment metrics
+## Current-runtime metrics
 
-| Environment | Model | Macro-F1 | AUROC |
+| Comparison | Model | Macro-F1 | AUROC |
 |---|---|---:|---:|
-| Saved reference run, Python 3.12/macOS | Context-free | 0.486 | 0.667 |
-| Saved reference run, Python 3.12/macOS | Weak context | 0.486 | 0.556 |
-| Fresh Colab, 7 October, eight cells | Context-free | 0.486 | 0.556 |
-| Fresh Colab, 7 October, eight cells | Weak context | 0.486 | 0.444 |
-| Fresh Colab, 15 October, nine cells | Context-free | 0.486 | 0.556 |
-| Fresh Colab, 15 October, nine cells | Weak context | 0.486 | 0.222 |
-| Fresh Colab, 15 October, nine cells | Multi-event context | 0.486 | 0.444 |
+| Original six-clip test | Context-free | 0.486 | 0.556 |
+| Original six-clip test | Weak context | 0.486 | 0.222 |
+| Multi-event six-clip test | Multi-event context | 0.486 | 0.444 |
+| Matched six-clip ablation | Multi-event no-phone | 0.486 | 0.444 |
+| 20 repeated four-fold comparisons | Context-free | 0.643 | 0.688 |
+| 20 repeated four-fold comparisons | Multi-event context | 0.585 | 0.621 |
+| Matched 20 repeated four-fold ablation | Multi-event context | 0.585 | 0.621 |
+| Matched 20 repeated four-fold ablation | Multi-event no-phone | 0.593 | 0.638 |
 
-Macro-F1 stayed at 0.486 for the original two models in all three runs. Weak context reduced AUROC by 0.111 locally, 0.111 in the 7 October Colab run, and 0.333 in the 15 October Colab run. The substantive negative conclusion is stable, not the exact ranking score.
+The weak context proxy reduced AUROC by 0.333 without changing Macro-F1. The post-hoc multi-event method did not improve both held-out metrics: its change from context-free was +0.000 Macro-F1 and -0.111 AUROC. Across the repeated folds, its mean changes were -0.057 Macro-F1 and -0.067 AUROC. The matched no-phone ablation also slightly outperformed the phone-context version on both repeated-fold means in this runtime. Therefore, this experiment does **not** establish a reliable phonetic-context advantage.
 
-The 15 October multi-event result did **not** reproduce the local improvement. Saved local test Macro-F1/AUROC was 0.829/0.778, whereas fresh Colab gave 0.486/0.444, compared with its context-free 0.486/0.556. Local repeated four-fold mean changes were -0.010 Macro-F1 and +0.011 AUROC; Colab changes were -0.057 and -0.067. Therefore, no reliable gain has been established.
+## Cross-environment interpretation
 
-This is a cross-environment reproducibility check of the earlier revision, not an independent dataset. FFmpeg/codec decoding, ASR output and package versions can alter event selection and features; the ASR fallback makes one such difference visible. With only three real and three fake test clips, AUROC ranks are highly unstable. The final presentation plots saved local results and labels the earlier fresh-Colab disagreement on the relevant slides. The updated source prints a runtime-specific interpretation rather than claiming a gain unconditionally; its new ablation must be rerun in Colab separately.
+The saved local Python 3.12 replay gave an encouraging known-split result for multi-event context (0.829/0.778) and a mixed repeated-fold comparison. The fresh Colab result above did not reproduce that split gain. FFmpeg decoding, ASR output and dependency versions can alter event selection and features; with only three real and three fake test clips, AUROC rankings are especially unstable. The defensible conclusion is a functioning, reproducible experimental pipeline with a negative/unstable context result—not an effective new detector. The next research step is forced alignment plus a new matched hold-out set, not further tuning on these 24 clips.
+
+The GitHub notebook already contains nine saved local outputs. The fresh Colab run was verified interactively against the same embedded source snapshot; direct Colab-to-GitHub saving was unavailable because Colab requested a separate GitHub OAuth authorization. This report therefore records the fresh runtime, exact source hash and generated metrics without relabelling the saved local outputs as Colab outputs.

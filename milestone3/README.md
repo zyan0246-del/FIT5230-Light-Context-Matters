@@ -6,7 +6,7 @@ A reproducible two-channel Light-side study. Strategy A evaluates context-free a
 
 **Current evidence:** 24/24 public clips passed landmark extraction. On the six-clip held-out test, the context-free pilot reached macro-F1 0.486 and AUROC 0.667 in the saved local run; the original single weak-context model did not improve it. A post-hoc multi-event extension reached 0.829/0.778 locally, but a fresh Colab run did not reproduce that gain (0.486/0.444), and repeated four-fold comparisons showed no consistent average gain. In the single Dark.Mimic pair, colour energy near 1.2 Hz remained above a neutral re-encode control under H.264 CRF 35, 256×224 resizing and 15 FPS. However, synthetic 1.2 Hz global brightness variation on 12 real-speaker clips triggered the same frequency metric in all 12, so the metric is not attack-specific. These are course-pilot findings, not publication-scale generalisation claims. See [M3 results](reports/M3_RESULTS.md), the [multi-event follow-up](reports/M3_MULTI_CONTEXT_FOLLOWUP.md) and [submission checklist](reports/M3_SUBMISSION_CHECKLIST.md).
 
-Submission materials: [locally executed notebook](notebooks/Milestone3.ipynb), [final editable presentation](deliverables/FIT5230_M3_Context_Matters_Presentation_Final_v8.pptx), [15-minute script](reports/M3_PRESENTATION_SCRIPT.md) and [Moodle Colab-link file](deliverables/Moodle_M3_Colab_Link.txt). The revised notebook has nine locally saved code-cell outputs and 38 passing tests. The [15 October Colab verification record](reports/M3_COLAB_VERIFICATION.md) concerns the prior notebook revision; the new matched ablation still needs a fresh Colab rerun.
+Submission materials: [locally executed notebook](notebooks/Milestone3.ipynb), [final editable presentation](deliverables/FIT5230_M3_Context_Matters_Presentation_Final_v9.pptx), [15-minute script](reports/M3_PRESENTATION_SCRIPT.md) and [Moodle Colab-link file](deliverables/Moodle_M3_Colab_Link.txt). The revised notebook has nine locally saved code-cell outputs and 38 passing tests. The exact source revision also completed all nine cells and 38 tests in a fresh Colab CPU runtime on 16 October; see the [verification record](reports/M3_COLAB_VERIFICATION.md).
 
 ## Quick start
 
@@ -31,9 +31,8 @@ The script now also writes a matched `multi_event_no_phone` ablation to
 phonetic-category inputs while retaining the same event windows, numerical
 features, ridge penalty, clip aggregation, classifier and splits. Its new
 outputs have been generated from audited local caches and are now saved in the
-16 October notebook. The updated notebook also completed locally with nine
-code cells and 38 passing tests. A fresh Colab rerun of this exact version is
-still needed before claiming cross-environment confirmation. The repeated-CV Macro-F1 and AUROC effects
+16 October notebook. The updated notebook completed locally and in a fresh
+Colab CPU runtime with nine code cells and 38 passing tests. The repeated-CV Macro-F1 and AUROC effects
 point in opposite directions, so no stable context benefit is claimed.
 Its fixed-split improvement is reported together with a repeated-cross-validation
 stability check; it must not be described as fresh confirmatory evidence.

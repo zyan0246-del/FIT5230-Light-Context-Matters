@@ -4,8 +4,8 @@ Team: Light.Ningyizhuo_No.1 (Yan Zhiheng and He Hongjie)
 
 ## What to open first
 
-1. `deliverables/FIT5230_M3_Context_Matters_Presentation_Final_v8.pptx` — the revised, rendered 11-slide presentation, including the matched no-phone ablation, 12 public benign codec controls and the synthetic periodic-lighting counterexample.
-2. `notebooks/Milestone3.ipynb` — the revised notebook, with all nine code cells executed **locally** and 38 tests passing. A fresh Colab run of this exact revision is still pending; the 15 October Colab verification concerns the prior nine-cell version.
+1. `deliverables/FIT5230_M3_Context_Matters_Presentation_Final_v9.pptx` — the revised, rendered 11-slide presentation, including the matched no-phone ablation, 12 public benign codec controls, the synthetic periodic-lighting counterexample and the completed fresh-Colab result.
+2. `notebooks/Milestone3.ipynb` — the revised notebook, with all nine code cells executed locally and 38 tests passing. The exact revision was also run end to end in a fresh Colab CPU runtime on 16 October; see `reports/M3_COLAB_VERIFICATION.md` for the environment and runtime-specific metrics.
 3. `reports/M3_PRESENTATION_SCRIPT.md` — revised speaking notes for both members.
 4. `reports/M3_RESULTS.md` and `reports/M3_REVIEW_ACTIONS_20261016.md` — results, limitations and remaining actions.
 
@@ -20,4 +20,4 @@ The three private Dark.Mimic videos are intentionally excluded. Their hashes wer
 - The public Colab and GitHub URLs are in `deliverables/Moodle_M3_Colab_Link.txt`.
 - Confirm that GitHub `main` reflects the 16 October revision before sending the Colab link.
 - Moodle submission and the two-person oral presentation still require action by the team.
-- Before submission, run the revised final notebook end-to-end in fresh Colab, save outputs, and verify each member's account of their own work. The equal speaking allocation is not a verified record of who wrote each component.
+- Before submission, verify each member's factual account of their own work and rehearse the talk. The equal speaking allocation is not a verified record of who wrote each component.

@@ -8,7 +8,7 @@ implementation.
 
 | Person | Presentation responsibility | Remaining hands-on verification | Evidence to keep |
 |---|---|---|---|
-| Yan Zhiheng | M2-to-M3 progress, public pilot, lip features, weak-context result and matched no-phone ablation | Open the **current** GitHub-backed notebook in a reset Colab CPU runtime; run all cells; save outputs; compare fixed and repeated-fold tables with `M3_RESULTS.md`; revise claims if numbers change | Colab URL/version, run date, exported notebook outputs, actual edits and test log |
+| Yan Zhiheng | M2-to-M3 progress, public pilot, lip features, weak-context result and matched no-phone ablation | Review the completed 16 October fresh-Colab metrics against `M3_RESULTS.md`; explain why the negative/unstable result is still a valid experiment | Colab URL/version, run date, source hash, actual edits and test log |
 | He Hongjie | Dark.Mimic threat, paired RGB/FFT audit, historical and newly generated neutral controls, 12 benign codec controls, synthetic-light counterexample and limitations | Check private peer SHA256s; rerun the four robustness conditions and benign/periodic-light scripts; inspect at least slides 8–11 and verify cited ratios; report any peer counter-test if received | Rerun commands, source hashes, aggregate CSVs, slide corrections and peer exchange record |
 
 Both members should review the full 11-slide deck, rehearse the 15-minute timing,
@@ -19,9 +19,10 @@ person, change the contribution statement rather than copying the allocation.
 
 ## Current evidence status
 
-- The final notebook contains nine **locally executed** code-cell outputs and 38 passing tests.
-- The 15 October fresh-Colab result belongs to the previous notebook revision;
-  the matched-ablation revision needs its own reset-runtime run.
+- The final notebook contains nine locally executed code-cell outputs and 38 passing tests.
+- The exact matched-ablation source revision also completed nine cells and 38
+  tests in a fresh Colab CPU runtime on 16 October. Its no-phone comparison did
+  not reveal a stable context advantage.
 - The chromatic attack data contain one peer-supplied attacked identity. Twelve
   public real-speaker codec-only controls, a recipe-generated neutral control
   and synthetic periodic-light variants expose a specificity limit but do not

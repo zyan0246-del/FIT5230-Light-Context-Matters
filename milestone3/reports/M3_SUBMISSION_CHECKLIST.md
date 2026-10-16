@@ -26,7 +26,7 @@
 
 ## Still requires a team member
 
-- [ ] Run the current locally executed notebook in a fresh Colab session and save outputs. The saved notebook **does include** the matched ablation, but only the prior revision was verified in Colab on 15 October.
+- [x] Run the current matched-ablation notebook in a fresh Colab CPU session. All nine cells and 38 tests completed on 16 October; the exact source hash and runtime metrics are recorded in `M3_COLAB_VERIFICATION.md`. The notebook's committed outputs remain the labelled local run because Colab requested separate GitHub OAuth for direct save.
 - [ ] Add attacks on multiple identities and naturally captured lighting, motion and exposure videos if available; otherwise state clearly that Strategy B is a one-attack-pair forensic case plus 12 public codec-only and synthetic-light controls. Synthetic light is already tested and triggers the metric.
 - [ ] Yan and He each verify and rehearse a factual account of their own code, analysis and collaboration; do not infer personal contribution from the owner labels alone.
 - [ ] Read every slide and practise the 15-minute timing.
@@ -35,7 +35,8 @@
 - [x] Upload the final repository to GitHub.
 - [x] Open `notebooks/Milestone3.ipynb` in Google Colab.
 - [x] The previous eight-cell notebook completed in a fresh Colab CPU runtime.
-- [x] Run the prior nine-cell notebook in a reset Colab CPU runtime; all nine cells and 37 tests completed on 15 October. This does not verify the 16 October ablation revision.
+- [x] Run the prior nine-cell notebook in a reset Colab CPU runtime; all nine cells and 37 tests completed on 15 October.
+- [x] Run the current matched-ablation revision in a fresh Colab CPU runtime; all nine cells and 38 tests completed on 16 October.
 - [x] Verify the public GitHub-backed Colab URL loads without repository authentication.
 - [x] Record the cross-environment result variation without changing the conclusion.
 - [x] Correct the post-hoc interpretation: the local multi-event gain did not reproduce in Colab.
