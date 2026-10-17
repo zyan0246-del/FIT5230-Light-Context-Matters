@@ -130,7 +130,7 @@ def generate_fake(
         "--source_image", str(portrait),
         "--checkpoint_dir", "checkpoints",
         "--result_dir", str(run_dir),
-        "--size", "256", "--batch_size", "1",
+        "--size", "256", "--batch_size", "4",
         "--preprocess", "full", "--still",
     ]
     if target.exists() and target.stat().st_size > 0:
