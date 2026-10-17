@@ -1,0 +1,106 @@
+{
+  "seed": 5230,
+  "repeats": 20,
+  "outer_folds": 4,
+  "inner_folds": 3,
+  "threshold": 0.5,
+  "n_clips": 48,
+  "n_pairs": 24,
+  "n_speakers": 12,
+  "C_grid": [
+    0.001,
+    0.01,
+    0.1,
+    1.0
+  ],
+  "C_selection": "minimum inner grouped-CV log-loss",
+  "group": "speaker_id (all matched segments from a speaker stay together)",
+  "evaluation_subset": "new_non_overlapping_segments_s1_s2",
+  "feature_count_range_by_model": {
+    "global": {
+      "min": 24,
+      "max": 24
+    },
+    "lowdim_window": {
+      "min": 60,
+      "max": 60
+    },
+    "shuffled_viseme": {
+      "min": 114,
+      "max": 132
+    },
+    "viseme_context": {
+      "min": 114,
+      "max": 132
+    }
+  },
+  "selected_C_counts": [
+    {
+      "model": "global",
+      "selected_C": 0.01,
+      "count": 1
+    },
+    {
+      "model": "global",
+      "selected_C": 0.1,
+      "count": 27
+    },
+    {
+      "model": "global",
+      "selected_C": 1.0,
+      "count": 52
+    },
+    {
+      "model": "lowdim_window",
+      "selected_C": 0.001,
+      "count": 2
+    },
+    {
+      "model": "lowdim_window",
+      "selected_C": 0.01,
+      "count": 15
+    },
+    {
+      "model": "lowdim_window",
+      "selected_C": 0.1,
+      "count": 59
+    },
+    {
+      "model": "lowdim_window",
+      "selected_C": 1.0,
+      "count": 4
+    },
+    {
+      "model": "shuffled_viseme",
+      "selected_C": 0.001,
+      "count": 17
+    },
+    {
+      "model": "shuffled_viseme",
+      "selected_C": 0.01,
+      "count": 55
+    },
+    {
+      "model": "shuffled_viseme",
+      "selected_C": 0.1,
+      "count": 8
+    },
+    {
+      "model": "viseme_context",
+      "selected_C": 0.001,
+      "count": 8
+    },
+    {
+      "model": "viseme_context",
+      "selected_C": 0.01,
+      "count": 62
+    },
+    {
+      "model": "viseme_context",
+      "selected_C": 0.1,
+      "count": 10
+    }
+  ],
+  "alignment_boundary": "Visemes come from Whisper tiny.en word timestamps plus uniform CMUdict phone placement; this remains a weak proxy, not forced alignment.",
+  "claim_boundary": "Small 24-pair course evaluation from 12 public identities and one generator. Repeated folds quantify split sensitivity on the same clips; they are not independent datasets."
+}

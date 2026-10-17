@@ -1,0 +1,10 @@
+comparison,metric,mean_delta,sd_delta,positive_repeats,ties,negative_repeats
+lowdim_window-minus-global,macro_f1,0.08436834582486756,0.0762751470681457,17,1,2
+lowdim_window-minus-global,auroc,0.05451388888888888,0.046189417322365055,18,0,2
+lowdim_window-minus-global,log_loss,-0.05961685082788663,0.08254842029803908,3,0,17
+viseme_context-minus-lowdim_window,macro_f1,-0.08232723395766875,0.05306990540523788,2,0,18
+viseme_context-minus-lowdim_window,auroc,-0.146875,0.04651795741698267,0,0,20
+viseme_context-minus-lowdim_window,log_loss,0.09337560802243201,0.08781355418067237,18,0,2
+viseme_context-minus-shuffled_viseme,macro_f1,-0.00733724890246627,0.0709781491979509,3,5,12
+viseme_context-minus-shuffled_viseme,auroc,-0.04791666666666667,0.037424116421480476,0,0,20
+viseme_context-minus-shuffled_viseme,log_loss,0.007653901337530811,0.09466696395384225,11,0,9

@@ -140,12 +140,12 @@ def main() -> None:
         if args.reuse_source_asr:
             source_results.setdefault(row.source_id, result)
         phones = flatten_words(result, dictionary)
-        duration = float(max((word["end"] for segment in result.get("segments", [])
-                              for word in segment.get("words", [])), default=0.0))
-        # The video may continue after speech. Use its feature timestamp as the
-        # authoritative sampling duration so the selected context is in-bounds.
+        # Whisper's last word is not the clip boundary.  A short or low-volume
+        # utterance can end early even though its valid mouth frames continue.
+        # Use the landmark timeline as the authoritative video duration; the
+        # candidate phone timestamps still come exclusively from the ASR JSON.
         features = pd.read_csv(ROOT / args.feature_dir / f"{row.clip_id}.csv")
-        duration = min(duration or float(features.time_s.max()), float(features.time_s.max()))
+        duration = float(features.time_s.max())
         index, start, end = select_interval(phones, duration)
         previous, central, following = phones[index - 1], phones[index], phones[index + 1]
         intervals.append({

@@ -1,0 +1,102 @@
+{
+  "seed": 5230,
+  "repeats": 20,
+  "outer_folds": 4,
+  "inner_folds": 3,
+  "threshold": 0.5,
+  "C_grid": [
+    0.001,
+    0.01,
+    0.1,
+    1.0
+  ],
+  "C_selection": "minimum inner grouped-CV log-loss",
+  "group": "source_id (matched real/fake pair)",
+  "feature_count_range_by_model": {
+    "global": {
+      "min": 24,
+      "max": 24
+    },
+    "lowdim_window": {
+      "min": 60,
+      "max": 60
+    },
+    "shuffled_viseme": {
+      "min": 89,
+      "max": 97
+    },
+    "viseme_context": {
+      "min": 85,
+      "max": 97
+    }
+  },
+  "selected_C_counts": [
+    {
+      "model": "global",
+      "selected_C": 0.01,
+      "count": 19
+    },
+    {
+      "model": "global",
+      "selected_C": 0.1,
+      "count": 46
+    },
+    {
+      "model": "global",
+      "selected_C": 1.0,
+      "count": 15
+    },
+    {
+      "model": "lowdim_window",
+      "selected_C": 0.01,
+      "count": 16
+    },
+    {
+      "model": "lowdim_window",
+      "selected_C": 0.1,
+      "count": 55
+    },
+    {
+      "model": "lowdim_window",
+      "selected_C": 1.0,
+      "count": 9
+    },
+    {
+      "model": "shuffled_viseme",
+      "selected_C": 0.001,
+      "count": 1
+    },
+    {
+      "model": "shuffled_viseme",
+      "selected_C": 0.01,
+      "count": 52
+    },
+    {
+      "model": "shuffled_viseme",
+      "selected_C": 0.1,
+      "count": 25
+    },
+    {
+      "model": "shuffled_viseme",
+      "selected_C": 1.0,
+      "count": 2
+    },
+    {
+      "model": "viseme_context",
+      "selected_C": 0.001,
+      "count": 14
+    },
+    {
+      "model": "viseme_context",
+      "selected_C": 0.01,
+      "count": 53
+    },
+    {
+      "model": "viseme_context",
+      "selected_C": 0.1,
+      "count": 13
+    }
+  ],
+  "alignment_boundary": "Visemes come from Whisper tiny.en word timestamps plus uniform CMUdict phone placement; this remains a weak proxy, not forced alignment.",
+  "claim_boundary": "Small 12-pair course pilot. Repeated folds quantify split sensitivity on the same pairs; they are not independent datasets."
+}

@@ -22,7 +22,26 @@ if [[ ! -f "${manifest}" ]]; then
 fi
 
 "${PYTHON_BIN}" -m s2f.cli validate-manifest "${manifest}" --protocol speaker
-"${PYTHON_BIN}" -m s2f.cli extract-manifest "${manifest}" --out "${feature_root}"
+if "${PYTHON_BIN}" - "${feature_root}" <<'PY'
+import sys
+from pathlib import Path
+import pandas as pd
+
+root = Path(sys.argv[1])
+features = list((root / "features").glob("*.csv"))
+qc_path = root / "qc.csv"
+if len(features) != 72 or not qc_path.exists():
+    raise SystemExit(1)
+qc = pd.read_csv(qc_path)
+if len(qc) != 72 or (qc["status"] != "ok").any() or float(qc["coverage"].min()) < 0.8:
+    raise SystemExit(1)
+print("Reusing 72 audited landmark files; minimum coverage", float(qc["coverage"].min()))
+PY
+then
+  :
+else
+  "${PYTHON_BIN}" -m s2f.cli extract-manifest "${manifest}" --out "${feature_root}"
+fi
 
 "${PYTHON_BIN}" scripts/build_weak_phoneme_intervals.py \
   --manifest "${manifest}" \

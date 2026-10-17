@@ -2,11 +2,11 @@
 
 **Light.Ningyizhuo_No.1 · Yan Zhiheng; He Hongjie · Theme 3 / Light (Defense)**
 
-A reproducible two-channel Light-side study. Strategy A evaluates lip dynamics on a 24-clip public pilot and a new 12-pair matched real/SadTalker pilot. Strategy B audits periodic chromatic traces introduced by Dark.Mimic's rPPG evasion on one peer-supplied aligned pair and a neutral re-encode control.
+A reproducible two-channel Light-side study. Strategy A evaluates lip dynamics on a 24-clip public pilot and a 36-pair matched real/SadTalker experiment. Strategy B audits periodic chromatic traces introduced by Dark.Mimic's rPPG evasion on one peer-supplied aligned pair and a neutral re-encode control.
 
-**Current evidence:** the original 24-clip public pilot established an executable pipeline but did not show a stable weak-phone advantage. We therefore built 12 matched real/SadTalker pairs that share speaker, audio, duration and final encoding. All 24 matched clips passed landmark extraction with 1.00 coverage. Across 20 repeated four-fold pair-grouped runs, local temporal windows without phone labels improved mean Macro-F1 from 0.707 to 0.748 and AUROC from 0.773 to 0.806. Weak phone-category interactions reduced both metrics and failed the shuffled-phone control. Strategy A therefore keeps the temporal-window representation and reports phone context as a negative ablation. In the single Dark.Mimic pair, colour energy near 1.2 Hz remained above a neutral re-encode control under H.264 CRF 35, 256×224 resizing and 15 FPS. Synthetic 1.2 Hz global brightness variation on 12 real-speaker clips triggered the same metric in all 12, so the chromatic metric is not attack-specific. These are course-pilot findings, not publication-scale claims. See [M3 results](reports/M3_RESULTS.md), the [matched SadTalker follow-up](reports/M3_MATCHED_SADTALKER_FOLLOWUP.md) and [submission checklist](reports/M3_SUBMISSION_CHECKLIST.md).
+**Current evidence:** the original 24-clip public pilot established an executable pipeline but did not show a stable weak-phone advantage. A 12-pair matched SadTalker development run suggested that compact local windows might help, so we prespecified an expansion before inspecting its scores. The completed expansion contains 36 matched pairs / 72 clips from three non-overlapping segments for each of 12 speakers; all 72 passed landmark extraction with 1.00 coverage. On only the 24 new pairs, the 24-feature global model reached mean Macro-F1 0.762 and AUROC 0.843, while compact windows reached 0.677 and 0.739. Weak viseme context reached 0.600 and 0.671 and did not consistently beat shuffled visemes. Strategy A therefore keeps the global representation and reports the older window gain plus weak visemes as failed confirmation/negative ablations. In the single Dark.Mimic pair, colour energy near 1.2 Hz remained above a neutral re-encode control under H.264 CRF 35, 256×224 resizing and 15 FPS. Synthetic 1.2 Hz global brightness variation on 12 real-speaker clips triggered the same metric in all 12, so the chromatic metric is not attack-specific. These are course-pilot findings, not publication-scale claims. See [M3 results](reports/M3_RESULTS.md), the [expanded optimisation report](reports/M3_VISEME_OPTIMIZATION.md) and [submission checklist](reports/M3_SUBMISSION_CHECKLIST.md).
 
-Submission materials: [executed notebook](notebooks/Milestone3.ipynb), [editable presentation](deliverables/FIT5230_M3_Context_Matters_Presentation_Final_v11.pptx), [15-minute script](reports/M3_PRESENTATION_SCRIPT.md) and [Moodle Colab-link file](deliverables/Moodle_M3_Colab_Link.txt). The matched GPU pipeline completed with 40 passing tests on 17 October 2026. The earlier public branch also completed in fresh Colab; see the [verification record](reports/M3_COLAB_VERIFICATION.md).
+Submission materials: [executed notebook](notebooks/Milestone3.ipynb), [editable presentation v13](deliverables/FIT5230_M3_Context_Matters_Presentation_Final_v13.pptx), [15-minute script](reports/M3_PRESENTATION_SCRIPT.md) and [Moodle Colab-link file](deliverables/Moodle_M3_Colab_Link.txt). The expanded GPU pipeline completed with 46 passing tests on 17 October 2026. The earlier public branch also completed in fresh Colab; see the [verification record](reports/M3_COLAB_VERIFICATION.md).
 
 ## Quick start
 
@@ -37,9 +37,9 @@ point in opposite directions, so no stable context benefit is claimed.
 Its fixed-split improvement is reported together with a repeated-cross-validation
 stability check; it must not be described as fresh confirmatory evidence.
 
-The current notebook adds the controlled matched SadTalker evidence as a tenth
-code cell. It was executed on the prepared server with saved outputs and 40
-passing tests. The original public-video branch remains optional because live
+The current notebook adds the controlled matched SadTalker development evidence
+and the prespecified 36-pair expansion. It was executed on the prepared server
+with saved outputs and 46 passing tests. The original public-video branch remains optional because live
 Wikimedia downloads can time out; its committed result tables and prior fresh
 Colab verification remain available for inspection.
 

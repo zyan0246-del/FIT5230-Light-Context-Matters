@@ -385,6 +385,9 @@ def main() -> None:
     (out / "run.json").write_text(json.dumps({
         "seed": SEED, "repeats": REPEATS, "outer_folds": OUTER_FOLDS,
         "inner_folds": INNER_FOLDS, "threshold": THRESHOLD,
+        "n_clips": int(len(manifest)),
+        "n_pairs": int(manifest.source_id.nunique()),
+        "n_speakers": int(manifest.speaker_id.nunique()),
         "C_grid": list(C_GRID), "C_selection": "minimum inner grouped-CV log-loss",
         "group": "speaker_id (all matched segments from a speaker stay together)",
         "evaluation_subset": "new_non_overlapping_segments_s1_s2" if args.new_segments_only else "all_manifest_segments",
@@ -395,8 +398,8 @@ def main() -> None:
             "this remains a weak proxy, not forced alignment."
         ),
         "claim_boundary": (
-            "Small 12-pair course pilot. Repeated folds quantify split sensitivity on the same pairs; "
-            "they are not independent datasets."
+            f"Small {manifest.source_id.nunique()}-pair course evaluation from 12 public identities and one generator. "
+            "Repeated folds quantify split sensitivity on the same clips; they are not independent datasets."
         ),
     }, indent=2), encoding="utf-8")
 

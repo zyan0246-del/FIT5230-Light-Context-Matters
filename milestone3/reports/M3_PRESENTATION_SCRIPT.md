@@ -12,19 +12,19 @@ Speaker: Yan.
 
 Speaker: Yan.
 
-"The submitted M2 notebook used 32 synthetic trajectories from 16 artificial identity IDs to check classifier logic. It did not measure real-video detection accuracy. M3 first added a public pilot. We then repaired its largest source confound by generating 12 matched SadTalker clips from the same speakers and audio as 12 real clips."
+"The submitted M2 notebook used 32 synthetic trajectories from 16 artificial identity IDs to check classifier logic. It did not measure real-video detection accuracy. M3 first added a public pilot. We then built a matched SadTalker experiment and expanded it to three non-overlapping segments for each of 12 speakers: 36 pairs and 72 clips."
 
-Point to the fixed split: 12 train, six validation and six test clips. Mention 40 passing tests and 24 out of 24 matched clips with full face-landmark coverage.
+Point to the fixed split: 36 train, 18 validation and 18 test clips. Mention 46 passing tests and 72 out of 72 matched clips with full face-landmark coverage.
 
 ## Slide 3: Experimental framework (1:45 to 3:00)
 
 Speakers: Yan for the first 30 seconds, He for the next 45 seconds.
 
-Yan: "The matched branch compares global lip dynamics, local temporal windows, weak phone context and shuffled phone labels. Every evaluation fold keeps the matched real/fake pair together."
+Yan: "The matched branch compares global lip dynamics, compact local temporal windows, weak viseme context and shuffled visemes. Every evaluation fold keeps all three segments from one speaker together. Inner grouped folds select regularisation by log loss."
 
 He: "The peer branch compares aligned RGB signals from Dark.Mimic's control and modified video. We report the branches separately because one peer pair cannot calibrate a valid fusion model."
 
-Emphasize the data boundaries: 12 public speakers and 12 derived SadTalker videos for Strategy A; hash-identified private peer videos for Strategy B.
+Emphasize the data boundaries: 12 public speakers and 36 derived SadTalker videos for Strategy A; hash-identified private peer videos for Strategy B.
 
 ## Slide 4: Dark.Mimic's strategy and our response (3:00 to 4:30)
 
@@ -38,7 +38,7 @@ State that the team did not receive enough identities for population-level accur
 
 Speaker: Yan.
 
-"Each fake uses the corresponding real speaker's portrait and audio. Both members of a pair are standardised to 12 seconds, 512 by 512, 25 FPS and identical audio and codec settings. We compare whole-clip dynamics, local before/during/after windows, weak phone interactions and shuffled phone labels. All use the same logistic-regression settings and threshold."
+"Each fake uses the corresponding real segment's portrait and audio. Both members of a pair are standardised to 12 seconds, 512 by 512, 25 FPS and identical audio and codec settings. We compare 24 global features, a 60-feature compact window, weak viseme interactions and shuffled visemes. Outer folds are grouped by speaker, and inner grouped folds select C from four values using binary log loss. The decision threshold stays at 0.5."
 
 Explain that Whisper word timestamps plus CMUdict give a weak proxy. Do not call it forced alignment.
 
@@ -50,15 +50,15 @@ Speaker: Yan.
 
 "This negative result motivated the controlled matched experiment instead of more tuning on the known six-clip split."
 
-## Slide 7: Matched SadTalker result (7:00 to 9:00)
+## Slide 7: Expanded SadTalker confirmation (7:00 to 9:00)
 
 Speaker: Yan.
 
-"The matched pilot contains 12 real/fake pairs. Each pair shares the speaker, decoded audio, duration, split and final codec settings. We use 20 repeated four-fold splits grouped by pair, so the real and fake versions never enter different folds."
+"The matched experiment contains 36 real/fake pairs. Each pair shares the speaker, decoded audio, duration, split and final codec settings. We use 20 repeated four-fold splits grouped by speaker, so all three real/fake segments from one identity stay together."
 
-"The context-free model averages Macro-F1 0.707 and AUROC 0.773. Adding local windows without phone labels raises them to 0.748 and 0.806. The window model scores higher in 15 of 20 repeats for F1 and 14 of 20 for AUROC. Weak phone context averages only 0.522 and 0.518. It is worse than no-phone windows in all 20 repeats and does not beat shuffled phone labels consistently."
+"The original 12-pair development run suggested a compact-window gain. On all 36 pairs, global and compact-window Macro-F1 are both about 0.753, but global AUROC is higher: 0.826 versus 0.809. The decisive check uses only the 24 new pairs. Global features reach Macro-F1 0.762 and AUROC 0.843. Compact windows fall to 0.677 and 0.739 and improve AUROC in zero of 20 repeats. Weak viseme context reaches 0.600 and 0.671 and does not consistently beat shuffled visemes."
 
-Explain the failure analysis: the weak aligner selects a vowel as every central category, neighbouring categories are sparse, and the interaction representation expands from 102 numeric window features to 726–960 features with only 18 training clips per fold. The course conclusion is that temporal windows help this matched SadTalker pilot; the current phone labels do not.
+Explain the failure analysis: word-level timestamps give coarse phone placement, some segments have very low ASR confidence, local features add correlated dimensions, and only 12 independent identities remain. The course conclusion is that the simpler global representation is most stable; compact windows and weak visemes are transparent negative ablations.
 
 ## Slide 8: Strategy B design and neutral control (9:00 to 10:30)
 
@@ -88,7 +88,7 @@ He should distinguish the completed 12-speaker *codec-only* and *synthetic perio
 
 Speaker: He, final sentence by Yan.
 
-"The lip branch now has a controlled course result: temporal windows improve the matched SadTalker pilot, while weak phone labels fail the shuffled control. The colour branch finds a strong trace in one attacked peer pair, but a synthetic-light counterexample shows that the frequency metric is not attack-specific."
+"The lip branch now has a controlled model-selection result: the apparent 12-pair window gain failed confirmation, and global lip dynamics are most stable on the new segments. Weak visemes also fail to add reliable information. The colour branch finds a strong trace in one attacked peer pair, but a synthetic-light counterexample shows that the frequency metric is not attack-specific."
 
 Yan closes:
 
@@ -98,7 +98,11 @@ Yan closes:
 
 ### Why did the context model fail?
 
-Whisper supplies word timestamps and CMUdict supplies pronunciations, so phone boundaries are approximate. Every central category was a vowel, neighbouring categories were sparse, and interactions expanded to 726–960 features from only 18 training clips per fold. The no-phone windows kept 102 numeric features and performed better.
+Whisper supplies word timestamps and CMUdict supplies pronunciations, so phone boundaries are approximate. Some new segments have little confident English ASR. Coarse viseme interactions still add noisy dimensions, while only 12 independent identities are available. The weak labels therefore do not reliably condition the observed mouth motion.
+
+### Why did you keep a negative confirmation result?
+
+The data construction and evaluation were committed before the expanded scores were inspected. The new segments showed that the favourable 12-pair window result was not stable. Selecting the global model from this controlled comparison is a more defensible course outcome than reporting only the development gain.
 
 ### Why show the older six-clip negative result?
 

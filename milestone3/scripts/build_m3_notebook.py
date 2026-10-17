@@ -31,12 +31,20 @@ def text_snapshot() -> tuple[dict[str, str], str]:
         ROOT / "scripts/run_benign_chromatic_controls.py",
         ROOT / "scripts/run_periodic_light_control.py",
         ROOT / "scripts/build_matched_sadtalker_pilot.py",
+        ROOT / "scripts/build_expanded_sadtalker_pilot.py",
         ROOT / "scripts/run_matched_sadtalker_evaluation.py",
         ROOT / "scripts/run_matched_sadtalker_pipeline.sh",
+        ROOT / "scripts/run_expanded_sadtalker_pipeline.sh",
+        ROOT / "scripts/run_viseme_context_optimization.py",
         ROOT / "data/matched_sadtalker_manifest.csv",
         ROOT / "data/matched_sadtalker_aligned_manifest.csv",
         ROOT / "data/matched_sadtalker_intervals.csv",
         ROOT / "data/matched_sadtalker_provenance.json",
+        ROOT / "data/expanded_sadtalker_manifest.csv",
+        ROOT / "data/expanded_sadtalker_aligned_manifest.csv",
+        ROOT / "data/expanded_sadtalker_intervals.csv",
+        ROOT / "data/expanded_sadtalker_provenance.json",
+        ROOT / "outputs/expanded_sadtalker/qc.csv",
     ]
     paths += list((ROOT / "artifacts/m3_results").glob("*.csv"))
     paths += list((ROOT / "artifacts/m3_results").glob("*.json"))
@@ -44,6 +52,12 @@ def text_snapshot() -> tuple[dict[str, str], str]:
     paths += list((ROOT / "artifacts/m3_improvement").glob("*.json"))
     paths += list((ROOT / "artifacts/matched_sadtalker").glob("*.csv"))
     paths += list((ROOT / "artifacts/matched_sadtalker").glob("*.json"))
+    paths += list((ROOT / "artifacts/viseme_optimization").glob("*.csv"))
+    paths += list((ROOT / "artifacts/viseme_optimization").glob("*.json"))
+    paths += list((ROOT / "artifacts/viseme_optimization_expanded").glob("*.csv"))
+    paths += list((ROOT / "artifacts/viseme_optimization_expanded").glob("*.json"))
+    paths += list((ROOT / "artifacts/viseme_optimization_new_segments").glob("*.csv"))
+    paths += list((ROOT / "artifacts/viseme_optimization_new_segments").glob("*.json"))
     sources = {
         path.relative_to(ROOT).as_posix(): path.read_text(encoding="utf-8")
         for path in sorted(set(paths))
@@ -98,7 +112,7 @@ print(json.dumps(environment(), indent=2))
             "This notebook evaluates two distinct defenses. Yan presents the phonetic-context "
             "mouth-dynamics analysis. He presents the periodic-colour audit of Dark.Mimic's rPPG evasion. "
             "These are speaking roles, not independently verified implementation credits. "
-            "The public pilot runs end to end on CPU. A controlled SadTalker follow-up was generated on a T4 GPU and "
+            "The public pilot runs end to end on CPU. A 36-pair controlled SadTalker experiment was generated on a T4 GPU and "
             "its commands, provenance and lightweight result tables are embedded below. Peer videos remain private, so the notebook includes their hashes, "
             "aggregate results and a guarded rerun path without redistributing the MP4 files."
         ),
@@ -106,7 +120,7 @@ print(json.dumps(environment(), indent=2))
             "## 1. Reproducible source and environment\n\n"
             "The notebook contains a readable source snapshot and verifies its SHA256 before execution. "
             "A fresh run downloads approximately 180 MB of public models and videos. No paid GPU is required to rerun "
-            "the original public branch or inspect the matched result; regenerating the 12 SadTalker videos requires a GPU."
+            "the original public branch or inspect the matched results; regenerating the 36 SadTalker videos requires a GPU."
         ),
         nbf.v4.new_code_cell(bootstrap),
         nbf.v4.new_code_cell(install),
@@ -226,12 +240,12 @@ print(followup["interpretation"])
 '''
         ),
         nbf.v4.new_markdown_cell(
-            "### Controlled real/SadTalker follow-up\n\n"
-            "The original public pilot used different real and fake collections. The follow-up uses 12 matched pairs: "
+            "### Controlled real/SadTalker development run\n\n"
+            "The original public pilot used different real and fake collections. This development run uses 12 matched pairs: "
             "each fake is generated from the corresponding real speaker's still image and audio, and both outputs use "
             "the same 12-second duration, 512 by 512 canvas, 25 FPS and final codec settings. Pair-grouped folds prevent "
             "the matched real and fake from entering different folds. Four representations use the same classifier, "
-            "regularisation, threshold and folds. The tables below are the saved output of the completed T4 server run."
+            "regularisation, threshold and folds. The tables below motivated, but do not replace, the prespecified expanded confirmation that follows."
         ),
         nbf.v4.new_code_cell(
             '''matched = ROOT / "artifacts/matched_sadtalker"
@@ -257,7 +271,64 @@ for axis, metric, title in [(axes[0], "macro_f1", "Out-of-fold Macro-F1"),
     axis.grid(axis="y", alpha=.25)
 fig.suptitle("Matched real/SadTalker pilot: 20 repeated pair-grouped runs")
 fig.tight_layout(); plt.show()
-print("Course result: temporal windows improved this matched pilot; weak phone labels did not.")
+print("Development result only: temporal windows improved these 12 pairs; expanded confirmation follows.")
+'''
+        ),
+        nbf.v4.new_markdown_cell(
+            "### Prespecified expanded-segment confirmation\n\n"
+            "A development run on the original 12 pairs suggested that a compact numeric window could reduce overfitting. "
+            "Before inspecting any expanded results, we committed the data construction, representations and evaluation "
+            "protocol at Git commit `eed6a3b`. The same 12 speakers now contribute three non-overlapping 12-second "
+            "segments each, giving 36 matched real/SadTalker pairs and 72 clips. Nested evaluation groups every fold by "
+            "speaker, selects logistic-regression regularisation only inside each outer training fold using binary log loss, "
+            "and keeps the decision threshold at 0.5. The compact local representation retains the 24 global features and "
+            "adds 36 trajectory summaries. Coarse viseme interactions and shuffled visemes test whether weak phonetic "
+            "categories add information beyond the same numeric windows.\n\n"
+            "We report both all 36 pairs and only the 24 newly generated s1/s2 pairs. The latter are fresh, non-overlapping "
+            "segments but still reuse the same identities and generator, so they are a confirmation within this course "
+            "setting rather than an independent generalisation test."
+        ),
+        nbf.v4.new_code_cell(
+            '''development = ROOT / "artifacts/viseme_optimization"
+expanded = ROOT / "artifacts/viseme_optimization_expanded"
+new_segments = ROOT / "artifacts/viseme_optimization_new_segments"
+
+def show_viseme_run(name, directory):
+    summary = pd.read_csv(directory / "summary.csv")
+    comparisons = pd.read_csv(directory / "paired_comparisons.csv")
+    run = json.loads((directory / "run.json").read_text())
+    print(name)
+    print(
+        "Clips / matched pairs / speakers:",
+        run.get("n_clips", 24), run.get("n_pairs", 12), run.get("n_speakers", 12),
+    )
+    display(summary)
+    display(comparisons)
+    return summary, comparisons
+
+development_summary, development_comparisons = show_viseme_run("Development: original s0 segment", development)
+expanded_summary, expanded_comparisons = show_viseme_run("All three segments per speaker", expanded)
+fresh_summary, fresh_comparisons = show_viseme_run("Only new s1/s2 segments", new_segments)
+expanded_qc = pd.read_csv(ROOT / "outputs/expanded_sadtalker/qc.csv")
+print(
+    "Expanded landmark QC:", len(expanded_qc), "clips; minimum coverage",
+    round(float(expanded_qc.coverage.min()), 3), "; failed clips",
+    int((expanded_qc.status != "ok").sum()),
+)
+
+def comparison_row(frame, comparison, metric):
+    return frame[(frame.comparison == comparison) & (frame.metric == metric)].iloc[0]
+
+for label, frame in [("All segments", expanded_comparisons), ("New segments only", fresh_comparisons)]:
+    f1 = comparison_row(frame, "lowdim_window-minus-global", "macro_f1")
+    auc = comparison_row(frame, "lowdim_window-minus-global", "auroc")
+    viseme = comparison_row(frame, "viseme_context-minus-shuffled_viseme", "auroc")
+    print(
+        f"{label}: compact-window minus global = {f1.mean_delta:+.3f} Macro-F1 "
+        f"({int(f1.positive_repeats)}/20 positive repeats), {auc.mean_delta:+.3f} AUROC "
+        f"({int(auc.positive_repeats)}/20 positive repeats). "
+        f"Viseme minus shuffled-viseme AUROC = {viseme.mean_delta:+.3f}."
+    )
 '''
         ),
         nbf.v4.new_markdown_cell(
@@ -322,16 +393,19 @@ else:
         nbf.v4.new_markdown_cell(
             "## 6. Conclusions and claim boundaries\n\n"
             "1. All 24 original public clips passed landmark coverage, but their six-clip held-out result remained small and confounded by source collection.\n"
-            "2. The controlled 12-pair SadTalker follow-up matched speaker, audio, duration and encoding. "
-            "Across 20 repeated pair-grouped runs, temporal windows without phone labels improved mean Macro-F1 from 0.707 to 0.748 "
-            "and AUROC from 0.773 to 0.806. Weak phone labels reduced both metrics and did not beat shuffled labels consistently. "
-            "This supports temporal windows within the matched course pilot, not generalisation beyond SadTalker.\n"
+            "2. The controlled SadTalker experiment expanded the 12-pair development run to 36 pairs / 72 clips. "
+            "All clips passed landmark extraction with coverage 1.00. On only the 24 new pairs, global lip dynamics reached "
+            "mean Macro-F1 0.762 and AUROC 0.843. Compact windows reached 0.677 and 0.739 and improved AUROC in 0/20 repeats. "
+            "Weak viseme context reached 0.600 and 0.671 and did not consistently dominate shuffled visemes across all metrics. "
+            "The final Strategy A model is therefore the 24-feature global representation; the favourable 12-pair window result "
+            "is retained as development evidence that failed confirmation.\n"
             "3. The original weak phonetic-context proxy did not improve the held-out result. "
             "A post-hoc multi-event extension improved the saved local reference split, but not the fresh Colab "
             "rerun. In both environments its repeated four-fold comparisons showed no consistent gain across both "
             "metrics. ASR, decoding and package versions can change six-clip rankings; use the generated metrics "
-            "above for this runtime. This narrows the next research step to forced "
-            "alignment and a fresh matched hold-out set rather than further tuning these 24 clips.\n"
+            "above for this runtime. The expanded run also exposed one short-ASR boundary bug, which was repaired by using "
+            "the landmark timeline as the video duration without changing ASR phone timestamps. No clip was removed. "
+            "The course evidence therefore supports simpler global features rather than further tuning weak context.\n"
             "4. In the single attacked peer pair, periodic colour energy near 1.2 Hz remained higher than both the historical "
             "and newly regenerated neutral controls after H.264 CRF 35, resizing and 15 FPS. Twelve public real-speaker "
             "codec-only controls were also run. Synthetic 1.2 Hz global light raised the same metric on all 12 real "

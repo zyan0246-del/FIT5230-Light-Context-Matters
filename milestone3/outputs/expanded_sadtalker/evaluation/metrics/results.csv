@@ -1,0 +1,5 @@
+n,macro_f1,auroc,threshold,model,split,protocol,seed,evidence,n_train,n_train_speakers,n_eval_speakers
+18,0.6,0.7901234567901234,0.5,context_free,val,speaker,5230,pilot,36,6,3
+18,0.8888888888888888,0.9382716049382716,0.5,context_free,test,speaker,5230,pilot,36,6,3
+18,0.3377926421404682,0.4444444444444445,0.5,context,val,speaker,5230,pilot,36,6,3
+18,0.5555555555555556,0.4691358024691358,0.5,context,test,speaker,5230,pilot,36,6,3

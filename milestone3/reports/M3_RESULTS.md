@@ -22,8 +22,10 @@ We report the channels separately. We do not tune score fusion on one peer pair.
 - Added reproducible Whisper and CMUdict weak context annotations.
 - Added a paired chromatic spectral analyser and five unit tests.
 - Added a neutral re-encode control and three post-processing conditions.
-- Added a 12-pair matched real/SadTalker control experiment with identical audio and encoding inside every pair.
-- Increased the regression suite to 40 passing tests.
+- Added a 12-pair matched real/SadTalker development experiment with identical audio and encoding inside every pair.
+- Expanded the controlled data to 36 matched pairs / 72 clips using three non-overlapping segments for each of 12 speakers.
+- Added nested speaker-grouped regularisation selection, a compact-window ablation and coarse-viseme/shuffled-viseme controls.
+- Increased the regression suite to 46 passing tests.
 - Built and executed a standalone Milestone 3 notebook with saved outputs.
 
 ## Public pilot
@@ -85,7 +87,11 @@ Twenty repeated four-fold pair-grouped runs compared four representations under 
 
 Weak phone context averaged only 0.522 Macro-F1 and 0.518 AUROC. It was worse than the no-phone window model in all 20 repeats on both metrics and did not consistently beat shuffled phone labels. The weak alignment selected a vowel as every central category, neighbouring categories were sparse, and category interactions expanded the representation from 102 numeric window features to 726–960 features with only 18 training clips per fold. These observations explain why the current phone representation can overfit without showing that natural coarticulation lacks value.
 
-The course conclusion is narrower and stronger than before: local temporal windows help within this controlled SadTalker pilot; the weak phone labels do not. Repeated splits reuse the same 12 pairs, so the result remains a small course pilot. Full details are in `M3_MATCHED_SADTALKER_FOLLOWUP.md`.
+The 12-pair result was treated as development evidence, not as the final claim. Before inspecting any expanded scores, we committed an evaluation with three non-overlapping segments per speaker, nested speaker-grouped regularisation selection, a compact 60-feature window and coarse-viseme/shuffled-viseme controls (`eed6a3b`). The full pipeline then processed 36 matched pairs / 72 clips. Every clip achieved landmark coverage 1.00 and 46 tests passed.
+
+On all 36 pairs, global features reached mean Macro-F1 0.753 and AUROC 0.826. Compact windows reached 0.753 and 0.809: essentially equal Macro-F1 and lower AUROC. On only the 24 new s1/s2 pairs, global features reached 0.762 / 0.843, while compact windows fell to 0.677 / 0.739. Compact windows improved AUROC in 0/20 confirmation repeats. Viseme context reached 0.600 / 0.671 on the new pairs and remained below compact windows; it did not consistently dominate shuffled visemes across Macro-F1, AUROC and log loss.
+
+The final Strategy A model is therefore the simpler 24-feature global lip-dynamics baseline. Compact windows and weak visemes are retained as transparent negative ablations. The old 12-pair improvement did not confirm. This model-selection result is more reliable than selecting the favourable development score. Full details are in `M3_VISEME_OPTIMIZATION.md`; the earlier experiment remains documented in `M3_MATCHED_SADTALKER_FOLLOWUP.md`.
 
 ## Peer work
 
@@ -138,7 +144,7 @@ To test specificity, we added the same *global* 1.2 Hz brightness modulation (no
 
 ## Integrated Light-side response
 
-The two strategies answer different questions. The lip model asks whether generated mouth movement appears plausible. The chromatic audit asks whether the adversarial attempt to repair physiological plausibility leaves another trace. The first experiment currently gives a negative small-pilot result. The second gives a strong single-pair forensic result. Keeping them separate makes the evidence and limitations clear.
+The two strategies answer different questions. The lip model asks whether generated mouth movement appears plausible. The chromatic audit asks whether the adversarial attempt to repair physiological plausibility leaves another trace. The expanded lip experiment selects a stable global baseline and rejects the added context features under speaker-grouped confirmation. The chromatic branch gives a strong single-pair forensic result but fails an attack-specificity counterexample. Keeping the channels separate makes the evidence and limitations clear.
 
 ## Reproducibility
 
@@ -151,7 +157,7 @@ The two strategies answer different questions. The lip model asks whether genera
 - Fixed split, seed, threshold and preprocessing parameters are stored.
 - The notebook contains an inspectable source snapshot and saved outputs.
 - All nine updated notebook code cells execute locally without errors.
-- All 40 regression tests pass in the current server run.
+- All 46 regression tests pass in the completed expanded server run.
 
 ## Claim boundary
 

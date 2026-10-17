@@ -48,7 +48,9 @@ Phone context did not help. It was worse than the no-phone window model in all 2
 
 ## Course conclusion
 
-The controlled experiment repairs the largest weakness of the original cross-collection pilot. It supports a modest course-level result: local temporal windows improve this matched SadTalker pilot, while the current weak phone labels do not. The final course system therefore keeps the no-phone window representation as Strategy A and presents phone context as a tested negative ablation.
+The controlled experiment repairs the largest weakness of the original cross-collection pilot. At this development stage, local temporal windows improved the original 12-pair sample, while weak phone labels did not. This finding motivated a prespecified expansion to three non-overlapping segments per identity.
+
+The expanded confirmation did **not** retain the window advantage. On only the 24 new pairs, the global model reached 0.762 Macro-F1 / 0.843 AUROC, compared with 0.677 / 0.739 for compact windows. The final course system therefore keeps the global representation. This page documents the development experiment; `M3_VISEME_OPTIMIZATION.md` contains the final 36-pair model-selection result.
 
 This result does not establish a general detector. The pilot has 12 speakers, one generator and derived real/fake pairs. A publication claim would require new speakers, multiple generators, independent data and stronger alignment, which are outside the M3 submission scope.
 

@@ -14,7 +14,7 @@
 - [x] H.264 CRF 35, resize and 15 FPS conditions included.
 - [x] Raw peer files excluded from the public repository.
 - [x] Peer file SHA256 provenance recorded.
-- [x] 40 regression tests pass in the current server-executed notebook.
+- [x] 46 regression tests pass in the completed expanded server pipeline.
 - [x] Multi-event context follow-up added with a repeated-cross-validation stability check.
 - [x] Matched no-phone ablation run locally with fixed-split and 20 repeated four-fold comparisons; report mixed results.
 - [x] New matched real/SadTalker pilot built from 12 public speakers and 12 same-identity, same-audio generated videos.
@@ -22,12 +22,18 @@
 - [x] Matched pilot evaluated with 20 repeated four-fold splits grouped by pair; no pair leakage.
 - [x] Context-free, no-phone temporal windows, weak phone context and shuffled-phone control compared under the same classifier settings.
 - [x] All 24 matched clips passed landmark extraction with 1.00 coverage.
+- [x] Prespecified expansion completed: 36 matched pairs / 72 clips, with three non-overlapping segments per speaker.
+- [x] All 72 expanded clips passed landmark extraction with minimum coverage 1.00 and no failed status.
+- [x] Nested speaker-grouped comparison completed with inner log-loss selection of regularisation.
+- [x] Expanded all-pair and new-segment-only results saved separately.
+- [x] Development window gain failed confirmation; final Strategy A model changed to the stable 24-feature global representation.
+- [x] Coarse-viseme and shuffled-viseme controls completed; weak visemes did not show a stable advantage.
 - [x] Twelve public real-speaker neutral codec controls run and aggregate results saved.
 - [x] Synthetic 1.2 Hz periodic-light controls run on the 12 real speakers; 12/12 triggered the frequency metric, so specificity is explicitly limited.
 - [x] A new neutral peer control regenerated with a documented FFmpeg recipe; results labelled separately from historical-neutral results.
 - [x] Updated Milestone3.ipynb executed locally with nine saved code-cell outputs and no errors.
-- [x] Server experiment completed with 40 passing tests.
-- [x] Final v11 presentation updated, rendered and structurally validated after the 17 October matched experiment.
+- [x] Server experiment completed with 46 passing tests.
+- [x] Final v13 presentation updated, all 11 slides rendered, and package/layout/native-chart validation passed.
 - [x] Fifteen-minute presentation script prepared.
 
 ## Still requires a team member

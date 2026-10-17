@@ -1,0 +1,13 @@
+source_id,previous_viseme,central_viseme,next_viseme
+matched_simon,alveolar,v_front,alveolar
+matched_william,alveolar,v_round,v_open
+matched_yorkshire,bilabial_closed,v_round,alveolar
+matched_ahmad,bilabial_closed,v_round,velar
+matched_daniel,velar,v_open,v_open
+matched_gereon,velar,v_front,alveolar
+matched_ingid,velar,v_open,alveolar
+matched_mckensie,alveolar,v_open,alveolar
+matched_sam,alveolar,v_round,alveolar
+matched_james,alveolar,v_open,alveolar
+matched_john,alveolar,v_front,v_open
+matched_omar,bilabial_closed,v_open,postalveolar
