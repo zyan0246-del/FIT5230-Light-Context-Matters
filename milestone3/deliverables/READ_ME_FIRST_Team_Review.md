@@ -1,17 +1,17 @@
-# FIT5230 Milestone 3 — team review package (16 October 2026)
+# FIT5230 Milestone 3 — team review package (17 October 2026)
 
 Team: Light.Ningyizhuo_No.1 (Yan Zhiheng and He Hongjie)
 
 ## What to open first
 
-1. `deliverables/FIT5230_M3_Context_Matters_Presentation_Final_v9.pptx` — the revised, rendered 11-slide presentation, including the matched no-phone ablation, 12 public benign codec controls, the synthetic periodic-lighting counterexample and the completed fresh-Colab result.
-2. `notebooks/Milestone3.ipynb` — the revised notebook, with all nine code cells executed locally and 38 tests passing. The exact revision was also run end to end in a fresh Colab CPU runtime on 16 October; see `reports/M3_COLAB_VERIFICATION.md` for the environment and runtime-specific metrics.
+1. `deliverables/FIT5230_M3_Context_Matters_Presentation_Final_v11.pptx` — the final 11-slide presentation, including the controlled 12-pair SadTalker experiment and Dark.Mimic controls.
+2. `notebooks/Milestone3.ipynb` — the revised notebook with saved outputs. The earlier public branch was also run in fresh Colab; see `reports/M3_COLAB_VERIFICATION.md`.
 3. `reports/M3_PRESENTATION_SCRIPT.md` — revised speaking notes for both members.
 4. `reports/M3_RESULTS.md` and `reports/M3_REVIEW_ACTIONS_20261016.md` — results, limitations and remaining actions.
 
 ## Evidence boundaries
 
-The matched no-phone ablation is in the executed final notebook. Local cached-data results are in `artifacts/m3_improvement/matched_context_ablation_*.csv`. On the known six-clip split the context version scored better, while repeated cross-validation was mixed. Do not present this as a stable or Colab-reproduced improvement.
+The new matched pilot is the primary Strategy A control. It uses 12 public speakers and 12 SadTalker fakes generated with the same identity and audio. Across 20 repeated pair-grouped runs, temporal windows without phone labels improved mean Macro-F1 from 0.707 to 0.748 and AUROC from 0.773 to 0.806. Weak phone labels performed worse than the no-phone version and failed the shuffled-phone control. Keep both findings together and describe the scope as one small matched-generator pilot.
 
 The three private Dark.Mimic videos are intentionally excluded. Their hashes were rechecked and the one-pair chromatic audit was rerun on 16 October. Twelve public real-speaker codec-only controls were added, and a separate neutral MP4 was regenerated with a documented FFmpeg recipe. Synthetic 1.2 Hz global lighting changes on those 12 speakers triggered the frequency metric in all cases, so it cannot alone attribute the peer trace to an attack. None of this establishes a population-level detector; natural lighting/motion and multiple attacked identities remain untested.
 

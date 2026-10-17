@@ -1,0 +1,9 @@
+comparison,metric,mean_delta,sd_delta,positive_repeats,ties,negative_repeats
+window_no_phone-minus-context_free,macro_f1,0.0410350776437733,0.09454907746967348,15,1,4
+window_no_phone-minus-context_free,auroc,0.03298611111111111,0.06533432756483823,14,0,6
+phone_context-minus-context_free,macro_f1,-0.18548278712526536,0.06257341772735674,0,0,20
+phone_context-minus-context_free,auroc,-0.2548611111111111,0.06211708562212038,0,0,20
+phone_context-minus-window_no_phone,macro_f1,-0.22651786476903862,0.08674057436767756,0,0,20
+phone_context-minus-window_no_phone,auroc,-0.28784722222222214,0.05607736485943014,0,0,20
+phone_context-minus-shuffled_phone,macro_f1,-0.029478388224354175,0.07636907562581638,5,2,13
+phone_context-minus-shuffled_phone,auroc,-0.06840277777777778,0.07601500073181156,3,2,15

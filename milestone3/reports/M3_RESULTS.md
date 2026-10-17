@@ -22,7 +22,8 @@ We report the channels separately. We do not tune score fusion on one peer pair.
 - Added reproducible Whisper and CMUdict weak context annotations.
 - Added a paired chromatic spectral analyser and five unit tests.
 - Added a neutral re-encode control and three post-processing conditions.
-- Increased the regression suite to 38 passing tests.
+- Added a 12-pair matched real/SadTalker control experiment with identical audio and encoding inside every pair.
+- Increased the regression suite to 40 passing tests.
 - Built and executed a standalone Milestone 3 notebook with saved outputs.
 
 ## Public pilot
@@ -75,6 +76,16 @@ This follow-up also changes regularisation (`C=0.01` versus the context-free mod
 ### Matched-setting phonetic ablation added after review
 
 The source script includes a `multi_event_no_phone` comparison. It uses the same eligible events, before/after mouth measurements, ridge penalty, clip aggregation, logistic-regression settings and fixed/CV splits as `multi_event_context`; only the previous/next/central phone-category inputs to the expected-mouth model are removed. A local replay used 547 cached events from 24 clips. On the already-known six-clip split, context scored 0.829/0.778 versus no-phone 0.625/0.667 (Macro-F1/AUROC); repeated means were 0.645/0.689 versus 0.632/0.694, already a mixed result. The exact revision was then run from scratch in fresh Colab and produced 567 events. There, both versions scored 0.486/0.444 on the six test clips; repeated means were 0.585/0.621 for context versus 0.593/0.638 for no-phone. Thus the local fixed-split advantage did not reproduce, and the fresh matched ablation favors neither a stable nor causal phonetic-context claim. The CSVs are `matched_context_ablation_fixed.csv`, `matched_context_ablation_folds.csv` and `matched_context_ablation_summary.csv`. The six-clip test was already known and real training-event residuals remain in sample, so all fixed-split comparisons are exploratory.
+
+### New matched real/SadTalker control experiment
+
+To reduce the original collection confound, we generated one SadTalker clip for each of 12 public Wikitongues speakers using that speaker's still image and audio. Each real/fake pair shares identity, decoded audio, 12-second duration, split and final H.264/AAC settings. The manifest keeps each pair under one `source_id`, and all evaluation folds keep the pair together. All 24 matched clips achieved 1.00 face-landmark coverage. Provenance records public licences, SHA256 values, exact commands, SadTalker commit and checkpoint, and identical decoded-audio MD5 inside each pair.
+
+Twenty repeated four-fold pair-grouped runs compared four representations under the same logistic-regression settings and fixed threshold. The context-free model averaged 0.707 Macro-F1 and 0.773 AUROC. Adding before/during/after mouth windows without phone labels increased the means to 0.748 and 0.806. This no-phone window version beat the baseline in 15 of 20 repeats for Macro-F1 and 14 of 20 for AUROC. The means increased by 0.041 and 0.033 respectively.
+
+Weak phone context averaged only 0.522 Macro-F1 and 0.518 AUROC. It was worse than the no-phone window model in all 20 repeats on both metrics and did not consistently beat shuffled phone labels. The weak alignment selected a vowel as every central category, neighbouring categories were sparse, and category interactions expanded the representation from 102 numeric window features to 726–960 features with only 18 training clips per fold. These observations explain why the current phone representation can overfit without showing that natural coarticulation lacks value.
+
+The course conclusion is narrower and stronger than before: local temporal windows help within this controlled SadTalker pilot; the weak phone labels do not. Repeated splits reuse the same 12 pairs, so the result remains a small course pilot. Full details are in `M3_MATCHED_SADTALKER_FOLLOWUP.md`.
 
 ## Peer work
 
@@ -140,7 +151,7 @@ The two strategies answer different questions. The lip model asks whether genera
 - Fixed split, seed, threshold and preprocessing parameters are stored.
 - The notebook contains an inspectable source snapshot and saved outputs.
 - All nine updated notebook code cells execute locally without errors.
-- All 38 regression tests pass.
+- All 40 regression tests pass in the current server run.
 
 ## Claim boundary
 

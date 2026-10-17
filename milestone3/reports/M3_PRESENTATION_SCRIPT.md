@@ -12,21 +12,21 @@ Speaker: Yan.
 
 Speaker: Yan.
 
-"The submitted M2 notebook used 32 synthetic trajectories from 16 artificial identity IDs to check classifier logic. It also preprocessed one real and one generated public video, but did not measure real-video detection accuracy. In M3 we built a 24-clip public pilot and added held-out evaluation, weak phonetic timing, and a separate paired forensic audit of Dark.Mimic's signal modification."
+"The submitted M2 notebook used 32 synthetic trajectories from 16 artificial identity IDs to check classifier logic. It did not measure real-video detection accuracy. M3 first added a public pilot. We then repaired its largest source confound by generating 12 matched SadTalker clips from the same speakers and audio as 12 real clips."
 
-Point to the fixed split: 12 train, six validation and six test. Mention 38 passing tests and 24 out of 24 clips with full face-landmark coverage.
+Point to the fixed split: 12 train, six validation and six test clips. Mention 40 passing tests and 24 out of 24 matched clips with full face-landmark coverage.
 
 ## Slide 3: Experimental framework (1:45 to 3:00)
 
 Speakers: Yan for the first 30 seconds, He for the next 45 seconds.
 
-Yan: "The public branch extracts lip geometry and compares a context-free model with a weak context model."
+Yan: "The matched branch compares global lip dynamics, local temporal windows, weak phone context and shuffled phone labels. Every evaluation fold keeps the matched real/fake pair together."
 
 He: "The peer branch compares aligned RGB signals from Dark.Mimic's control and modified video. We report the branches separately because one peer pair cannot calibrate a valid fusion model."
 
-Emphasize the data boundaries: public videos for Strategy A, hash-identified private peer videos for Strategy B.
+Emphasize the data boundaries: 12 public speakers and 12 derived SadTalker videos for Strategy A; hash-identified private peer videos for Strategy B.
 
-## Slide 4: Dark.Mimic's strategy and our response (3:00 to 5:00)
+## Slide 4: Dark.Mimic's strategy and our response (3:00 to 4:30)
 
 Speaker: He.
 
@@ -34,33 +34,33 @@ Speaker: He.
 
 State that the team did not receive enough identities for population-level accuracy. The raw peer videos remain private.
 
-## Slide 5: Strategy A design (5:00 to 6:30)
+## Slide 5: Strategy A design (4:30 to 6:00)
 
 Speaker: Yan.
 
-"I will present our lip-dynamics strategy. The context-free model summarizes aperture, width and their time derivatives over a clip. The context version adds before, during and after statistics around one central vowel, conditioned on neighbouring phonetic classes. Both models use the same clips and the same fixed threshold."
+"Each fake uses the corresponding real speaker's portrait and audio. Both members of a pair are standardised to 12 seconds, 512 by 512, 25 FPS and identical audio and codec settings. We compare whole-clip dynamics, local before/during/after windows, weak phone interactions and shuffled phone labels. All use the same logistic-regression settings and threshold."
 
 Explain that Whisper word timestamps plus CMUdict give a weak proxy. Do not call it forced alignment.
 
-## Slide 6: Strategy A held-out result (6:30 to 8:15)
+## Slide 6: Original Strategy A result (6:00 to 7:00)
 
 Speaker: Yan.
 
 "On six held-out clips, the saved local reference run gave macro-F1 0.486 for both models and AUROC 0.667 versus 0.556. A fresh Colab CPU rerun on 15 October gave the same macro-F1 and AUROC 0.556 versus 0.222. The exact AUROC changed with the runtime, but weak context was worse in both. The bootstrap intervals are wide because the test set contains only three real and three fake clips."
 
-"The correct conclusion is that this weak context implementation does not improve the pilot."
+"This negative result motivated the controlled matched experiment instead of more tuning on the known six-clip split."
 
-## Slide 7: Strategy A multi-event follow-up (8:15 to 10:00)
+## Slide 7: Matched SadTalker result (7:00 to 9:00)
 
 Speaker: Yan.
 
-"We addressed one clear limitation by using every eligible vowel proxy rather than one interval per clip. This gives 547 events in the saved local run, with a median of 20 per clip. A model learned expected central mouth geometry from real training speech and aggregated residuals back to one row per clip."
+"The matched pilot contains 12 real/fake pairs. Each pair shares the speaker, decoded audio, duration, split and final codec settings. We use 20 repeated four-fold splits grouped by pair, so the real and fake versions never enter different folds."
 
-"We added a matched no-phone ablation using identical events, windows, ridge and classifier settings, and splits; only phone-category inputs were removed. The saved local replay looked better on the already-known six-clip split, but its repeated-fold evidence was mixed. We then ran this exact revision from scratch in Colab. There, context and no-phone both scored F1 0.486 and AUROC 0.444 on the six test clips. Across 20 repeated four-fold runs, context averaged F1 0.585 and AUROC 0.621, versus no-phone 0.593 and 0.638. The fresh run therefore does not show a phonetic-context advantage."
+"The context-free model averages Macro-F1 0.707 and AUROC 0.773. Adding local windows without phone labels raises them to 0.748 and 0.806. The window model scores higher in 15 of 20 repeats for F1 and 14 of 20 for AUROC. Weak phone context averages only 0.522 and 0.518. It is worse than no-phone windows in all 20 repeats and does not beat shuffled phone labels consistently."
 
-If asked whether phonetic context caused the six-clip improvement: this matched ablation removes a major confound but the known split, in-sample real-training residuals and mixed repeated-fold result prevent a causal or stable-effect claim. Cross-fitting, shuffled-phone controls and a new matched hold-out are still needed.
+Explain the failure analysis: the weak aligner selects a vowel as every central category, neighbouring categories are sparse, and the interaction representation expands from 102 numeric window features to 726–960 features with only 18 training clips per fold. The course conclusion is that temporal windows help this matched SadTalker pilot; the current phone labels do not.
 
-## Slide 8: Strategy B design and neutral control (10:00 to 11:30)
+## Slide 8: Strategy B design and neutral control (9:00 to 10:30)
 
 Speaker: He.
 
@@ -68,13 +68,13 @@ Speaker: He.
 
 "This is a paired forensic audit. It does not estimate a pulse waveform and it does not decide whether an arbitrary video is real or fake."
 
-## Slide 9: Strategy B main result (11:30 to 12:45)
+## Slide 9: Strategy B main result (10:30 to 11:45)
 
 Speaker: He.
 
 "In the original pair, the red-channel peak is 1.159 Hz. Energy near 1.2 Hz is 0.946 for A=1 and 0.204 for neutral re-encoding. The ratio is 4.63. The green-channel ratio is 8.48. The time-domain trace also shows a clear periodic pattern."
 
-## Slide 10: Post-processing robustness (12:45 to 14:00)
+## Slide 10: Post-processing robustness (11:45 to 13:30)
 
 Speaker: He.
 
@@ -84,25 +84,25 @@ Speaker: He.
 
 He should distinguish the completed 12-speaker *codec-only* and *synthetic periodic-light* controls from the still-missing multi-identity attacks and naturally captured lighting, motion and exposure experiments. Do not call the 12-speaker values a false-positive rate.
 
-## Slide 11: Integrated conclusion (14:00 to 15:00)
+## Slide 11: Integrated conclusion (13:30 to 15:00)
 
 Speaker: He, final sentence by Yan.
 
-"The lip branch contains a negative first result and a transparent matched ablation with mixed evidence. A prior local split gain failed to reproduce in Colab. The colour branch finds a strong trace in one attacked peer pair, but a synthetic-light counterexample shows the frequency metric is not attack-specific."
+"The lip branch now has a controlled course result: temporal windows improve the matched SadTalker pilot, while weak phone labels fail the shuffled control. The colour branch finds a strong trace in one attacked peer pair, but a synthetic-light counterexample shows that the frequency metric is not attack-specific."
 
 Yan closes:
 
-"For the course project, we have an executable, reproducible two-strategy evaluation with clear claim boundaries. For a paper, the next step is a matched multi-generator dataset with forced alignment and many attacked identities."
+"For the course project, both strategies are executable, their controls are explicit and our conclusions stay within the tested pilots."
 
 ## Questions to prepare for
 
 ### Why did the context model fail?
 
-The first version used only a word-timestamp proxy, 12 training clips and one interval per clip. The follow-up uses many intervals but still lacks forced alignment and matched sources. Its improvement on one known split did not remain stable across repeated folds.
+Whisper supplies word timestamps and CMUdict supplies pronunciations, so phone boundaries are approximate. Every central category was a vowel, neighbouring categories were sparse, and interactions expanded to 726–960 features from only 18 training clips per fold. The no-phone windows kept 102 numeric features and performed better.
 
-### Why report the 0.829 result if it is post-hoc?
+### Why show the older six-clip negative result?
 
-It records an exploratory local finding, but it cannot confirm effectiveness because the split was already visible, and fresh Colab did not reproduce it. We pair it with repeated cross-validation and explicitly require a new matched hold-out set.
+It explains why we built the controlled matched pilot rather than tuning the known split. We do not use the older split as evidence for the final temporal-window result.
 
 ### Why is the chromatic result not a detector?
 

@@ -2,11 +2,11 @@
 
 **Light.Ningyizhuo_No.1 · Yan Zhiheng; He Hongjie · Theme 3 / Light (Defense)**
 
-A reproducible two-channel Light-side study. Strategy A evaluates context-free and weak context-conditioned lip dynamics on a 24-clip public pilot. Strategy B audits periodic chromatic traces introduced by Dark.Mimic's rPPG evasion on one peer-supplied aligned pair and a neutral re-encode control.
+A reproducible two-channel Light-side study. Strategy A evaluates lip dynamics on a 24-clip public pilot and a new 12-pair matched real/SadTalker pilot. Strategy B audits periodic chromatic traces introduced by Dark.Mimic's rPPG evasion on one peer-supplied aligned pair and a neutral re-encode control.
 
-**Current evidence:** 24/24 public clips passed landmark extraction. On the six-clip held-out test, the context-free pilot reached macro-F1 0.486 and AUROC 0.667 in the saved local run; the original single weak-context model did not improve it. A post-hoc multi-event extension reached 0.829/0.778 locally, but a fresh Colab run did not reproduce that gain (0.486/0.444), and repeated four-fold comparisons showed no consistent average gain. In the single Dark.Mimic pair, colour energy near 1.2 Hz remained above a neutral re-encode control under H.264 CRF 35, 256×224 resizing and 15 FPS. However, synthetic 1.2 Hz global brightness variation on 12 real-speaker clips triggered the same frequency metric in all 12, so the metric is not attack-specific. These are course-pilot findings, not publication-scale generalisation claims. See [M3 results](reports/M3_RESULTS.md), the [multi-event follow-up](reports/M3_MULTI_CONTEXT_FOLLOWUP.md) and [submission checklist](reports/M3_SUBMISSION_CHECKLIST.md).
+**Current evidence:** the original 24-clip public pilot established an executable pipeline but did not show a stable weak-phone advantage. We therefore built 12 matched real/SadTalker pairs that share speaker, audio, duration and final encoding. All 24 matched clips passed landmark extraction with 1.00 coverage. Across 20 repeated four-fold pair-grouped runs, local temporal windows without phone labels improved mean Macro-F1 from 0.707 to 0.748 and AUROC from 0.773 to 0.806. Weak phone-category interactions reduced both metrics and failed the shuffled-phone control. Strategy A therefore keeps the temporal-window representation and reports phone context as a negative ablation. In the single Dark.Mimic pair, colour energy near 1.2 Hz remained above a neutral re-encode control under H.264 CRF 35, 256×224 resizing and 15 FPS. Synthetic 1.2 Hz global brightness variation on 12 real-speaker clips triggered the same metric in all 12, so the chromatic metric is not attack-specific. These are course-pilot findings, not publication-scale claims. See [M3 results](reports/M3_RESULTS.md), the [matched SadTalker follow-up](reports/M3_MATCHED_SADTALKER_FOLLOWUP.md) and [submission checklist](reports/M3_SUBMISSION_CHECKLIST.md).
 
-Submission materials: [locally executed notebook](notebooks/Milestone3.ipynb), [final editable presentation](deliverables/FIT5230_M3_Context_Matters_Presentation_Final_v9.pptx), [15-minute script](reports/M3_PRESENTATION_SCRIPT.md) and [Moodle Colab-link file](deliverables/Moodle_M3_Colab_Link.txt). The revised notebook has nine locally saved code-cell outputs and 38 passing tests. The exact source revision also completed all nine cells and 38 tests in a fresh Colab CPU runtime on 16 October; see the [verification record](reports/M3_COLAB_VERIFICATION.md).
+Submission materials: [executed notebook](notebooks/Milestone3.ipynb), [editable presentation](deliverables/FIT5230_M3_Context_Matters_Presentation_Final_v11.pptx), [15-minute script](reports/M3_PRESENTATION_SCRIPT.md) and [Moodle Colab-link file](deliverables/Moodle_M3_Colab_Link.txt). The matched GPU pipeline completed with 40 passing tests on 17 October 2026. The earlier public branch also completed in fresh Colab; see the [verification record](reports/M3_COLAB_VERIFICATION.md).
 
 ## Quick start
 
@@ -31,11 +31,17 @@ The script now also writes a matched `multi_event_no_phone` ablation to
 phonetic-category inputs while retaining the same event windows, numerical
 features, ridge penalty, clip aggregation, classifier and splits. Its new
 outputs have been generated from audited local caches and are now saved in the
-16 October notebook. The updated notebook completed locally and in a fresh
+16 October notebook. That revision completed locally and in a fresh
 Colab CPU runtime with nine code cells and 38 passing tests. The repeated-CV Macro-F1 and AUROC effects
 point in opposite directions, so no stable context benefit is claimed.
 Its fixed-split improvement is reported together with a repeated-cross-validation
 stability check; it must not be described as fresh confirmatory evidence.
+
+The current notebook adds the controlled matched SadTalker evidence as a tenth
+code cell. It was executed on the prepared server with saved outputs and 40
+passing tests. The original public-video branch remains optional because live
+Wikimedia downloads can time out; its committed result tables and prior fresh
+Colab verification remain available for inspection.
 
 For Strategy B, `scripts/run_benign_chromatic_controls.py` measures 12 public
 real-speaker neutral codec pairs. `scripts/run_chromatic_robustness.py` verifies

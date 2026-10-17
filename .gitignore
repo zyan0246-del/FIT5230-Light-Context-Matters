@@ -34,3 +34,9 @@ milestone3/.pytest_cache/
 milestone3/.venv/
 milestone3/.build*/
 milestone3/.codex-finalizer/
+milestone3/server_data/
+milestone3/server_logs/
+
+# Local presentation build and validation workspaces
+.codex-ppt-build/
+.codex-ppt-v10/

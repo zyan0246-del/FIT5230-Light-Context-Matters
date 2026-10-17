@@ -106,7 +106,12 @@ def main() -> None:
     parser.add_argument("--aligned-manifest", default="data/m3_pilot_aligned_manifest.csv")
     parser.add_argument("--intervals", default="data/m3_pilot_intervals.csv")
     parser.add_argument("--asr-dir", default="outputs/m3_work/asr")
+    parser.add_argument("--feature-dir", default="outputs/m3_work/pilot_features/features")
     parser.add_argument("--model", default="tiny.en")
+    parser.add_argument(
+        "--reuse-source-asr", action="store_true",
+        help="Reuse one ASR result for clips sharing source_id (only for verified shared audio)",
+    )
     args = parser.parse_args()
 
     manifest_path = ROOT / args.manifest
@@ -116,11 +121,15 @@ def main() -> None:
     dictionary = cmudict.dict()
     model = whisper.load_model(args.model, download_root=str(ROOT / "models" / "whisper"))
     intervals = []
+    source_results: dict[str, dict] = {}
 
     for row in manifest.itertuples(index=False):
         cache = asr_dir / f"{row.clip_id}.json"
         if cache.exists():
             result = json.loads(cache.read_text(encoding="utf-8"))
+        elif args.reuse_source_asr and row.source_id in source_results:
+            result = source_results[row.source_id]
+            cache.write_text(json.dumps(result, ensure_ascii=False, indent=2), encoding="utf-8")
         else:
             print("transcribe", row.clip_id, flush=True)
             result = model.transcribe(
@@ -128,12 +137,14 @@ def main() -> None:
                 fp16=False, verbose=False, temperature=0,
             )
             cache.write_text(json.dumps(result, ensure_ascii=False, indent=2), encoding="utf-8")
+        if args.reuse_source_asr:
+            source_results.setdefault(row.source_id, result)
         phones = flatten_words(result, dictionary)
         duration = float(max((word["end"] for segment in result.get("segments", [])
                               for word in segment.get("words", [])), default=0.0))
         # The video may continue after speech. Use its feature timestamp as the
         # authoritative sampling duration so the selected context is in-bounds.
-        features = pd.read_csv(ROOT / "outputs/m3_work/pilot_features/features" / f"{row.clip_id}.csv")
+        features = pd.read_csv(ROOT / args.feature_dir / f"{row.clip_id}.csv")
         duration = min(duration or float(features.time_s.max()), float(features.time_s.max()))
         index, start, end = select_interval(phones, duration)
         previous, central, following = phones[index - 1], phones[index], phones[index + 1]

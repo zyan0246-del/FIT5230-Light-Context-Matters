@@ -1,12 +1,15 @@
-# M3 review actions, 16 October 2026
+# M3 review actions, updated 17 October 2026
 
-This note separates implemented changes from evidence still missing. It is not a claim of an HD grade.
+This note separates implemented changes from evidence still missing. It is not a claim of a particular grade.
 
-The revised `notebooks/Milestone3.ipynb` has been executed locally, with saved outputs for all nine code cells and 38 passing regression tests. The editable 11-slide `deliverables/FIT5230_M3_Context_Matters_Presentation_Final_v9.pptx` was regenerated and visually checked. The exact matched-ablation revision also completed all nine cells and 38 tests in a fresh Colab CPU runtime on 16 October.
+The 17 October server run adds a controlled 12-pair real/SadTalker pilot. Each pair shares speaker, decoded audio, duration, split and final encoding. All 24 clips passed landmark extraction with 1.00 coverage, and all 40 regression tests passed.
+
+The current `notebooks/Milestone3.ipynb` has 10 saved code-cell outputs from the 17 October server execution and 40 passing regression tests. The editable 11-slide `deliverables/FIT5230_M3_Context_Matters_Presentation_Final_v11.pptx` was rendered and structurally validated. The prior nine-cell public revision completed 38 tests in fresh Colab on 16 October; the new matched SadTalker branch was generated and evaluated on the prepared T4 server.
 
 | Reviewer concern | Action in this revision | Evidence boundary |
 |---|---|---|
 | Context gain not isolated | Added a same-window, same-model `multi_event_no_phone` ablation to `scripts/run_multi_context_improvement.py`, including fixed-split and repeated-CV outputs. Replayed audited local caches and reran the exact revision in fresh Colab. | Local known-split values favored context but repeated means were mixed. In fresh Colab, context and no-phone tied at 0.486/0.444 on the six-clip test; repeated means were 0.585/0.621 versus 0.593/0.638. No stable context advantage was found. |
+| Cross-collection confounding | Added 12 matched Wikitongues/SadTalker pairs with one shared audio track, the same identity and the same final codec settings. Ran 20 repeated four-fold splits grouped by pair, plus a shuffled-phone negative control. | The no-phone temporal-window model improved mean Macro-F1 by 0.041 and AUROC by 0.033 within this pilot. Phone labels reduced both metrics and did not beat shuffled labels consistently. The result supports temporal windows within one generator, not broad generalisation. |
 | One attacked pair | Added 12 distinct public real-speaker neutral re-encode controls (red target-band median 0.074), then applied a synthetic 1.2 Hz global brightness change to each. All 12 periodic-light variants raised the fraction, median 0.981. Retained the peer pair and three post-processing checks. | The frequency metric responds to non-attack periodic light; it cannot attribute the peer trace to the attack alone. Natural lighting/motion and multi-identity attacks remain untested. No false-positive or population-level detector claim. |
 | Individual contribution vague | Split the *presentation responsibility* evenly: Yan explains Strategy A and its ablation; He explains Strategy B and the controls. Added prompts for each to identify demonstrable work. | The team has not supplied verified personal work logs. The slides and report do not invent individual implementation credit. Each member must confirm actual contributions before speaking. |
 | Reproduction gap | Executed the revised public notebook locally and in fresh Colab. The peer rerun script verifies all three private MP4 hashes. Added an explicit FFmpeg recipe that regenerates a second neutral control from the peer control. | The independent historical-neutral rerun matched red ratios 4.63, 8.45, 6.28 and 20.86. The recipe-generated neutral produced red ratios 7.61, 1.88, 17.69 and 34.76 across the same conditions: still above one, but sensitive to control encoding. Fresh Colab reproduced the code path, not the local lip improvement. |
@@ -14,7 +17,7 @@ The revised `notebooks/Milestone3.ipynb` has been executed locally, with saved o
 
 ## Before submitting an updated M3 package
 
-1. Present the fresh-Colab no-phone comparison as another negative result. Do not select only the encouraging local six-clip split.
+1. Present the matched SadTalker experiment as the primary Strategy A control. Report the temporal-window improvement and the phone-context negative ablation together.
 2. For a private rerun, set `M3_PRIVATE_DIR` to the directory holding the three verified MP4s, then run `PYTHONPATH=src python scripts/run_chromatic_robustness.py`. To generate a new neutral control, also set `M3_REGENERATE_NEUTRAL=1` and a separate `M3_CHROMATIC_OUT`. Additional attacked identities or controlled lighting/motion videos still require new data; present the one-attack-pair scope plainly.
 3. Have Yan and He confirm their own actual contributions and rehearse the 15-minute talk. The equal speaking allocation is not evidence of equal historical implementation.
 4. Moodle still requires a TXT or PDF containing the Colab URL, plus the team's presentation and any other item specified by the current Moodle page.

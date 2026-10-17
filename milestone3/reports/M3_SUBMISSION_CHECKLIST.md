@@ -14,14 +14,20 @@
 - [x] H.264 CRF 35, resize and 15 FPS conditions included.
 - [x] Raw peer files excluded from the public repository.
 - [x] Peer file SHA256 provenance recorded.
-- [x] 38 regression tests pass.
+- [x] 40 regression tests pass in the current server-executed notebook.
 - [x] Multi-event context follow-up added with a repeated-cross-validation stability check.
 - [x] Matched no-phone ablation run locally with fixed-split and 20 repeated four-fold comparisons; report mixed results.
+- [x] New matched real/SadTalker pilot built from 12 public speakers and 12 same-identity, same-audio generated videos.
+- [x] All 12 real/fake pairs verified to have identical decoded audio and matching final video/audio settings.
+- [x] Matched pilot evaluated with 20 repeated four-fold splits grouped by pair; no pair leakage.
+- [x] Context-free, no-phone temporal windows, weak phone context and shuffled-phone control compared under the same classifier settings.
+- [x] All 24 matched clips passed landmark extraction with 1.00 coverage.
 - [x] Twelve public real-speaker neutral codec controls run and aggregate results saved.
 - [x] Synthetic 1.2 Hz periodic-light controls run on the 12 real speakers; 12/12 triggered the frequency metric, so specificity is explicitly limited.
 - [x] A new neutral peer control regenerated with a documented FFmpeg recipe; results labelled separately from historical-neutral results.
 - [x] Updated Milestone3.ipynb executed locally with nine saved code-cell outputs and no errors.
-- [x] Editable 11-slide presentation updated and rendered for inspection.
+- [x] Server experiment completed with 40 passing tests.
+- [x] Final v11 presentation updated, rendered and structurally validated after the 17 October matched experiment.
 - [x] Fifteen-minute presentation script prepared.
 
 ## Still requires a team member

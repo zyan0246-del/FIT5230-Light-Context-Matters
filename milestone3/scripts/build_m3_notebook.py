@@ -30,11 +30,20 @@ def text_snapshot() -> tuple[dict[str, str], str]:
         ROOT / "scripts/run_chromatic_robustness.py",
         ROOT / "scripts/run_benign_chromatic_controls.py",
         ROOT / "scripts/run_periodic_light_control.py",
+        ROOT / "scripts/build_matched_sadtalker_pilot.py",
+        ROOT / "scripts/run_matched_sadtalker_evaluation.py",
+        ROOT / "scripts/run_matched_sadtalker_pipeline.sh",
+        ROOT / "data/matched_sadtalker_manifest.csv",
+        ROOT / "data/matched_sadtalker_aligned_manifest.csv",
+        ROOT / "data/matched_sadtalker_intervals.csv",
+        ROOT / "data/matched_sadtalker_provenance.json",
     ]
     paths += list((ROOT / "artifacts/m3_results").glob("*.csv"))
     paths += list((ROOT / "artifacts/m3_results").glob("*.json"))
     paths += list((ROOT / "artifacts/m3_improvement").glob("*.csv"))
     paths += list((ROOT / "artifacts/m3_improvement").glob("*.json"))
+    paths += list((ROOT / "artifacts/matched_sadtalker").glob("*.csv"))
+    paths += list((ROOT / "artifacts/matched_sadtalker").glob("*.json"))
     sources = {
         path.relative_to(ROOT).as_posix(): path.read_text(encoding="utf-8")
         for path in sorted(set(paths))
@@ -89,13 +98,15 @@ print(json.dumps(environment(), indent=2))
             "This notebook evaluates two distinct defenses. Yan presents the phonetic-context "
             "mouth-dynamics analysis. He presents the periodic-colour audit of Dark.Mimic's rPPG evasion. "
             "These are speaking roles, not independently verified implementation credits. "
-            "The public pilot runs end to end on CPU. Peer videos remain private, so the notebook includes their hashes, "
+            "The public pilot runs end to end on CPU. A controlled SadTalker follow-up was generated on a T4 GPU and "
+            "its commands, provenance and lightweight result tables are embedded below. Peer videos remain private, so the notebook includes their hashes, "
             "aggregate results and a guarded rerun path without redistributing the MP4 files."
         ),
         nbf.v4.new_markdown_cell(
             "## 1. Reproducible source and environment\n\n"
             "The notebook contains a readable source snapshot and verifies its SHA256 before execution. "
-            "A fresh run downloads approximately 180 MB of public models and videos. No paid GPU is required."
+            "A fresh run downloads approximately 180 MB of public models and videos. No paid GPU is required to rerun "
+            "the original public branch or inspect the matched result; regenerating the 12 SadTalker videos requires a GPU."
         ),
         nbf.v4.new_code_cell(bootstrap),
         nbf.v4.new_code_cell(install),
@@ -123,18 +134,23 @@ result.check_returncode()
             "Real and fake clips come from different collections, so this experiment can establish feasibility only."
         ),
         nbf.v4.new_code_cell(
-            '''processed = ROOT / "data/processed/m3_pilot"
-if len(list(processed.glob("*.mp4"))) != 24:
-    subprocess.run([sys.executable, "scripts/download_m3_pilot.py"], cwd=ROOT, check=True)
+            '''RUN_ORIGINAL_PUBLIC_PIPELINE = False
+processed = ROOT / "data/processed/m3_pilot"
+if RUN_ORIGINAL_PUBLIC_PIPELINE:
+    if len(list(processed.glob("*.mp4"))) != 24:
+        subprocess.run([sys.executable, "scripts/download_m3_pilot.py"], cwd=ROOT, check=True)
+    else:
+        print("Reusing 24 hash-recorded public pilot clips from the execution cache.")
+    subprocess.run([sys.executable, "scripts/audit_m3_pilot.py"], cwd=ROOT, check=True)
 else:
-    print("Reusing 24 hash-recorded public pilot clips from the execution cache.")
-subprocess.run([sys.executable, "scripts/audit_m3_pilot.py"], cwd=ROOT, check=True)
+    print("Original public-video download skipped in this saved evidence run.")
+    print("Set RUN_ORIGINAL_PUBLIC_PIPELINE=True to redownload and recompute that branch.")
 import pandas as pd
 from IPython.display import display, Image
 manifest = pd.read_csv(ROOT / "data/m3_pilot_manifest.csv")
 display(manifest.groupby(["split", "label"]).size().rename("clips").reset_index())
-display(pd.read_csv(ROOT / "outputs/m3_work/pilot_qc/metadata_qc.csv").head())
-display(Image(filename=str(ROOT / "outputs/m3_work/pilot_qc/contact_sheet.png")))
+provenance = json.loads((ROOT / "data/m3_pilot_provenance.json").read_text())
+print("Hash-recorded public sources:", len(provenance))
 '''
         ),
         nbf.v4.new_markdown_cell(
@@ -157,25 +173,30 @@ def run_checked(command):
 
 model = download(MODEL_URL, ROOT / "models/face_landmarker.task")
 features = ROOT / "outputs/m3_work/pilot_features"
-if not (features / "qc.csv").exists():
-    run_checked([sys.executable, "-m", "s2f.cli", "extract-manifest", "data/m3_pilot_manifest.csv",
-                 "--root", ".", "--out", "outputs/m3_work/pilot_features",
-                 "--model", "models/face_landmarker.task"])
-qc = pd.read_csv(features / "qc.csv")
-display(qc[["clip_id", "sampled_frames", "coverage", "status"]])
-assert len(qc) == 24 and qc.coverage.min() >= 0.8
-run_checked([sys.executable, "scripts/build_weak_phoneme_intervals.py"])
-run_checked([sys.executable, "-m", "s2f.cli", "evaluate", "data/m3_pilot_aligned_manifest.csv",
-             "--features", "outputs/m3_work/pilot_features/features", "--intervals", "data/m3_pilot_intervals.csv",
-             "--root", ".", "--out", "outputs/m3_work/pilot_eval_context", "--protocol", "speaker"])
-run_checked([sys.executable, "scripts/summarize_lip_pilot.py"])
+if RUN_ORIGINAL_PUBLIC_PIPELINE:
+    if not (features / "qc.csv").exists():
+        run_checked([sys.executable, "-m", "s2f.cli", "extract-manifest", "data/m3_pilot_manifest.csv",
+                     "--root", ".", "--out", "outputs/m3_work/pilot_features",
+                     "--model", "models/face_landmarker.task"])
+    qc = pd.read_csv(features / "qc.csv")
+    display(qc[["clip_id", "sampled_frames", "coverage", "status"]])
+    assert len(qc) == 24 and qc.coverage.min() >= 0.8
+    run_checked([sys.executable, "scripts/build_weak_phoneme_intervals.py"])
+    run_checked([sys.executable, "-m", "s2f.cli", "evaluate", "data/m3_pilot_aligned_manifest.csv",
+                 "--features", "outputs/m3_work/pilot_features/features", "--intervals", "data/m3_pilot_intervals.csv",
+                 "--root", ".", "--out", "outputs/m3_work/pilot_eval_context", "--protocol", "speaker"])
+    run_checked([sys.executable, "scripts/summarize_lip_pilot.py"])
+else:
+    print("Using the committed, hash-linked result tables from the completed public run.")
 '''
         ),
         nbf.v4.new_code_cell(
-            '''results = pd.read_csv(ROOT / "outputs/m3_work/pilot_eval_context/metrics/results.csv")
+            '''if RUN_ORIGINAL_PUBLIC_PIPELINE:
+    results = pd.read_csv(ROOT / "outputs/m3_work/pilot_eval_context/metrics/results.csv")
+else:
+    results = pd.read_csv(ROOT / "artifacts/m3_results/test_metrics_with_bootstrap.csv")
 display(results)
-display(pd.read_csv(ROOT / "outputs/m3_work/lip_pilot_summary/held_out_predictions_and_failures.csv"))
-display(Image(filename=str(ROOT / "outputs/m3_work/lip_pilot_summary/lip_pilot_results.png")))
+display(pd.read_csv(ROOT / "artifacts/m3_results/held_out_predictions_and_failures.csv"))
 print("Result: the weak context proxy did not improve the six-clip held-out pilot.")
 '''
         ),
@@ -191,15 +212,52 @@ print("Result: the weak context proxy did not improve the six-clip held-out pilo
             "the rule is applied without reference to labels or scores."
         ),
         nbf.v4.new_code_cell(
-            '''run_checked([sys.executable, "scripts/run_multi_context_improvement.py"])
+            '''if RUN_ORIGINAL_PUBLIC_PIPELINE:
+    run_checked([sys.executable, "scripts/run_multi_context_improvement.py"])
+else:
+    print("Displaying the committed output of the completed multi-event run.")
 followup = json.loads((ROOT / "artifacts/m3_improvement/multi_context_summary.json").read_text())
 display(pd.DataFrame(followup["fixed_split_metrics"]))
 display(pd.DataFrame(followup["repeated_cv"]))
 display(pd.DataFrame(followup["matched_context_ablation"]["fixed_split"]))
 display(pd.DataFrame(followup["matched_context_ablation"]["repeated_cv_mean"]))
-display(Image(filename=str(ROOT / "artifacts/m3_improvement/multi_context_improvement.png")))
 print("Fallback ASR clips:", followup["events"]["fallback_clips"])
 print(followup["interpretation"])
+'''
+        ),
+        nbf.v4.new_markdown_cell(
+            "### Controlled real/SadTalker follow-up\n\n"
+            "The original public pilot used different real and fake collections. The follow-up uses 12 matched pairs: "
+            "each fake is generated from the corresponding real speaker's still image and audio, and both outputs use "
+            "the same 12-second duration, 512 by 512 canvas, 25 FPS and final codec settings. Pair-grouped folds prevent "
+            "the matched real and fake from entering different folds. Four representations use the same classifier, "
+            "regularisation, threshold and folds. The tables below are the saved output of the completed T4 server run."
+        ),
+        nbf.v4.new_code_cell(
+            '''matched = ROOT / "artifacts/matched_sadtalker"
+import matplotlib.pyplot as plt
+matched_summary = pd.read_csv(matched / "summary.csv")
+matched_comparisons = pd.read_csv(matched / "paired_comparisons.csv")
+matched_repeats = pd.read_csv(matched / "repeat_oof_metrics.csv")
+matched_run = json.loads((matched / "run.json").read_text())
+matched_provenance = json.loads((ROOT / "data/matched_sadtalker_provenance.json").read_text())
+display(matched_summary)
+display(matched_comparisons)
+print("Pairs with verified decoded-audio equality:", len(matched_provenance))
+print("Feature count ranges:", matched_run["feature_count_range_by_model"])
+
+order = ["context_free", "window_no_phone", "phone_context", "shuffled_phone"]
+labels = ["Global", "Window, no phone", "Phone context", "Shuffled phone"]
+fig, axes = plt.subplots(1, 2, figsize=(10, 4.2))
+for axis, metric, title in [(axes[0], "macro_f1", "Out-of-fold Macro-F1"),
+                            (axes[1], "auroc", "Out-of-fold AUROC")]:
+    axis.boxplot([matched_repeats.loc[matched_repeats.model.eq(model), metric] for model in order],
+                 tick_labels=labels)
+    axis.set_ylim(0, 1.02); axis.set_title(title); axis.tick_params(axis="x", rotation=18)
+    axis.grid(axis="y", alpha=.25)
+fig.suptitle("Matched real/SadTalker pilot: 20 repeated pair-grouped runs")
+fig.tight_layout(); plt.show()
+print("Course result: temporal windows improved this matched pilot; weak phone labels did not.")
 '''
         ),
         nbf.v4.new_markdown_cell(
@@ -263,15 +321,18 @@ else:
         ),
         nbf.v4.new_markdown_cell(
             "## 6. Conclusions and claim boundaries\n\n"
-            "1. All 24 public clips passed landmark coverage, but the six-clip held-out result remained small and uncertain. "
-            "The generated metrics table above is authoritative for the current runtime.\n"
-            "2. The original weak phonetic-context proxy did not improve the held-out result. "
+            "1. All 24 original public clips passed landmark coverage, but their six-clip held-out result remained small and confounded by source collection.\n"
+            "2. The controlled 12-pair SadTalker follow-up matched speaker, audio, duration and encoding. "
+            "Across 20 repeated pair-grouped runs, temporal windows without phone labels improved mean Macro-F1 from 0.707 to 0.748 "
+            "and AUROC from 0.773 to 0.806. Weak phone labels reduced both metrics and did not beat shuffled labels consistently. "
+            "This supports temporal windows within the matched course pilot, not generalisation beyond SadTalker.\n"
+            "3. The original weak phonetic-context proxy did not improve the held-out result. "
             "A post-hoc multi-event extension improved the saved local reference split, but not the fresh Colab "
             "rerun. In both environments its repeated four-fold comparisons showed no consistent gain across both "
             "metrics. ASR, decoding and package versions can change six-clip rankings; use the generated metrics "
             "above for this runtime. This narrows the next research step to forced "
             "alignment and a fresh matched hold-out set rather than further tuning these 24 clips.\n"
-            "3. In the single attacked peer pair, periodic colour energy near 1.2 Hz remained higher than both the historical "
+            "4. In the single attacked peer pair, periodic colour energy near 1.2 Hz remained higher than both the historical "
             "and newly regenerated neutral controls after H.264 CRF 35, resizing and 15 FPS. Twelve public real-speaker "
             "codec-only controls were also run. Synthetic 1.2 Hz global light raised the same metric on all 12 real "
             "speakers, showing that the metric is not attack-specific. These checks support a paired manipulation audit, "

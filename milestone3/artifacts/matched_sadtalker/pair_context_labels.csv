@@ -1,0 +1,13 @@
+source_id,previous_phoneme,central_phoneme,next_phoneme
+matched_simon,fricative,vowel,liquid
+matched_william,stop,vowel,vowel
+matched_yorkshire,stop,vowel,fricative
+matched_ahmad,stop,vowel,stop
+matched_daniel,stop,vowel,vowel
+matched_gereon,stop,vowel,nasal
+matched_ingid,stop,vowel,nasal
+matched_mckensie,stop,vowel,nasal
+matched_sam,nasal,vowel,stop
+matched_james,fricative,vowel,stop
+matched_john,liquid,vowel,vowel
+matched_omar,nasal,vowel,affricate

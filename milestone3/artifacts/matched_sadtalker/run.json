@@ -1,0 +1,34 @@
+{
+  "seed": 5230,
+  "repeats": 20,
+  "folds": 4,
+  "threshold": 0.5,
+  "classifier_C": 1.0,
+  "group": "source_id (matched real/fake pair)",
+  "models": [
+    "context_free",
+    "window_no_phone",
+    "phone_context",
+    "shuffled_phone"
+  ],
+  "feature_count_range_by_model": {
+    "context_free": {
+      "min": 24,
+      "max": 24
+    },
+    "phone_context": {
+      "min": 726,
+      "max": 960
+    },
+    "shuffled_phone": {
+      "min": 726,
+      "max": 960
+    },
+    "window_no_phone": {
+      "min": 102,
+      "max": 102
+    }
+  },
+  "interpretation": "window_no_phone tests whether local temporal windows help without phone labels; phone_context tests the additional value of observed weak phone categories; shuffled_phone is a negative control for those categories.",
+  "claim_boundary": "Small matched course pilot; repeated folds reuse the same 12 pairs and do not constitute independent datasets or publication evidence."
+}
