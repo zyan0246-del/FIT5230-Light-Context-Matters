@@ -10,4 +10,9 @@ https://colab.research.google.com/github/zyan0246-del/FIT5230-Light-Context-Matt
 Repository URL:
 https://github.com/zyan0246-del/FIT5230-Light-Context-Matters/tree/main/milestone3
 
-Verification status: the prior public revision completed all nine code cells and 38 tests in fresh Google Colab on 16 October 2026. The current 17 October notebook adds the controlled matched SadTalker result, contains 10 saved server-executed outputs and passes 40 tests. The public-video recomputation is optional in the saved notebook because Wikimedia downloads can time out; its hash-linked result tables remain embedded. The private Dark.Mimic rerun remains disabled, so only hash-linked aggregate results are displayed.
+Verified content commit:
+68d6fca971a686f8558443a736760c5218dda967
+
+Verification status: the submitted notebook contains 11 executed code cells numbered 1-11. Every code cell has saved output and no error output is present. The expanded pipeline reports 46 passing tests. The final 20 October revision changed only explanatory Markdown and preserved the executed code and outputs. Public-video downloads are optional because remote sources may time out. Private Dark.Mimic videos are excluded; the notebook displays hash-linked aggregate results and clearly labels the one-pair scope.
+
+Submission note: the official Moodle item requires this Colab link in a PDF or text file. The presentation, notebook copy and supplementary evidence are retained in the team backup package and public repository.
