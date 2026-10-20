@@ -31,9 +31,10 @@
 - [x] Twelve public real-speaker neutral codec controls run and aggregate results saved.
 - [x] Synthetic 1.2 Hz periodic-light controls run on the 12 real speakers; 12/12 triggered the frequency metric, so specificity is explicitly limited.
 - [x] A new neutral peer control regenerated with a documented FFmpeg recipe; results labelled separately from historical-neutral results.
-- [x] Updated Milestone3.ipynb executed locally with nine saved code-cell outputs and no errors.
+- [x] Updated Milestone3.ipynb contains 11 executed code cells with saved outputs and no errors.
 - [x] Server experiment completed with 46 passing tests.
-- [x] Final v13 presentation updated, all 11 slides rendered, and package/layout/native-chart validation passed.
+- [x] Final v14 presentation updated, all 11 slides rendered, and package/layout/native-chart validation passed for PowerPoint.
+- [x] Codex-assisted Windows Strategy B evidence archived separately; the workflow completed but numerical differences from the reference run remain explicitly labelled.
 - [x] Fifteen-minute presentation script prepared.
 
 ## Still requires a team member
