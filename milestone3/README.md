@@ -8,7 +8,7 @@ Theme: Speech-to-Face, Light / Defense
 
 Open the [Google Colab notebook](https://colab.research.google.com/github/zyan0246-del/FIT5230-Light-Context-Matters/blob/main/milestone3/notebooks/Milestone3.ipynb). It contains the source snapshot, environment setup, execution controls and saved outputs. Run the cells in order and follow their resource and data requirements. Regenerating the 36 SadTalker videos requires a GPU. Private peer videos are excluded; their aggregate results and hashes are provided, with an optional rerun path for holders of the original files.
 
-The [GitHub project](https://github.com/zyan0246-del/FIT5230-Light-Context-Matters/tree/main/milestone3) contains the source, tests and experiment records. This submission backup contains the executed notebook, presentation, speaker script, results reports and supplementary verification evidence.
+The [GitHub project](https://github.com/zyan0246-del/FIT5230-Light-Context-Matters/tree/main/milestone3) contains the source, tests and experiment records. The notebook is the code submission entry point. The current presentation and historical display materials are identified in the [presentation guide](deliverables/README.md). Speaker scripts are rehearsal aids, not required Moodle submissions.
 
 ## Findings
 
@@ -30,3 +30,11 @@ The final notebook contains 11 code cells with saved expanded-server outputs and
 The separate Codex-assisted Windows Strategy B rerun completed its tests and workflows, but numerical values differed from the reference environment. Qualitative observations agreed. The runs remain separately labelled; the cause of the differences was not isolated. The Windows archive records assisted execution rather than independent manual execution by a student.
 
 Only 12 independent speakers and one generator are used in the matched experiment. The new segments reuse those identities. Strategy B has one attacked pair and requires an aligned control; natural lighting, motion, exposure and attacks on additional identities remain untested.
+
+## Design rationale
+
+The notebook explains why normalized lip geometry, motion summaries, compact windows and weak context were compared using a fixed regularized classifier. These cues were hypotheses tested by controlled comparisons, not assumed deepfake signatures. The expanded results led to selecting the global representation. Strategy B explains why paired subtraction, neutral re-encoding and a periodic-light counterexample are needed, and why a trace is not a real/fake decision. The 0.20-second context margin and spectral band settings are not claimed as optimal.
+
+## Current presentation
+
+Use the [current v15 presentation](deliverables/FIT5230_M3_Presentation_v15_Optimized.pptx). It retains the reference results and simplifies the wording for the online presentation. Earlier decks in deliverables are historical versions; see the [version guide](deliverables/README.md). The current notebook revision adds explanatory Markdown only; experiment code and saved outputs are unchanged. This wording revision is not a new Colab execution.
