@@ -1,6 +1,6 @@
-# Fresh Colab verification
+# Historical Colab verification: 16 October 2026
 
-The current nine-code-cell public notebook was opened directly from GitHub commit `5b139a3` and run from a fresh Google Colab CPU runtime on **16 October 2026**. Its embedded readable-source snapshot had SHA256 `508b11a432aa6e4a8f1fb910a6bb17dcb2f29fcbf5433a15715ed38ac6b3174c`. This is the revision containing the matched no-phone ablation, 12 public codec controls and synthetic periodic-light controls.
+The historical nine-code-cell public notebook revision tested on 16 October 2026 was opened directly from GitHub commit `5b139a3` and run from a fresh Google Colab CPU runtime on **16 October 2026**. Its embedded readable-source snapshot had SHA256 `508b11a432aa6e4a8f1fb910a6bb17dcb2f29fcbf5433a15715ed38ac6b3174c`. This is the revision containing the matched no-phone ablation, 12 public codec controls and synthetic periodic-light controls.
 
 Notebook: `milestone3/notebooks/Milestone3.ipynb`
 
@@ -37,4 +37,9 @@ The weak context proxy reduced AUROC by 0.333 without changing Macro-F1. The pos
 
 The saved local Python 3.12 replay gave an encouraging known-split result for multi-event context (0.829/0.778) and a mixed repeated-fold comparison. The fresh Colab result above did not reproduce that split gain. FFmpeg decoding, ASR output and dependency versions can alter event selection and features; with only three real and three fake test clips, AUROC rankings are especially unstable. The defensible conclusion is a functioning, reproducible experimental pipeline with a negative/unstable context result—not an effective new detector. The next research step is forced alignment plus a new matched hold-out set, not further tuning on these 24 clips.
 
-The GitHub notebook already contains nine saved local outputs. The fresh Colab run was verified interactively against the same embedded source snapshot; direct Colab-to-GitHub saving was unavailable because Colab requested a separate GitHub OAuth authorization. This report therefore records the fresh runtime, exact source hash and generated metrics without relabelling the saved local outputs as Colab outputs.
+That historical revision contained nine saved local outputs. The fresh Colab run was verified interactively against the same embedded source snapshot; direct Colab-to-GitHub saving was unavailable because Colab requested a separate GitHub OAuth authorization. This report therefore records the fresh runtime, exact source hash and generated metrics without relabelling the saved local outputs as Colab outputs.
+
+
+## Final submission revision
+
+The final submission contains eleven code cells with saved outputs from the expanded server run and 46 passing regression tests. A fresh full Colab run of that eleven-code-cell revision is not documented. The Colab measurements in this report apply only to the historical source snapshot identified above.
