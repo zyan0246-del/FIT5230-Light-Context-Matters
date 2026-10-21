@@ -57,7 +57,7 @@ Both models use the same 12 training, six validation and six held-out test clips
 
 The intervals use 5,000 paired stratified bootstrap resamples. The held-out set contains only three real and three fake clips, so the intervals are necessarily wide.
 
-These are the saved local reference-run values (Python 3.12). A fresh Google Colab CPU run on 15 October 2026 completed all nine code cells and produced macro-F1 0.486 for both original models, with AUROC 0.556 for context-free and 0.222 for weak context. The weak-context difference was -0.333. A prior eight-cell Colab run on 7 October had AUROC 0.556 versus 0.444. FFmpeg builds, decoded pixels, ASR output and dependency versions can differ; with only six test clips, AUROC ranks are especially unstable. The negative weak-context conclusion held in each run, but the exact scores did not. Full details are in [M3_COLAB_VERIFICATION.md](M3_COLAB_VERIFICATION.md).
+These are the saved local reference-run values (Python 3.12). A fresh Google Colab CPU run on 15 October 2026 completed all nine code cells and produced macro-F1 0.486 for both original models, with AUROC 0.556 for context-free and 0.222 for weak context. The weak-context difference was -0.333. A prior eight-cell Colab run on 7 October had AUROC 0.556 versus 0.444. FFmpeg builds, decoded pixels, ASR output and dependency versions can differ; with only six test clips, AUROC ranks are especially unstable. The negative weak-context conclusion held in each run, but the exact scores did not. Full details are in [historical Colab verification](https://github.com/zyan0246-del/FIT5230-Light-Context-Matters/blob/main/milestone3/reports/M3_COLAB_VERIFICATION.md).
 
 ### Interpretation
 
@@ -156,7 +156,7 @@ The two strategies answer different questions. The lip model asks whether genera
 - Twelve synthetic periodic-lighting variants on those real speakers exposed a specificity failure (12/12 increased target-band fractions); the controlled recipe and aggregates are public, not the derived videos.
 - Fixed split, seed, threshold and preprocessing parameters are stored.
 - The notebook contains an inspectable source snapshot and saved outputs.
-- All nine updated notebook code cells execute locally without errors.
+- The final eleven-code-cell notebook retains the expanded server run outputs with no saved error outputs. The fresh Colab verification documented on 16 October applies to the historical nine-code-cell revision, not to a fresh full run of this final revision.
 - All 46 regression tests pass in the completed expanded server run.
 
 ## Claim boundary
