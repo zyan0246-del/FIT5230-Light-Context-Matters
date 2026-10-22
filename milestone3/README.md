@@ -25,7 +25,7 @@ The presentation allocates approximately 7.5 minutes to each member. These respo
 
 ## Execution records and limitations
 
-The final notebook contains 11 code cells with saved expanded-server outputs and 46 passing regression tests. The documented fresh Colab verification applies to the historical nine-code-cell revision tested on 16 October 2026, with 38 passing tests. A fresh full Colab run of the final eleven-code-cell revision is not documented.
+The final notebook contains 11 code cells. On 22 October 2026, the supplied Google Colab run completed the default workflow with execution counts 1-11, 46 passing regression tests, one non-fatal pandas FutureWarning and no error outputs. Both `RUN_ORIGINAL_PUBLIC_PIPELINE` and `RUN_PRIVATE_PAIR` were `False`. This verifies environment setup, tests and the reading/display of saved result tables; it does not regenerate SadTalker videos, rerun public-video feature extraction or recompute the private peer audit. The current notebook preserves that Colab output; only documentation and display metadata were subsequently changed. [Verification details](reports/M3_COLAB_VERIFICATION.md) distinguish this run from the historical nine-cell Colab experiment.
 
 The separate Codex-assisted Windows Strategy B rerun completed its tests and workflows, but numerical values differed from the reference environment. Qualitative observations agreed. The runs remain separately labelled; the cause of the differences was not isolated. The Windows archive records assisted execution rather than independent manual execution by a student.
 
@@ -37,4 +37,4 @@ The notebook explains why normalized lip geometry, motion summaries, compact win
 
 ## Current presentation
 
-Use the [current v16 presentation](deliverables/FIT5230_M3_Presentation_v16_Online.pptx). It retains the reference results and simplifies the wording for the online presentation. Earlier decks in deliverables are historical versions; see the [version guide](deliverables/README.md). The current notebook revision adds explanatory Markdown only; experiment code and saved outputs are unchanged. This wording revision is not a new Colab execution.
+Use the [current v16 presentation](deliverables/FIT5230_M3_Presentation_v16_Online.pptx). It retains the reference results and simplifies the wording for the online presentation. Earlier decks in deliverables are historical versions; see the [version guide](deliverables/README.md). The current notebook includes the 22 October Colab default-workflow outputs, a verification note and a hidden setup-source cell for readability. Experimental code and reference result tables are unchanged; see the execution record above for what was and was not recomputed.
