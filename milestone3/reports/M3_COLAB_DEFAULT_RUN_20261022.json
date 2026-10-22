@@ -1,7 +1,7 @@
 {
   "record_date": "2026-10-22",
   "scope": "Google Colab default-workflow verification; saved-result display, not full video experiment recomputation",
-  "notebook_sha256": "827dc98fec8c795e2b67cf161c3f62618f11e2d8fd9697368b45ea020864e377",
+  "notebook_sha256": "ee094424741945271dba61e6312ab39afaa09a8665d5e51ec4d8f18e15b7a89b",
   "source_snapshot_sha256": "481a8a31a4487da47279d2614fabda2f9875517feca85b4e1ff60c39c1d1b304",
   "code_cell_count": 11,
   "execution_counts": [
@@ -38,5 +38,6 @@
       "nbclient": "0.10.4"
     }
   },
-  "timing_metadata_note": "Some execution timestamp fields were inherited from the reference notebook; the record date comes from the supplied Colab run and file review, not those historical timestamps."
+  "timing_metadata_note": "Some execution timestamp fields were inherited from the reference notebook; the record date comes from the supplied Colab run and file review, not those historical timestamps.",
+  "display_note": "Colab setup title comment added to activate form display; executable AST unchanged."
 }
