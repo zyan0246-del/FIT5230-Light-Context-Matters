@@ -37,4 +37,4 @@ The notebook explains why normalized lip geometry, motion summaries, compact win
 
 ## Current presentation
 
-Use the [current v15 presentation](deliverables/FIT5230_M3_Presentation_v15_Optimized.pptx). It retains the reference results and simplifies the wording for the online presentation. Earlier decks in deliverables are historical versions; see the [version guide](deliverables/README.md). The current notebook revision adds explanatory Markdown only; experiment code and saved outputs are unchanged. This wording revision is not a new Colab execution.
+Use the [current v16 presentation](deliverables/FIT5230_M3_Presentation_v16_Online.pptx). It retains the reference results and simplifies the wording for the online presentation. Earlier decks in deliverables are historical versions; see the [version guide](deliverables/README.md). The current notebook revision adds explanatory Markdown only; experiment code and saved outputs are unchanged. This wording revision is not a new Colab execution.
