@@ -1,0 +1,27 @@
+{
+  "n_public_clips": 24,
+  "n_fake_evaluations": 240,
+  "repeats": 20,
+  "folds": 4,
+  "dynamic_features_modified": 12,
+  "epsilon_training_sd": 0.75,
+  "alpha_toward_real_training_centroid": 0.75,
+  "mean_clean_fake_probability": 0.5870658795890914,
+  "mean_attacked_fake_probability": 0.5705645023629651,
+  "mean_probability_drop": 0.016501377226126265,
+  "clean_evasion_fraction": 0.42916666666666664,
+  "attacked_evasion_fraction": 0.44583333333333336,
+  "repeat_level_stability": {
+    "epsilon_training_sd": 0.75,
+    "repeats": 20.0,
+    "probability_drop_mean": 0.016501377226126265,
+    "probability_drop_ci_low": 0.013718672223245605,
+    "probability_drop_ci_high": 0.019108826773875487,
+    "probability_drop_positive_repeats": 20.0,
+    "evasion_change_mean": 0.016666666666666663,
+    "evasion_change_ci_low": -8.326672684688674e-18,
+    "evasion_change_ci_high": 0.03749999999999999,
+    "evasion_change_positive_repeats": 5.0
+  },
+  "claim_boundary": "Feature-space feasibility only. The bounded dynamic-summary changes have not been rendered into an imperceptible MP4."
+}

@@ -1,0 +1,18 @@
+{
+  "macro_f1": {
+    "mean_paired_difference": -0.004488552331046744,
+    "bootstrap_95_ci_low": -0.017261426748323958,
+    "bootstrap_95_ci_high": 0.00877349523173229,
+    "confidence_weighted_wins": 3,
+    "ties": 11,
+    "repeats": 20
+  },
+  "auroc": {
+    "mean_paired_difference": 0.008333333333333349,
+    "bootstrap_95_ci_low": 0.0013888888888888894,
+    "bootstrap_95_ci_high": 0.016319444444444442,
+    "confidence_weighted_wins": 11,
+    "ties": 2,
+    "repeats": 20
+  }
+}

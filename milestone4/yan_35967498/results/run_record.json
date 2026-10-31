@@ -1,0 +1,182 @@
+{
+  "seed": 5230,
+  "repeats": 20,
+  "folds": 4,
+  "classifier": "standardised class-balanced logistic regression",
+  "classifier_C": 0.1,
+  "enhancement": [
+    {
+      "model": "uniform_events",
+      "n_clips": 24,
+      "n_events": 547,
+      "macro_f1_mean": 0.5864549344825415,
+      "macro_f1_sd": 0.07149846429741882,
+      "auroc_mean": 0.6166666666666668,
+      "auroc_sd": 0.07233038459328558
+    },
+    {
+      "model": "confidence_squared",
+      "n_clips": 24,
+      "n_events": 547,
+      "macro_f1_mean": 0.5819663821514947,
+      "macro_f1_sd": 0.07567951905227875,
+      "auroc_mean": 0.625,
+      "auroc_sd": 0.06657065454675674
+    }
+  ],
+  "enhancement_paired": {
+    "macro_f1": {
+      "mean_paired_difference": -0.004488552331046744,
+      "bootstrap_95_ci_low": -0.017261426748323958,
+      "bootstrap_95_ci_high": 0.00877349523173229,
+      "confidence_weighted_wins": 3,
+      "ties": 11,
+      "repeats": 20
+    },
+    "auroc": {
+      "mean_paired_difference": 0.008333333333333349,
+      "bootstrap_95_ci_low": 0.0013888888888888894,
+      "bootstrap_95_ci_high": 0.016319444444444442,
+      "confidence_weighted_wins": 11,
+      "ties": 2,
+      "repeats": 20
+    }
+  },
+  "attack": {
+    "n_public_clips": 24,
+    "n_fake_evaluations": 240,
+    "repeats": 20,
+    "folds": 4,
+    "dynamic_features_modified": 12,
+    "epsilon_training_sd": 0.75,
+    "alpha_toward_real_training_centroid": 0.75,
+    "mean_clean_fake_probability": 0.5870658795890914,
+    "mean_attacked_fake_probability": 0.5705645023629651,
+    "mean_probability_drop": 0.016501377226126265,
+    "clean_evasion_fraction": 0.42916666666666664,
+    "attacked_evasion_fraction": 0.44583333333333336,
+    "repeat_level_stability": {
+      "epsilon_training_sd": 0.75,
+      "repeats": 20.0,
+      "probability_drop_mean": 0.016501377226126265,
+      "probability_drop_ci_low": 0.013718672223245605,
+      "probability_drop_ci_high": 0.019108826773875487,
+      "probability_drop_positive_repeats": 20.0,
+      "evasion_change_mean": 0.016666666666666663,
+      "evasion_change_ci_low": -8.326672684688674e-18,
+      "evasion_change_ci_high": 0.03749999999999999,
+      "evasion_change_positive_repeats": 5.0
+    },
+    "claim_boundary": "Feature-space feasibility only. The bounded dynamic-summary changes have not been rendered into an imperceptible MP4."
+  },
+  "attack_sweep": [
+    {
+      "epsilon_training_sd": 0.0,
+      "n_fake_evaluations": 240,
+      "mean_clean_fake_probability": 0.5870658795890914,
+      "mean_attacked_fake_probability": 0.5870658795890914,
+      "mean_probability_drop": 0.0,
+      "clean_evasion_fraction": 0.42916666666666664,
+      "attacked_evasion_fraction": 0.42916666666666664
+    },
+    {
+      "epsilon_training_sd": 0.25,
+      "n_fake_evaluations": 240,
+      "mean_clean_fake_probability": 0.5870658795890914,
+      "mean_attacked_fake_probability": 0.5796363518912785,
+      "mean_probability_drop": 0.007429527697812812,
+      "clean_evasion_fraction": 0.42916666666666664,
+      "attacked_evasion_fraction": 0.43333333333333335
+    },
+    {
+      "epsilon_training_sd": 0.5,
+      "n_fake_evaluations": 240,
+      "mean_clean_fake_probability": 0.5870658795890914,
+      "mean_attacked_fake_probability": 0.5736528446961718,
+      "mean_probability_drop": 0.013413034892919519,
+      "clean_evasion_fraction": 0.42916666666666664,
+      "attacked_evasion_fraction": 0.44166666666666665
+    },
+    {
+      "epsilon_training_sd": 0.75,
+      "n_fake_evaluations": 240,
+      "mean_clean_fake_probability": 0.5870658795890914,
+      "mean_attacked_fake_probability": 0.5705645023629651,
+      "mean_probability_drop": 0.016501377226126265,
+      "clean_evasion_fraction": 0.42916666666666664,
+      "attacked_evasion_fraction": 0.44583333333333336
+    },
+    {
+      "epsilon_training_sd": 1.0,
+      "n_fake_evaluations": 240,
+      "mean_clean_fake_probability": 0.5870658795890914,
+      "mean_attacked_fake_probability": 0.5676737868621924,
+      "mean_probability_drop": 0.019392092726898923,
+      "clean_evasion_fraction": 0.42916666666666664,
+      "attacked_evasion_fraction": 0.44583333333333336
+    }
+  ],
+  "attack_repeat_stability": [
+    {
+      "epsilon_training_sd": 0.0,
+      "repeats": 20,
+      "probability_drop_mean": 0.0,
+      "probability_drop_ci_low": 0.0,
+      "probability_drop_ci_high": 0.0,
+      "probability_drop_positive_repeats": 0,
+      "evasion_change_mean": 0.0,
+      "evasion_change_ci_low": 0.0,
+      "evasion_change_ci_high": 0.0,
+      "evasion_change_positive_repeats": 0
+    },
+    {
+      "epsilon_training_sd": 0.25,
+      "repeats": 20,
+      "probability_drop_mean": 0.007429527697812813,
+      "probability_drop_ci_low": 0.006343677492039697,
+      "probability_drop_ci_high": 0.008442481259358415,
+      "probability_drop_positive_repeats": 20,
+      "evasion_change_mean": 0.004166666666666666,
+      "evasion_change_ci_low": -0.00833333333333334,
+      "evasion_change_ci_high": 0.016666666666666673,
+      "evasion_change_positive_repeats": 2
+    },
+    {
+      "epsilon_training_sd": 0.5,
+      "repeats": 20,
+      "probability_drop_mean": 0.01341303489291952,
+      "probability_drop_ci_low": 0.011204860491154513,
+      "probability_drop_ci_high": 0.015459693286123741,
+      "probability_drop_positive_repeats": 20,
+      "evasion_change_mean": 0.012499999999999997,
+      "evasion_change_ci_low": -0.004166666666666671,
+      "evasion_change_ci_high": 0.029166666666666667,
+      "evasion_change_positive_repeats": 4
+    },
+    {
+      "epsilon_training_sd": 0.75,
+      "repeats": 20,
+      "probability_drop_mean": 0.016501377226126265,
+      "probability_drop_ci_low": 0.013718672223245605,
+      "probability_drop_ci_high": 0.019108826773875487,
+      "probability_drop_positive_repeats": 20,
+      "evasion_change_mean": 0.016666666666666663,
+      "evasion_change_ci_low": -8.326672684688674e-18,
+      "evasion_change_ci_high": 0.03749999999999999,
+      "evasion_change_positive_repeats": 5
+    },
+    {
+      "epsilon_training_sd": 1.0,
+      "repeats": 20,
+      "probability_drop_mean": 0.019392092726898923,
+      "probability_drop_ci_low": 0.016100128018124236,
+      "probability_drop_ci_high": 0.02246497491461963,
+      "probability_drop_positive_repeats": 20,
+      "evasion_change_mean": 0.016666666666666663,
+      "evasion_change_ci_low": -8.326672684688674e-18,
+      "evasion_change_ci_high": 0.03749999999999999,
+      "evasion_change_positive_repeats": 5
+    }
+  ],
+  "data_boundary": "24 public M3 pilot clips; one clip per source/speaker ID in this branch; results are repeated-split feasibility evidence only."
+}
