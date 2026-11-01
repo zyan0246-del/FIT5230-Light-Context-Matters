@@ -19,12 +19,16 @@ only.  Test labels are used solely for evaluation.
 from __future__ import annotations
 
 import json
+import hashlib
+import platform
 from pathlib import Path
 import sys
 
+import matplotlib
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
+import sklearn
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import f1_score, roc_auc_score
 from sklearn.model_selection import StratifiedKFold
@@ -52,6 +56,14 @@ def project_root() -> Path:
 
 def demo_data_root() -> Path:
     return project_root() / "demo_data"
+
+
+def sha256_file(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as stream:
+        for block in iter(lambda: stream.read(1024 * 1024), b""):
+            digest.update(block)
+    return digest.hexdigest()
 
 
 def m3_root() -> Path:
@@ -479,6 +491,22 @@ def main() -> None:
     plt.close(figure)
 
     run_record = {
+        "environment": {
+            "python": platform.python_version(),
+            "numpy": np.__version__,
+            "pandas": pd.__version__,
+            "matplotlib": matplotlib.__version__,
+            "scikit_learn": sklearn.__version__,
+        },
+        "input_sha256": {
+            name: sha256_file(demo_data_root() / name)
+            for name in (
+                "manifest.csv",
+                "multi_context_events.csv",
+                "global_features.csv",
+            )
+            if (demo_data_root() / name).exists()
+        },
         "seed": SEED,
         "repeats": REPEATS,
         "folds": FOLDS,
@@ -493,6 +521,12 @@ def main() -> None:
             "24 public M3 pilot clips; one clip per source/speaker ID in this "
             "branch; results are repeated-split feasibility evidence only."
         ),
+        "claim_checks": {
+            "enhancement_significant_improvement": False,
+            "attack_score_response_stable": True,
+            "attack_threshold_crossing_stable": False,
+            "rendered_adversarial_video_completed": False,
+        },
     }
     (out / "run_record.json").write_text(
         json.dumps(run_record, indent=2), encoding="utf-8"

@@ -11,9 +11,14 @@ Open `M4_Strategy_A_Demo.ipynb` and select **Runtime -> Run all**. The notebook 
 ```bash
 python -m pip install -r code/requirements.txt
 python code/run_m4_pocs.py
+python code/verify_m4_demo.py
 ```
 
 The script reads only `demo_data/`. No private peer video is required or distributed.
+
+The verifier checks the input SHA256 values, fixed seed/fold contract, reported
+claim boundaries, repeat-level attack intervals, and monotonic attack-budget
+response. A successful run prints `M4 public demo verification: all checks passed.`
 
 ## Evidence boundary
 

@@ -1,4 +1,16 @@
 {
+  "environment": {
+    "python": "3.12.15",
+    "numpy": "2.5.4",
+    "pandas": "3.0.6",
+    "matplotlib": "3.11.2",
+    "scikit_learn": "1.9.1"
+  },
+  "input_sha256": {
+    "manifest.csv": "658742ce750a2fb06badb93aad7f6deea682f19214c414a9abf5738cefa1bfb7",
+    "multi_context_events.csv": "5bb94ae57f05014bd70cc856132029e9170ad6e8cac78fb44e823d4e5d31850a",
+    "global_features.csv": "54b607d9c3f66df626a67d3b1daa3fa89051a7f6f1bf8fbf69670402d06deb58"
+  },
   "seed": 5230,
   "repeats": 20,
   "folds": 4,
@@ -178,5 +190,11 @@
       "evasion_change_positive_repeats": 5
     }
   ],
-  "data_boundary": "24 public M3 pilot clips; one clip per source/speaker ID in this branch; results are repeated-split feasibility evidence only."
+  "data_boundary": "24 public M3 pilot clips; one clip per source/speaker ID in this branch; results are repeated-split feasibility evidence only.",
+  "claim_checks": {
+    "enhancement_significant_improvement": false,
+    "attack_score_response_stable": true,
+    "attack_threshold_crossing_stable": false,
+    "rendered_adversarial_video_completed": false
+  }
 }
