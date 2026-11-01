@@ -23,5 +23,7 @@ response. A successful run prints `M4 public demo verification: all checks passe
 ## Evidence boundary
 
 - The enhancement demo uses 24 public clips and 547 speech events.
-- The role-reversal demo is a bounded feature-space feasibility test, not a rendered adversarial MP4.
+- Weighting alone is retained as a negative control; the robust follow-up improves both means but is post-hoc.
+- The role-reversal sweep is feature-space; a separate saved summary records one rendered and re-extracted MP4 case.
+- The rendered source video is not redistributed; this prevents the public notebook from rerendering that case by default.
 - Bootstrap intervals resample the 20 repeat seeds, rather than treating repeated clip predictions as independent subjects.

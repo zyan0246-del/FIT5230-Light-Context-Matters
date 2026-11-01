@@ -1,0 +1,18 @@
+{
+  "clip_id": "fake_hallo_00023",
+  "prespecified_case": true,
+  "decoded_frames_compared": 298,
+  "decoded_rgb_psnr_db": 36.555450753425525,
+  "landmark_coverage_during_render": 1.0,
+  "mean_absolute_scale_change": 0.010823202578999462,
+  "maximum_absolute_scale_change": 0.12,
+  "attacked_video_sha256": "1c7af62941acd570ed65a55fe17005fefe8cffb0e9998b56ffa8f7aa3999e069",
+  "n_repeats": 20,
+  "mean_original_fake_probability": 0.5280025108819253,
+  "mean_attacked_fake_probability": 0.5265699391954988,
+  "mean_probability_drop": 0.001432571686426437,
+  "positive_drop_repeats": 12,
+  "original_evasion_fraction": 0.45,
+  "attacked_evasion_fraction": 0.45,
+  "claim_boundary": "One prespecified rendered clip. It establishes render-and-reextract feasibility, not reliable evasion, imperceptibility, or generalisation."
+}

@@ -1,0 +1,12 @@
+{
+  "input_sha256": "15774d309c9edd4df03e6097e21b06e7485cc6c390787459156dae42c843d57f",
+  "output_sha256": "1c7af62941acd570ed65a55fe17005fefe8cffb0e9998b56ffa8f7aa3999e069",
+  "frames": 298,
+  "fps": 25.0,
+  "landmark_coverage": 1.0,
+  "gain": 1.35,
+  "max_scale_change": 0.12,
+  "mean_absolute_scale_change": 0.010823202578999462,
+  "maximum_absolute_scale_change": 0.12,
+  "claim_boundary": "One prespecified rendered case. Visual quality, detector evasion, and generalisation require separate measurements."
+}

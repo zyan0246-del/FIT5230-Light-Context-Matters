@@ -34,25 +34,55 @@
       "macro_f1_sd": 0.07567951905227875,
       "auroc_mean": 0.625,
       "auroc_sd": 0.06657065454675674
+    },
+    {
+      "model": "robust_confidence_squared",
+      "n_clips": 24,
+      "n_events": 547,
+      "macro_f1_mean": 0.6167414952338,
+      "macro_f1_sd": 0.06005217199959927,
+      "auroc_mean": 0.635763888888889,
+      "auroc_sd": 0.08052892658274541
     }
   ],
   "enhancement_paired": {
-    "macro_f1": {
-      "mean_paired_difference": -0.004488552331046744,
-      "bootstrap_95_ci_low": -0.017261426748323958,
-      "bootstrap_95_ci_high": 0.00877349523173229,
-      "confidence_weighted_wins": 3,
-      "ties": 11,
-      "repeats": 20
+    "weighting_only_vs_uniform": {
+      "macro_f1": {
+        "mean_paired_difference": -0.004488552331046744,
+        "bootstrap_95_ci_low": -0.017261426748323958,
+        "bootstrap_95_ci_high": 0.00877349523173229,
+        "candidate_wins": 3,
+        "ties": 11,
+        "repeats": 20
+      },
+      "auroc": {
+        "mean_paired_difference": 0.008333333333333349,
+        "bootstrap_95_ci_low": 0.0013888888888888894,
+        "bootstrap_95_ci_high": 0.016319444444444442,
+        "candidate_wins": 11,
+        "ties": 2,
+        "repeats": 20
+      }
     },
-    "auroc": {
-      "mean_paired_difference": 0.008333333333333349,
-      "bootstrap_95_ci_low": 0.0013888888888888894,
-      "bootstrap_95_ci_high": 0.016319444444444442,
-      "confidence_weighted_wins": 11,
-      "ties": 2,
-      "repeats": 20
-    }
+    "robust_weighting_vs_uniform": {
+      "macro_f1": {
+        "mean_paired_difference": 0.030286560751258584,
+        "bootstrap_95_ci_low": 0.011126595242553546,
+        "bootstrap_95_ci_high": 0.05149681336367438,
+        "candidate_wins": 11,
+        "ties": 7,
+        "repeats": 20
+      },
+      "auroc": {
+        "mean_paired_difference": 0.01909722222222225,
+        "bootstrap_95_ci_low": -0.00034722222222217106,
+        "bootstrap_95_ci_high": 0.039930555555555594,
+        "candidate_wins": 13,
+        "ties": 0,
+        "repeats": 20
+      }
+    },
+    "claim_boundary": "The robust 10/90 winsorisation step was added after diagnosing the weighting-only failure. It is post-hoc feasibility evidence, not an independent confirmation result."
   },
   "attack": {
     "n_public_clips": 24,
@@ -192,9 +222,13 @@
   ],
   "data_boundary": "24 public M3 pilot clips; one clip per source/speaker ID in this branch; results are repeated-split feasibility evidence only.",
   "claim_checks": {
-    "enhancement_significant_improvement": false,
+    "enhancement_both_mean_metrics_improved": true,
+    "enhancement_macro_f1_interval_excludes_zero": true,
+    "enhancement_auroc_interval_excludes_zero": false,
+    "enhancement_independently_confirmed": false,
     "attack_score_response_stable": true,
     "attack_threshold_crossing_stable": false,
-    "rendered_adversarial_video_completed": false
+    "rendered_adversarial_video_completed": true,
+    "rendered_attack_reliable_evasion": false
   }
 }

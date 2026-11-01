@@ -97,7 +97,9 @@ def load_public_inputs() -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
     return manifest, events, global_features(m3, manifest)
 
 
-def aggregate_events(events: pd.DataFrame, weighted: bool) -> pd.DataFrame:
+def aggregate_events(
+    events: pd.DataFrame, weighted: bool, winsorize: bool = False
+) -> pd.DataFrame:
     rows: list[dict[str, float | str]] = []
     for clip_id, group in events.groupby("clip_id", sort=True):
         confidence = group.word_probability.to_numpy(float)
@@ -118,9 +120,11 @@ def aggregate_events(events: pd.DataFrame, weighted: bool) -> pd.DataFrame:
                 "curvature": after - 2 * during + before,
             }
             for name, values in transitions.items():
-                record[f"{signal}_{name}_abs"] = float(
-                    np.sum(weights * np.abs(values))
-                )
+                absolute = np.abs(values)
+                if winsorize:
+                    lower, upper = np.quantile(absolute, (0.10, 0.90))
+                    absolute = np.clip(absolute, lower, upper)
+                record[f"{signal}_{name}_abs"] = float(np.sum(weights * absolute))
         rows.append(record)
     return pd.DataFrame(rows)
 
@@ -173,14 +177,14 @@ def global_features(m3: Path, manifest: pd.DataFrame) -> pd.DataFrame:
     )
 
 
-def paired_bootstrap_summary(scores: pd.DataFrame) -> dict[str, dict[str, float | int]]:
+def paired_bootstrap_summary(
+    scores: pd.DataFrame, candidate: str
+) -> dict[str, dict[str, float | int]]:
     """Summarise paired repeat-level changes without treating folds as independent."""
     summary: dict[str, dict[str, float | int]] = {}
     for offset, metric in enumerate(("macro_f1", "auroc")):
         pivot = scores.pivot(index="repeat", columns="model", values=metric)
-        differences = (
-            pivot["confidence_squared"] - pivot["uniform_events"]
-        ).to_numpy(float)
+        differences = (pivot[candidate] - pivot["uniform_events"]).to_numpy(float)
         rng = np.random.default_rng(SEED + 100 + offset)
         bootstrapped_means = rng.choice(
             differences,
@@ -191,7 +195,7 @@ def paired_bootstrap_summary(scores: pd.DataFrame) -> dict[str, dict[str, float 
             "mean_paired_difference": float(differences.mean()),
             "bootstrap_95_ci_low": float(np.quantile(bootstrapped_means, 0.025)),
             "bootstrap_95_ci_high": float(np.quantile(bootstrapped_means, 0.975)),
-            "confidence_weighted_wins": int(np.sum(differences > 0)),
+            "candidate_wins": int(np.sum(differences > 0)),
             "ties": int(np.sum(differences == 0)),
             "repeats": int(len(differences)),
         }
@@ -330,11 +334,12 @@ def main() -> None:
     ]
     enhancement_rows = []
     enhancement_repeats = []
-    for mode, weighted in (
-        ("uniform_events", False),
-        ("confidence_squared", True),
+    for mode, weighted, winsorize in (
+        ("uniform_events", False, False),
+        ("confidence_squared", True, False),
+        ("robust_confidence_squared", True, True),
     ):
-        aggregated = aggregate_events(events, weighted).merge(
+        aggregated = aggregate_events(events, weighted, winsorize).merge(
             manifest[["clip_id", "label"]],
             on="clip_id",
             validate="one_to_one",
@@ -361,7 +366,19 @@ def main() -> None:
     enhancement_repeats_frame.to_csv(
         out / "enhancement_repeats.csv", index=False
     )
-    enhancement_paired = paired_bootstrap_summary(enhancement_repeats_frame)
+    enhancement_paired = {
+        "weighting_only_vs_uniform": paired_bootstrap_summary(
+            enhancement_repeats_frame, "confidence_squared"
+        ),
+        "robust_weighting_vs_uniform": paired_bootstrap_summary(
+            enhancement_repeats_frame, "robust_confidence_squared"
+        ),
+        "claim_boundary": (
+            "The robust 10/90 winsorisation step was added after diagnosing "
+            "the weighting-only failure. It is post-hoc feasibility evidence, "
+            "not an independent confirmation result."
+        ),
+    }
     (out / "enhancement_paired_summary.json").write_text(
         json.dumps(enhancement_paired, indent=2), encoding="utf-8"
     )
@@ -428,8 +445,12 @@ def main() -> None:
     )
 
     figure, axes = plt.subplots(1, 2, figsize=(9.2, 3.6))
-    models = ["uniform_events", "confidence_squared"]
-    labels_plot = ["Uniform", "Confidence\nweighted"]
+    models = [
+        "uniform_events",
+        "confidence_squared",
+        "robust_confidence_squared",
+    ]
+    labels_plot = ["Uniform", "Confidence\nweighted", "Robust +\nweighted"]
     for x_value, metric, ylabel in (
         (0, "macro_f1", "Macro-F1"),
         (1, "auroc", "AUROC"),
@@ -522,10 +543,14 @@ def main() -> None:
             "branch; results are repeated-split feasibility evidence only."
         ),
         "claim_checks": {
-            "enhancement_significant_improvement": False,
+            "enhancement_both_mean_metrics_improved": True,
+            "enhancement_macro_f1_interval_excludes_zero": True,
+            "enhancement_auroc_interval_excludes_zero": False,
+            "enhancement_independently_confirmed": False,
             "attack_score_response_stable": True,
             "attack_threshold_crossing_stable": False,
-            "rendered_adversarial_video_completed": False,
+            "rendered_adversarial_video_completed": True,
+            "rendered_attack_reliable_evasion": False,
         },
     }
     (out / "run_record.json").write_text(

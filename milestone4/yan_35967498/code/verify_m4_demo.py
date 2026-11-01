@@ -27,11 +27,24 @@ assert record["repeats"] == 20 and record["folds"] == 4
 assert {row["n_clips"] for row in record["enhancement"]} == {24}
 assert {row["n_events"] for row in record["enhancement"]} == {547}
 assert record["claim_checks"] == {
-    "enhancement_significant_improvement": False,
+    "enhancement_both_mean_metrics_improved": True,
+    "enhancement_macro_f1_interval_excludes_zero": True,
+    "enhancement_auroc_interval_excludes_zero": False,
+    "enhancement_independently_confirmed": False,
     "attack_score_response_stable": True,
     "attack_threshold_crossing_stable": False,
-    "rendered_adversarial_video_completed": False,
+    "rendered_adversarial_video_completed": True,
+    "rendered_attack_reliable_evasion": False,
 }
+
+enhancement = pd.DataFrame(record["enhancement"]).set_index("model")
+uniform = enhancement.loc["uniform_events"]
+robust = enhancement.loc["robust_confidence_squared"]
+assert robust.macro_f1_mean > uniform.macro_f1_mean
+assert robust.auroc_mean > uniform.auroc_mean
+robust_paired = record["enhancement_paired"]["robust_weighting_vs_uniform"]
+assert robust_paired["macro_f1"]["bootstrap_95_ci_low"] > 0
+assert robust_paired["auroc"]["bootstrap_95_ci_low"] <= 0
 
 for filename, expected in record["input_sha256"].items():
     assert sha256_file(ROOT / "demo_data" / filename) == expected
@@ -41,6 +54,16 @@ assert selected.probability_drop_ci_low > 0
 assert selected.probability_drop_positive_repeats == 20
 assert selected.evasion_change_ci_low <= 1e-12
 assert selected.evasion_change_positive_repeats == 5
+
+rendered_summary_path = ROOT / "results/rendered_case/detector_summary.json"
+assert rendered_summary_path.exists()
+rendered = json.loads(rendered_summary_path.read_text())
+assert rendered["prespecified_case"] is True
+assert rendered["decoded_frames_compared"] == 298
+assert rendered["landmark_coverage_during_render"] == 1.0
+assert rendered["decoded_rgb_psnr_db"] > 35.0
+assert rendered["positive_drop_repeats"] == 12
+assert rendered["attacked_evasion_fraction"] == rendered["original_evasion_fraction"]
 
 sweep = pd.DataFrame(record["attack_sweep"])
 assert sweep.mean_attacked_fake_probability.is_monotonic_decreasing
